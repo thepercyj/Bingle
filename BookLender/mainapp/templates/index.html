@@ -1,6 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
-
+{% load static %}
 <html>
 
 <head>
@@ -15,15 +14,19 @@
   <meta name="author" content="" />
 
   <title>Spering</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+
 
   <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
 
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   <!-- responsive style -->
-  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
 </head>
 
 <body>
@@ -33,12 +36,13 @@
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container">
           <a class="navbar-brand" href="index.html">
-            <img src="images/logo.png" alt="" />
+            <img src="{% static 'images/logo.png' %}" alt="" />
             <span>
               Spering
             </span>
           </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 
@@ -228,7 +232,9 @@
               </h2>
             </div>
             <p>
-              It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as
+              It is a long established fact that a reader will be distracted by the readable content of a page when
+              looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of
+              letters, as
             </p>
             <div class="btn-box">
               <a href="" class="btn-1">
@@ -340,7 +346,10 @@
           About Spering Company
         </h2>
         <p>
-          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If youThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you
+          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
+          some form, by injected humour, or randomised words which don't look even slightly believable. If youThere are
+          many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form,
+          by injected humour, or randomised words which don't look even slightly believable. If you
         </p>
         <a href="">
           Read More
@@ -365,7 +374,8 @@
                 </h2>
               </div>
               <div class="tab_container">
-                <div class="t-link-box" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <div class="t-link-box" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                  aria-controls="collapseOne">
                   <div class="img-box">
                     <img src="images/f1.png" alt="">
                   </div>
@@ -378,7 +388,8 @@
                     </h3>
                   </div>
                 </div>
-                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                  aria-expanded="false" aria-controls="collapseTwo">
                   <div class="img-box">
                     <img src="images/f2.png" alt="">
                   </div>
@@ -391,7 +402,8 @@
                     </h3>
                   </div>
                 </div>
-                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseThree"
+                  aria-expanded="false" aria-controls="collapseThree">
                   <div class="img-box">
                     <img src="images/f3.png" alt="">
                   </div>
@@ -404,7 +416,8 @@
                     </h3>
                   </div>
                 </div>
-                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseFour"
+                  aria-expanded="false" aria-controls="collapseFour">
                   <div class="img-box">
                     <img src="images/f4.png" alt="">
                   </div>
@@ -469,7 +482,9 @@
                     John Hissona
                   </h4>
                   <p>
-                    passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If youThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
+                    passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by
+                    injected humour, or randomised words which don't look even slightly believable. If youThere are many
+                    variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
                   </p>
                   <img src="images/quote.png" alt="">
                 </div>
@@ -480,7 +495,9 @@
                     John Hissona
                   </h4>
                   <p>
-                    passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If youThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
+                    passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by
+                    injected humour, or randomised words which don't look even slightly believable. If youThere are many
+                    variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
                   </p>
                   <img src="images/quote.png" alt="">
                 </div>
@@ -491,7 +508,9 @@
                     John Hissona
                   </h4>
                   <p>
-                    passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If youThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
+                    passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by
+                    injected humour, or randomised words which don't look even slightly believable. If youThere are many
+                    variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
                   </p>
                   <img src="images/quote.png" alt="">
                 </div>
@@ -520,7 +539,7 @@
       <div class="container">
         <div class="info_top">
           <div class="info_logo">
-            <img src="images/logo.png" alt="" />
+            <img src="{% static 'images/logo.png' %}" alt="" />
             <span>
               Spering
             </span>
@@ -572,7 +591,8 @@
                 Offices
               </h5>
               <p>
-                Readable content of a page when looking at its layoutreadable content of a page when looking at its layout
+                Readable content of a page when looking at its layoutreadable content of a page when looking at its
+                layout
               </p>
             </div>
 
@@ -581,7 +601,8 @@
                 Information
               </h5>
               <p>
-                Readable content of a page when looking at its layoutreadable content of a page when looking at its layout
+                Readable content of a page when looking at its layoutreadable content of a page when looking at its
+                layout
               </p>
             </div>
 
@@ -662,10 +683,6 @@
   </footer>
   <!-- end  footer section -->
 
-
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
 
 
 </body>
