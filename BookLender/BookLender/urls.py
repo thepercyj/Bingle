@@ -25,5 +25,8 @@ urlpatterns = [
     path('work/', work, name='work'),
     path('about/', about, name='about'),
     path('category/', category, name='category'),
+    path('login/', login, name='login'),
+    path('register/', register, name='register'),
 
+     
 ]
