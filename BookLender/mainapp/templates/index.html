@@ -18,9 +18,7 @@
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
-  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.js' %}"></script>
-  <script src="{% static 'js/custom.js' %}"></script>
+
 
 
   <!-- bootstrap core css -->
@@ -38,17 +36,16 @@
           <a class="navbar-brand" href="index.html">
             <img src="{% static 'images/logo.png' %}" alt="" />
             <span>
-              BookLender
+              Spering
             </span>
           </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ">
-              <li class="nav-item active">
+            <ul class="navbar-nav  ">
+              <li class="nav-item ">
                 <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
@@ -57,8 +54,8 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'work' %}">Work</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'category' %}">Category</a>
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'category' %}">Category </a>
               </li>
             </ul>
             <div class="user_option">
@@ -306,7 +303,7 @@
         <div class="box">
           <div class="img-box">
             <img src="{% static 'images/c5.png' %}" alt="" />
-d          </div>
+          </div>
           <div class="detail-box">
             <h5>
               Logo Design
@@ -378,7 +375,8 @@ d          </div>
                 <div class="t-link-box" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
                   aria-controls="collapseOne">
                   <div class="img-box">
-                    <img src="images/f1.png" alt="">
+                    <img src="{% static 'images/f1.png' %}" alt="" />
+
                   </div>
                   <div class="detail-box">
                     <h5>
@@ -392,7 +390,7 @@ d          </div>
                 <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseTwo"
                   aria-expanded="false" aria-controls="collapseTwo">
                   <div class="img-box">
-                    <img src="images/f2.png" alt="">
+                    <img src="{% static 'images/f2.png' %}" alt="" />
                   </div>
                   <div class="detail-box">
                     <h5>
@@ -406,7 +404,7 @@ d          </div>
                 <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseThree"
                   aria-expanded="false" aria-controls="collapseThree">
                   <div class="img-box">
-                    <img src="images/f3.png" alt="">
+                    <img src="{% static 'images/f3.png' %}" alt="" />
                   </div>
                   <div class="detail-box">
                     <h5>
@@ -420,7 +418,7 @@ d          </div>
                 <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseFour"
                   aria-expanded="false" aria-controls="collapseFour">
                   <div class="img-box">
-                    <img src="images/f4.png" alt="">
+                    <img src="{% static 'images/f4.png' %}" alt="" />
                   </div>
                   <div class="detail-box">
                     <h5>
@@ -438,22 +436,24 @@ d          </div>
           <div class="col-md-6">
             <div class="collapse show" id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion">
               <div class="img-box">
-                <img src="images/freelance-img.jpg" alt="">
+                <img src="{% static 'images/freelance-img.jpg' %}" alt="" />
+
               </div>
             </div>
             <div class="collapse" id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordion">
               <div class="img-box">
-                <img src="images/freelance-img.jpg" alt="">
+                <img src="{% static 'images/freelance-img.jpg' %}" alt="" />
+
               </div>
             </div>
             <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-parent="#accordion">
               <div class="img-box">
-                <img src="images/freelance-img.jpg" alt="">
+                <img src="{% static 'images/freelance-img.jpg' %}" alt="" />
               </div>
             </div>
             <div class="collapse" id="collapseFour" aria-labelledby="headingfour" data-parent="#accordion">
               <div class="img-box">
-                <img src="images/freelance-img.jpg" alt="">
+                <img src="{% static 'images/freelance-img.jpg' %}" alt="" />
               </div>
             </div>
           </div>
@@ -487,7 +487,8 @@ d          </div>
                     injected humour, or randomised words which don't look even slightly believable. If youThere are many
                     variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
                   </p>
-                  <img src="images/quote.png" alt="">
+                  <img src="{% static 'images/quote.png' %}" alt="" />
+
                 </div>
               </div>
               <div class="carousel-item">
@@ -500,7 +501,7 @@ d          </div>
                     injected humour, or randomised words which don't look even slightly believable. If youThere are many
                     variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
                   </p>
-                  <img src="images/quote.png" alt="">
+                  <img src="{% static 'images/quote.png' %}" alt="" />
                 </div>
               </div>
               <div class="carousel-item">
@@ -513,7 +514,7 @@ d          </div>
                     injected humour, or randomised words which don't look even slightly believable. If youThere are many
                     variations of passages of Lorem Ipsum available, but the majority have suffered alteration in s
                   </p>
-                  <img src="images/quote.png" alt="">
+                  <img src="{% static 'images/quote.png' %}" alt="" />
                 </div>
               </div>
             </div>
@@ -683,7 +684,9 @@ d          </div>
   </footer>
   <!-- end  footer section -->
 
-
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
 
 </body>
 </body>
