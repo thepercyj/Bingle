@@ -46,7 +46,7 @@
             const data = JSON.parse(event.data);
             const messageHTML = `
                     <div class="message-box">
-                        <div class="message-author">${data.author__name}</div>
+                        <div  class="message-author"> <strong>  ${data.author__name} </strong> </div>
                         <div class="message-content">${data.content}</div>
                     </div>`;
             sseData.innerHTML += messageHTML;
