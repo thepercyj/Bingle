@@ -19,6 +19,14 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
 
+  <!-- Favicons-->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
 
 
   <!-- bootstrap core css -->
@@ -34,9 +42,9 @@
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container">
           <a class="navbar-brand" href="index.html">
-            <img src="{% static 'images/logo.png' %}" alt="" />
+            <img src="{% static 'images/Bingle-logos.jpeg' %}" alt="" />
             <span>
-              Spering
+              Bingle
             </span>
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,9 +67,15 @@
               </li>
             </ul>
             <div class="user_option">
-              <a href="">
+              <a href="{% url 'login' %}">
                 <span>
                   Login
+                </span>
+              </a>
+              <br>
+              <a href="{% url 'register' %}">
+                <span>
+                  Register
                 </span>
               </a>
               <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
@@ -122,10 +136,11 @@
                     </p>
                     <div class="btn-box">
                       <a href="" class="btn-1">
-                        About Us
+                        Borrow 
+                        <!-- We -->
                       </a>
                       <a href="" class="btn-2">
-                        Get A Quote
+                        Lend
                       </a>
                     </div>
                   </div>
@@ -341,7 +356,7 @@
       </div>
       <div class="detail-box">
         <h2>
-          About Spering Company
+          About Bingle Company
         </h2>
         <p>
           There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
@@ -541,9 +556,9 @@
       <div class="container">
         <div class="info_top">
           <div class="info_logo">
-            <img src="{% static 'images/logo.png' %}" alt="" />
+            <img src="{% static 'images/Bingle-logos.jpeg' %}" alt="" />
             <span>
-              Spering
+              Bingle
             </span>
           </div>
           <div class="social_box">

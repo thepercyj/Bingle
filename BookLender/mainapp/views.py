@@ -12,3 +12,9 @@ def about(request):
 
 def work(request):
     return render(request, 'work.html')
+
+def login(request):
+    return render(request, 'login.html')
+
+def register(request):
+    return render(request, 'register.html')
