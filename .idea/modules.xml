@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/esrs-group-6.iml" filepath="$PROJECT_DIR$/.idea/esrs-group-6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ESRS.iml" filepath="$PROJECT_DIR$/.idea/ESRS.iml" />
     </modules>
   </component>
 </project>
