@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+<div class="header">
+    <h1>Welcome {{ request.session.username }}</h1>
+</div>
+
+<div class="container">
+    <div class="messages">
+        <div id="sse-data"></div>
+    </div>
+
+    <form x-cloak
+          @submit.prevent="submit" x-data="{state: 'composing', errors: {}}">
+        <div>
+            <textarea name="content" @input="state = 'composing'" autofocus placeholder="Your next message..."></textarea>
+            <button class="button">
+                Send
+            </button>
+        </div>
+
+        <div x-show="state === 'error'">
+            <p>
+                Error sending your message ❌
+            </p>
+        </div>
+    </form>
+
+    <form action="/lobby/" method="get">
+        <button type="submit">Return to Lobby</button>
+    </form>
+</div>
+
+<script>
+    let eventSource;
+    const sseData = document.getElementById('sse-data');
+
+    function startSSE() {
+        eventSource = new EventSource('/stream-chat-messages/');
+        eventSource.onmessage = event => {
+            const data = JSON.parse(event.data);
+            const messageHTML = `
+                    <div class="message-box">
+                        <div  class="message-author"> <strong>  ${data.author__name} </strong> </div>
+                        <div class="message-content">${data.content}</div>
+                    </div>`;
+            sseData.innerHTML += messageHTML;
+        };
+    }
+
+    // On load, start SSE if the browser supports it.
+    if (typeof(EventSource) !== 'undefined') {
+        startSSE();
+    } else {
+        sseData.innerHTML = 'Whoops! Your browser doesn\'t receive server-sent events.';
+    }
+</script>
+
+<script>
+    function submit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+
+        const endpointUrl = "/create-message/"
+        fetch(endpointUrl, {
+            method: "post",
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+            .then(response => {
+                this.state = response.ok ? 'success' : 'error';
+                return response.json();
+            })
+            .then(data => {
+                this.errors = data.errors || {};
+            });
+    }
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
+</body>
+</html>
+
