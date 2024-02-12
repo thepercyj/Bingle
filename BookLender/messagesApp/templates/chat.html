@@ -48,6 +48,7 @@
         // Create the container for the username
         const usernameElement = document.createElement('span');
         usernameElement.textContent = username;
+        usernameElement.style.fontWeight = 'bold';
         usernameElement.style.color = usernameColor; // Set username color
 
         // Append both the welcome message and the username to the header
@@ -79,7 +80,6 @@
                         <span class="message-time">Sent: ${formattedTime}</span>
                         <div class="message-author" style="color: ${color};"> <strong> ${data.author__name} </strong> </div>
                         <div class="message-content">${data.content}</div>
-
                     </div>`;
             sseData.innerHTML += messageHTML;
         };
