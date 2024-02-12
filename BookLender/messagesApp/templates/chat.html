@@ -76,6 +76,7 @@
         })
             .then(response => {
                 this.state = response.ok ? 'success' : 'error';
+                document.querySelector('textarea[name="content"]').value = ''; // Clears the textbox
                 return response.json();
             })
             .then(data => {
