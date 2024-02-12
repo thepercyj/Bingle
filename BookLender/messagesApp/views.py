@@ -2,6 +2,7 @@
 
 
 from datetime import datetime
+from asgiref.sync import sync_to_async
 from typing import AsyncGenerator
 import asyncio
 from django.shortcuts import render, redirect
@@ -77,15 +78,20 @@ async def stream_chat_messages(request: HttpRequest) -> StreamingHttpResponse:
         # Get last message ID to check for new messages
         last_id = await get_last_message_id()
 
-        # Continuously check for and stream new messages
-        while True:
-            new_messages = models.Message.objects.filter(id__gt=last_id).order_by('created_at').values(
-                'id', 'author__name', 'content'
-            )
-            async for message in new_messages:
-                yield f"data: {json.dumps(message)}\n\n"
-                last_id = message['id']
-            await asyncio.sleep(0.1)  # Throttle checks to reduce database queries
+        if last_id is not None:
+
+            # Continuously check for and stream new messages
+            while True:
+                new_messages = models.Message.objects.filter(id__gt=last_id).order_by('created_at').values(
+                    'id', 'author__name', 'content'
+                )
+                async for message in new_messages:
+                    yield f"data: {json.dumps(message)}\n\n"
+                    last_id = message['id']
+                await asyncio.sleep(0.1)  # Throttle checks to reduce database queries
+
+        else:
+            new_messages = models.Message.objects.all().order_by('created_at').values('message', 'created_at')[:10]
 
     async def get_existing_messages() -> AsyncGenerator:
         """
@@ -97,12 +103,13 @@ async def stream_chat_messages(request: HttpRequest) -> StreamingHttpResponse:
         async for message in messages:
             yield f"data: {json.dumps(message)}\n\n"
 
-    async def get_last_message_id() -> int:
-        """
-        Retrieves the ID of the last message sent.
-        """
-        last_message = await models.Message.objects.all().last()
-        return last_message.id if last_message else 0
+    @sync_to_async
+    def get_last_message_sync():
+        return models.Message.objects.all().last()
+
+    async def get_last_message_id():
+        last_message = await get_last_message_sync()
+        return last_message.id if last_message else None
 
     # Return a streaming HTTP response with the event stream
     return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
