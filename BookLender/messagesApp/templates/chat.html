@@ -70,12 +70,16 @@
         eventSource = new EventSource('/stream-chat-messages/');
         eventSource.onmessage = event => {
             const data = JSON.parse(event.data);
+            console.log(data)
             const color = getUsernameColor(data.author__name);
+            const formattedTime = formatTime(data.created_at); // You might need to implement formatTime
             const messageHTML = `
                     <div class="message-box">
+                        <br>
+                        <span class="message-time">Sent: ${formattedTime}</span>
                         <div class="message-author" style="color: ${color};"> <strong> ${data.author__name} </strong> </div>
                         <div class="message-content">${data.content}</div>
-                        <br>
+
                     </div>`;
             sseData.innerHTML += messageHTML;
         };
@@ -90,6 +94,15 @@
         }
         hash = Math.abs(hash);
         return colors[hash % colors.length];
+    }
+
+    function formatTime(timeString) {
+        const date = new Date(timeString)
+
+        // Formats date as MM/DD/YY HH:MM
+        const formattedDate = date.toLocaleDateString('en-GB');
+        const formattedTime = date.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', hour12: false});
+        return `${formattedDate} ${formattedTime}`;
     }
 
 
