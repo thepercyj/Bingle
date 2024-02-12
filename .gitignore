@@ -161,3 +161,4 @@ cython_debug/
 esrs.sql
 /BookLender/venv.zip
 /.idea
+/esrs.sql
