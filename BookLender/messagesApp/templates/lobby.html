@@ -66,6 +66,7 @@
         <form method="post">
             {% csrf_token %}
             <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="room_name" placeholder="Room Name" required>
             <button type="submit">Join the chat</button>
         </form>
     </div>

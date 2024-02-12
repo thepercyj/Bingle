@@ -9,39 +9,38 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, StreamingHttpResponse, HttpResponse
 from . import models
 import json
-import random
+from django.shortcuts import render, redirect
+from .models import ChatRoom, Message
 
 
-def lobby(request: HttpRequest) -> HttpResponse:
+def lobby(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        if username:
-            request.session['username'] = username
-        else:
-            names = [
-                "Horatio", "Benvolio", "Mercutio", "Lysander", "Demetrius", "Sebastian", "Orsino",
-                "Malvolio", "Hero", "Bianca", "Gratiano", "Feste", "Antonio", "Lucius", "Puck", "Lucio",
-                "Goneril", "Edgar", "Edmund", "Oswald"
-            ]
-            request.session['username'] = f"{random.choice(names)}-{hash(datetime.now().timestamp())}"
-
-        return redirect('chat')
+        room_name = request.POST.get('room_name')
+        username = request.POST.get('username')  # Get username from the form
+        request.session['username'] = username  # Save username in session
+        chat_room, created = ChatRoom.objects.get_or_create(name=room_name)
+        return redirect('chat', room_name=chat_room.name)  # Adjust redirection if necessary
     else:
-        return render(request, 'lobby.html')
+        rooms = ChatRoom.objects.all()
+        return render(request, 'lobby.html', {'rooms': rooms})
 
 
-def chat(request: HttpRequest) -> HttpResponse:
+
+def chat(request, room_name):
     if not request.session.get('username'):
         return redirect('lobby')
-    return render(request, 'chat.html')
+    chat_room, created = ChatRoom.objects.get_or_create(name=room_name)
+    messages = Message.objects.filter(chat_room=chat_room).order_by('created_at')
+    return render(request, 'chat.html', {'room': chat_room, 'messages': messages})
 
 
 def create_message(request: HttpRequest) -> HttpResponse:
     content = request.POST.get("content")
     username = request.session.get("username")
-
     if not username:
         return HttpResponse(status=403)
+
+    print(username)
     author, _ = models.Author.objects.get_or_create(name=username)
 
     if content:
@@ -55,6 +54,7 @@ async def stream_chat_messages(request: HttpRequest) -> StreamingHttpResponse:
     """
     Streams chat messages to the client as we create messages.
     """
+
     async def event_stream():
         """
         We use this function to send a continuous stream of data
