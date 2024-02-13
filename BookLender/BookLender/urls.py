@@ -27,8 +27,6 @@ urlpatterns = [
     path('category/', category, name='category'),
     path('login/', login, name='login'),
     path('register/', register, name='register'),
-    path('profile/', dashboard, name='dashboard'),
+    path('profile/', profile, name='dashboard'),
 
-
-     
 ]
