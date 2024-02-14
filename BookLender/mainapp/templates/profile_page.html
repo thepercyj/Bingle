@@ -55,12 +55,45 @@
 
           <div id="myModal" class="modal">
             <div class="modal-content">
-              <h2>Add Books Modal</h2>
-              <!-- Add your form or content for adding books here -->
-              <p>This is a simple modal for adding books.</p>
+                <form method="post" action="/add-book/" id="addBookForm">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit">
+                </form>
               <button class="close-btn" onclick="closeModal()">Close</button>
             </div>    
           </div>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('addBookForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent the normal submission of the form
+
+                // FormData to collect and send data from the form
+                let formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'), // Ensure CSRF token is sent
+                    },
+                    credentials: 'same-origin' // Include cookies
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Here you can handle the response, e.g., display a success message
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Here you can handle errors, e.g., display an error message
+                });
+            });
+        });
+        </script>
+
 
         </div>
         <div class="box">
@@ -115,6 +148,7 @@
                 </h2>
               </div>
               <div class="card-body">
+
                 <form>
                   <!-- Form Group (username)-->
                   <div class="mb-3">

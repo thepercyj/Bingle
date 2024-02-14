@@ -781,3 +781,9 @@ button {
   }
 }
 
+.errorlist {
+    list-style-type: none;/* Removes bullet points */
+    padding: 0;
+    margin: 0 ;
+}
+
