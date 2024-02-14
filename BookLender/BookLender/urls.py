@@ -29,6 +29,6 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('register/', register, name='register'),
     path('', include('messagesApp.urls')),
+    path('profile/', profile, name='dashboard'),
 
-     
 ]
