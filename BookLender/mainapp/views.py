@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
+
 from .forms import BookForm
 from .models import UserBooks, Book, User, UserProfile
 from django.contrib import messages
@@ -40,11 +42,13 @@ def login(request):
 def register(request):
     return render(request, 'register.html')
 
-
+@never_cache
 def profile(request):
     form = BookForm(request.POST or None)
+    user = test_user
+    user_profile = test_user_profile
     user_books = UserBooks.objects.filter(owner_book_id=test_user_profile)
-    context = {'form': form, 'user_books': user_books}
+    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user}
     return render(request, 'profile_page.html', context)
 
 
@@ -94,3 +98,24 @@ def removeBook(request):
     except UserBooks.DoesNotExist:
         messages.error(request, "Book not found.")
     return HttpResponseRedirect(reverse('dashboard') + '?remove=true')
+
+def updateProfile(request):
+    if request.method == 'POST':
+        user_id = test_user.id
+        user = User.objects.get(id=user_id)
+        user_profile = UserProfile.objects.get(user=user)  # Adjust based on your UserProfile model relation
+
+        user.username = request.POST.get('inputUserName')
+        user.first_name = request.POST.get('inputFirstName')
+        user.last_name = request.POST.get('inputLastName')
+        user.email = request.POST.get('inputEmailAddress')
+        user.save()
+
+        user_profile.primary_location = request.POST.get('inputLocation')
+        user_profile.save()
+
+        messages.success(request, "Profile updated successfully.")
+        return redirect('dashboard')  # Redirect back to profile page
+    else:
+        # Handle non-POST request
+        return render(request, 'profile_page.html')
