@@ -1,2 +1,2 @@
-# ESRS Group 6
-This is the repository of the Group 6 for the module Engineering Software and Reliable Systems
+# ESRS Group 9
+This is the repository of the Group 9 for the module Engineering Software and Reliable Systems
