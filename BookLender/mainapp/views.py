@@ -4,7 +4,11 @@ from django.http import JsonResponse
 from .forms import BookForm
 from .models import UserBooks, Book, User, UserProfile
 
-# Create a test user
+# Create a test user and profile for testing
+# test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
+# test_user_profile = UserProfile.objects.create(user=test_user, primary_location="Brighton", current_location="Brighton",review= 5)
+
+# Selects test user for testing
 test_user = User.objects.first()
 test_user_profile = UserProfile.objects.first()
 
@@ -66,7 +70,8 @@ def addBook(request):
 def addUserBook(book):
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBooks(
-        user_id=test_user_profile,  # Set the current user as the user_id
+        owner_book_id=test_user_profile,  # Set the current user as the user_id
+        currently_with=test_user_profile,
         book_id=book,  # Set the newly created book as the book_id
         availability=True,  # Assuming you want to set the book as available by default
         booked='No'  # Or any default value that makes sense for your 'booked' field
