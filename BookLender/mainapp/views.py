@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -11,10 +13,8 @@ from django.http import HttpResponseRedirect
 
 # Create a test user and profile for testing
 # test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
-# test_user_profile = UserProfile.objects.create(user=test_user, primary_location="Brighton", current_location="Brighton",review= 5)
-
-# Selects test user for testing
 test_user = User.objects.first()
+# test_user_profile = UserProfile.objects.create(user=test_user, primary_location="Brighton", current_location="Brighton",review= 5)
 test_user_profile = UserProfile.objects.first()
 
 
@@ -41,6 +41,7 @@ def login(request):
 
 def register(request):
     return render(request, 'register.html')
+
 
 @never_cache
 def profile(request):
@@ -89,6 +90,7 @@ def addUserBook(book):
     new_user_book.save()
 
 
+@never_cache
 def removeBook(request):
     book_id = request.POST.get('book_id')
     try:
@@ -98,6 +100,7 @@ def removeBook(request):
     except UserBooks.DoesNotExist:
         messages.error(request, "Book not found.")
     return HttpResponseRedirect(reverse('dashboard') + '?remove=true')
+
 
 def updateProfile(request):
     if request.method == 'POST':
@@ -112,10 +115,11 @@ def updateProfile(request):
         user.save()
 
         user_profile.primary_location = request.POST.get('inputLocation')
+        user_profile.phone_number = request.POST.get('inputPhone')
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('dashboard')  # Redirect back to profile page
+        return profile(request)
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')

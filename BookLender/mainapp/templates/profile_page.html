@@ -215,13 +215,12 @@
                     <div class="col-md-6">
                       <label class="small mb-1" for="inputPhone">Phone number</label>
                       <input class="form-control" name="inputPhone" id="inputPhone" type="tel" placeholder="Enter your phone number"
-                        value="555-123-4567">
+                        value={{ user_profile.phone_number }}>
                     </div>
                     <!-- Form Group (birthday)-->
                     <div class="col-md-6">
-                      <label class="small mb-1" for="inputBirthday">Birthday</label>
-                      <input class="form-control" id="inputBirthday" type="date" name="birthday"
-                             placeholder="Enter your birthday" value="06/10/1988">
+                        <label class="small mb-1" for="birthday">Birthday</label>
+                      <div>{{ user_profile.birth_date }}<br><div>
                     </div>
                   </div>
                   <!-- Save changes button-->

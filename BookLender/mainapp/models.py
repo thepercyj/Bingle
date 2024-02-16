@@ -7,6 +7,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     primary_location = models.CharField('Primary Location', max_length=255, null=False, default='default')
     current_location = models.CharField('Current Location', max_length=255, null=False, default='default')
+    phone_number = models.CharField('Phone Number', max_length=255, null=False, default='default')
+    birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
     review = models.IntegerField('Review Score', null=True)
 
 
