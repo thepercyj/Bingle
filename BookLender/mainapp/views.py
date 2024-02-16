@@ -1,9 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .forms import BookForm
-
 
 
 # Index Page
@@ -41,11 +39,12 @@ def addBook(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data) # Tests form submission
+            form.save()
             return JsonResponse({'status': 'success', 'message': 'Book added successfully'})
         else:
             # Form validation failed, return error details
-            return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
+                                status=400)
     else:
         # If the request method is not POST, inform the client appropriately
         # Or render a form for GET requests if that's intended behavior
