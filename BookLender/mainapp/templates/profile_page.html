@@ -64,62 +64,60 @@
             </div>    
           </div>
 
-        <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.getElementById('addBookForm');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault(); // Prevent the normal submission of the form
-
-                // FormData to collect and send data from the form
-                let formData = new FormData(form);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'), // Ensure CSRF token is sent
-                    },
-                    credentials: 'same-origin' // Include cookies
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                    // Here you can handle the response, e.g., display a success message
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Here you can handle errors, e.g., display an error message
-                });
-            });
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll('.remove-book-form').forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent normal form submission
-
-            fetch(form.action, {
-                method: 'POST',
-                body: new FormData(form),
-                headers: {
-                    'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message); // Show success or error message
-                if (data.status === 'success') {
-                    form.parentElement.parentElement.remove(); // Remove the book row from the table
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred'); // Show error message
-            });
-        });
-    });
-});
-        </script>
+{#        <script>#}
+{#        document.addEventListener("DOMContentLoaded", function() {#}
+{#            const form = document.getElementById('addBookForm');#}
+{#            form.addEventListener('submit', function(e) {#}
+{#                e.preventDefault(); // Prevent the normal submission of the form#}
+{##}
+{#                // FormData to collect and send data from the form#}
+{#                let formData = new FormData(form);#}
+{##}
+{#                fetch(form.action, {#}
+{#                    method: 'POST',#}
+{#                    body: formData,#}
+{#                    headers: {#}
+{#                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'), // Ensure CSRF token is sent#}
+{#                    },#}
+{#                    credentials: 'same-origin' // Include cookies#}
+{#                })#}
+{#                .then(response => response.json())#}
+{#                .then(data => {#}
+{#                    console.log('Success:', data);#}
+{#                })#}
+{#                .catch(error => {#}
+{#                    console.error('Error:', error);#}
+{#                });#}
+{#            });#}
+{#        });#}
+{##}
+{#        document.addEventListener("DOMContentLoaded", function() {#}
+{#        document.querySelectorAll('.removeBookForm').forEach(function(form) {#}
+{#        form.addEventListener('submit', function(e) {#}
+{#            e.preventDefault(); // Prevent normal form submission#}
+{##}
+{#            fetch(form.action, {#}
+{#                method: 'POST',#}
+{#                body: new FormData(form),#}
+{#                headers: {#}
+{#                    'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,#}
+{#                },#}
+{#            })#}
+{#            .then(response => response.json())#}
+{#            .then(data => {#}
+{#                alert(data.message); // Show success or error message#}
+{#                if (data.status === 'success') {#}
+{#                    form.parentElement.parentElement.remove(); // Remove the book row from the table#}
+{#                }#}
+{#            })#}
+{#            .catch(error => {#}
+{#                console.error('Error:', error);#}
+{#                alert('An error occurred'); // Show error message#}
+{#            });#}
+{#        });#}
+{#    });#}
+{#});#}
+{#        </script>#}
 
             <div id="remove-book-modal" class="modal">
             <div class="modal-content">

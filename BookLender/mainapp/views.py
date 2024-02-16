@@ -54,8 +54,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(new_book)
-
-            return JsonResponse({'status': 'success', 'message': 'Book added successfully'})
+            return redirect('dashboard')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -74,7 +73,7 @@ def addUserBook(book):
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBooks(
         owner_book_id=test_user_profile,  # Set the current user as the user_id
-        currently_with=test_user_profile, # Defaults current user to currently_with on creation
+        currently_with=test_user_profile,  # Defaults current user to currently_with on creation
         book_id=book,  # Set the newly created book as the book_id
         availability=True,  # Set available to true by default on creation
         booked='No'
@@ -82,6 +81,7 @@ def addUserBook(book):
 
     # Save the new userBooks instance to the database
     new_user_book.save()
+
 
 def removeBook(request):
     book_id = request.POST.get('book_id')
@@ -92,6 +92,3 @@ def removeBook(request):
     except UserBooks.DoesNotExist:
         messages.error(request, "Book not found.")
     return redirect('dashboard')
-
-
-
