@@ -86,7 +86,11 @@ DATABASES = {
         "NAME": "esrs",
         "USER": "root",
         "PASSWORD": "",
+<<<<<<< Updated upstream
         "HOST": "localhost",
+=======
+        "HOST": "127.0.0.1",
+>>>>>>> Stashed changes
         "PORT": "3306",
     }
 }
