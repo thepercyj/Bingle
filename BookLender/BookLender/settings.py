@@ -20,7 +20,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
+    'messagesApp'
 ]
 
 MIDDLEWARE = [
@@ -75,6 +77,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'BookLender.wsgi.application'
+ASGI_APPLICATION = 'BookLender.asgi.application'
 
 
 # Database
@@ -86,11 +89,7 @@ DATABASES = {
         "NAME": "esrs",
         "USER": "root",
         "PASSWORD": "",
-<<<<<<< Updated upstream
-        "HOST": "localhost",
-=======
         "HOST": "127.0.0.1",
->>>>>>> Stashed changes
         "PORT": "3306",
     }
 }
