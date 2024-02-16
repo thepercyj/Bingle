@@ -40,7 +40,9 @@ def register(request):
 
 def profile(request):
     form = BookForm(request.POST or None)
-    return render(request, 'profile_page.html', {'form': form})
+    user_books = UserBooks.objects.filter(owner_book_id=test_user_profile)
+    context = {'form': form, 'user_books': user_books}
+    return render(request, 'profile_page.html', context)
 
 
 def addBook(request):
@@ -71,14 +73,15 @@ def addUserBook(book):
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBooks(
         owner_book_id=test_user_profile,  # Set the current user as the user_id
-        currently_with=test_user_profile,
+        currently_with=test_user_profile, # Defaults current user to currently_with on creation
         book_id=book,  # Set the newly created book as the book_id
-        availability=True,  # Assuming you want to set the book as available by default
-        booked='No'  # Or any default value that makes sense for your 'booked' field
+        availability=True,  # Set available to true by default on creation
+        booked='No'
     )
 
     # Save the new userBooks instance to the database
     new_user_book.save()
+
 
 
 

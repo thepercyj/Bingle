@@ -49,18 +49,18 @@
         <div class="box">
           <h2>Books Owned</h2>
           <span>69</span>
-          <button class="add-books-btn" onclick="openModal()">
+          <button class="add-books-btn" onclick="openModal('add-book-modal')">
             <h4>Add Books</h4>
           </button>
 
-          <div id="myModal" class="modal">
+          <div id="add-book-modal" class="modal">
             <div class="modal-content">
                 <form method="post" action="/add-book/" id="addBookForm">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <input type="submit" value="Submit">
                 </form>
-              <button class="close-btn" onclick="closeModal()">Close</button>
+              <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
             </div>    
           </div>
 
@@ -94,12 +94,39 @@
         });
         </script>
 
+            <div id="remove-book-modal" class="modal">
+            <div class="modal-content">
+                <form method="post" action="/remove-book/" id="removeBookForm">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Publish Date</th>
+                            <th>Currently With</th>
+                        </tr>
+                    {% for user_book in user_books %}
+                        <tr>
+                            <td>{{ user_book.book_id.book_title }}</td>
+                            <td>{{ user_book.book_id.book_author }}</td>
+                            <td>{{ user_book.book_id.genre }}</td>
+                            <td>{{ user_book.book_id.published_date }}</td>
+                            <td>{{ user_book.currently_with }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                    <input type="submit" value="Submit">
+                </form>
+              <button class="close-btn" onclick="closeModal('remove-book-modal')">Close</button>
+            </div>
+          </div>
 
         </div>
         <div class="box">
           <h2>Books Borrowed</h2>
           <span>6</span>
-          <button class="add-books-btn" onclick="openModal()">
+          <button class="remove-books-btn" onclick="openModal('remove-book-modal')">
             <h4>Remove Books</h4>
           </button>
 
