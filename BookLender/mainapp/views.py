@@ -91,7 +91,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBooks.DoesNotExist:
         messages.error(request, "Book not found.")
-    return JsonResponse({'status': 'success', 'message': 'Book removed successfully'})
+    return redirect('dashboard')
 
 
 
