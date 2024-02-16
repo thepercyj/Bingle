@@ -964,3 +964,25 @@ a:focus {
   max-width: 30%;
 
 }
+
+.btn-login {
+  background-color: #ff4f5a;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.btn-register {
+  background-color: #ff4f5a;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  margin-left: 10px;
+  cursor: pointer;
+}
