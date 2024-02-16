@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import BookForm
 from .models import UserBooks, Book, User, UserProfile
+from django.contrib import messages
 
 # Create a test user and profile for testing
 # test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
@@ -82,6 +83,15 @@ def addUserBook(book):
     # Save the new userBooks instance to the database
     new_user_book.save()
 
+def removeBook(request):
+    book_id = request.POST.get('book_id')
+    try:
+        book = UserBooks.objects.get(id=book_id, owner_book_id=test_user_profile)
+        book.delete()
+        messages.success(request, "Book removed successfully.")
+    except UserBooks.DoesNotExist:
+        messages.error(request, "Book not found.")
+    return JsonResponse({'status': 'success', 'message': 'Book removed successfully'})
 
 
 

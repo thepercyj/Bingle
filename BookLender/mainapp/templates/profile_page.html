@@ -105,6 +105,7 @@
                             <th>Genre</th>
                             <th>Publish Date</th>
                             <th>Currently With</th>
+                            <th>Remove</th>
                         </tr>
                     {% for user_book in user_books %}
                         <tr>
@@ -113,10 +114,16 @@
                             <td>{{ user_book.book_id.genre }}</td>
                             <td>{{ user_book.book_id.published_date }}</td>
                             <td>{{ user_book.currently_with }}</td>
+                            <td>
+                                <form action="/remove-book/" method="post">
+                                {% csrf_token %}
+                                 <input type="hidden" name="book_id" value="{{ user_book.id }}" />
+                                <input type="submit" value="Remove" />
+                                </form>
+                            </td>
                         </tr>
                     {% endfor %}
                     </table>
-                    <input type="submit" value="Submit">
                 </form>
               <button class="close-btn" onclick="closeModal('remove-book-modal')">Close</button>
             </div>
