@@ -3,7 +3,8 @@ from datetime import date, datetime
 
 
 class User(models.Model):
-    name = models.CharField('Name', max_length=255, null=False, default='default')
+    first_name = models.CharField('First Name', max_length=255, null=False, default='default')
+    last_name = models.CharField('First Name', max_length=255, null=False, default='default')
     username = models.CharField('Username', max_length=255, unique=True, null=False, default='default')
     password = models.CharField('Password', max_length=255, null=False, default='default')
     email = models.CharField('Email Address', max_length=255, null=False, default='default')

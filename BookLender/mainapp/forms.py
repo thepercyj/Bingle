@@ -5,7 +5,6 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['book_title', 'book_author', 'genre', 'published_date']  # List all fields you want from the model
-        # Optionally, you can add widgets or labels here if you want to customize the form further
         labels = {
             'book_title': 'Book Title',
             'book_author': 'Book Author',
