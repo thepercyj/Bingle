@@ -17,7 +17,8 @@ class Book(models.Model):
     book_title = models.CharField('Book Title', max_length=255, null=False, default='default')
     book_author = models.CharField('Book Author', max_length=255, null=False, default='default')
     genre = models.CharField('Genre', max_length=255, null=False, default='default')
-    published_date = models.DateField('Publish Date', null=False, default=date(2024, 1, 1))
+    published_date = models.DateField('Publish Date', null=False,
+                                      default=date(2024, 1, 1))
 
     def __str__(self):
         return self.bookTitle

@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import JsonResponse
 from .forms import BookForm
+from .models import userBooks, Book, User
 
-
+test_user = User()
 # Index Page
 def index(request):
     return render(request, 'index.html')
@@ -39,7 +40,10 @@ def addBook(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_book = form.save()
+            # Adds the book to the userBooks table
+            addUserBook(request, new_book)
+
             return JsonResponse({'status': 'success', 'message': 'Book added successfully'})
         else:
             # Form validation failed, return error details
@@ -53,3 +57,18 @@ def addBook(request):
     # As a last resort, return a generic response for unexpected cases
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
+
+def addUserBook(request, book):
+    """Adds a book to the user's library based on the Book Form submitted"""
+    new_user_book = userBooks(
+        user_id=1,  # Set the current user as the user_id
+        book_id=book,  # Set the newly created book as the book_id
+        availability=True,  # Assuming you want to set the book as available by default
+        booked='No'  # Or any default value that makes sense for your 'booked' field
+    )
+
+    # Save the new userBooks instance to the database
+    new_user_book.save()
+
+
+
