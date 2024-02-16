@@ -46,7 +46,7 @@ def addBook(request):
         if form.is_valid():
             new_book = form.save()
             # Adds the book to the userBooks table
-            addUserBook(request, new_book)
+            addUserBook(new_book)
 
             return JsonResponse({'status': 'success', 'message': 'Book added successfully'})
         else:
@@ -62,7 +62,8 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
-def addUserBook(request, book):
+
+def addUserBook(book):
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBooks(
         user_id=test_user_profile,  # Set the current user as the user_id

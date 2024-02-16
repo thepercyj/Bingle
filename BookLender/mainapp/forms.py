@@ -20,5 +20,5 @@ class BookForm(forms.ModelForm):
 class UserBooksForm(forms.ModelForm):
     class Meta:
         model = UserBooks
-        fields = ['owner_book_id', 'user_id', 'book_id', 'availability', 'booked']
+        fields = ['owner_book_id', 'book_id', 'availability', 'booked']
 

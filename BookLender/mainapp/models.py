@@ -23,7 +23,6 @@ class Book(models.Model):
 
 class UserBooks(models.Model):
     owner_book_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='owner')
-    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='user_books_user')
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, related_name='user_books_book')
     availability = models.BooleanField('Available', null=False, default=True)
     booked = models.CharField('Booked', max_length=255, null=False, default='default')
