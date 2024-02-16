@@ -121,6 +121,16 @@
       </div>
 
     </div>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const remove = urlParams.get('remove');
+    if (remove === 'true') {
+        openModal('remove-book-modal')
+    }
+});
+  </script>
   </section>
   <section class=" client_section">
     <div class="container-xl px-4 mt-4">

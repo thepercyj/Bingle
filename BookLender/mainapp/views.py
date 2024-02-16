@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from .forms import BookForm
 from .models import UserBooks, Book, User, UserProfile
 from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 # Create a test user and profile for testing
 # test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
@@ -91,4 +93,4 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBooks.DoesNotExist:
         messages.error(request, "Book not found.")
-    return redirect('dashboard')
+    return HttpResponseRedirect(reverse('dashboard') + '?remove=true')
