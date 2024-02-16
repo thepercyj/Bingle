@@ -88,11 +88,12 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "esrs",
         "USER": "root",
-        "PASSWORD": "root",
+        "PASSWORD": "",
         "HOST": "localhost",
         "PORT": "3306",
     }
 }
+
 
 
 # Password validation

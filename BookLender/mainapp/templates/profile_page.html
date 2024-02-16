@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  {% load static %}
+
+  <title>BookLender</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+  <!-- Favicons-->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body class="sub_page">
+  <div class="hero_area">
+    <!-- header section strats -->
+    {% include 'header.html' %}
+
+    <!-- end header section -->
+  </div>
+
+  <section class="category_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Profile Page
+        </h2>
+      </div>
+      <div class="category_container">
+        <div class="box">
+          <h2>Books Owned</h2>
+          <span>69</span>
+          <button class="add-books-btn" onclick="openModal()">
+            <h4>Add Books</h4>
+          </button>
+
+          <div id="myModal" class="modal">
+            <div class="modal-content">
+                <form method="post" action="/add-book/" id="addBookForm">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit">
+                </form>
+              <button class="close-btn" onclick="closeModal()">Close</button>
+            </div>    
+          </div>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('addBookForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent the normal submission of the form
+
+                // FormData to collect and send data from the form
+                let formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'), // Ensure CSRF token is sent
+                    },
+                    credentials: 'same-origin' // Include cookies
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Here you can handle the response, e.g., display a success message
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Here you can handle errors, e.g., display an error message
+                });
+            });
+        });
+        </script>
+
+
+        </div>
+        <div class="box">
+          <h2>Books Borrowed</h2>
+          <span>6</span>
+          <button class="add-books-btn" onclick="openModal()">
+            <h4>Remove Books</h4>
+          </button>
+
+        </div>
+        <div class="box">
+          <h2>Books Lended</h2>
+          <span>9</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+  <section class=" client_section">
+    <div class="container-xl px-4 mt-4">
+      <!-- Account page navigation-->
+      <div class="container">
+
+        <hr class="mt-0 mb-4">
+        <div class="row">
+          <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+              <div class="heading_container">
+                <h2>
+                  Profile Picture
+                </h2>
+              </div>
+              <div class="card-body text-center">
+                <!-- Profile picture image-->
+                <img class="img-account-profile rounded-circle mb-2"
+                  src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                <!-- Profile picture help block-->
+                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                <!-- Profile picture upload button-->
+                <button class="btn btn-primary" type="button">Upload new image</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+              <div class="heading_container">
+                <h2>
+                  Account Details
+                </h2>
+              </div>
+              <div class="card-body">
+
+                <form>
+                  <!-- Form Group (username)-->
+                  <div class="mb-3">
+                    <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on
+                      the site)</label>
+                    <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username"
+                      value="username">
+                  </div>
+                  <!-- Form Row-->
+                  <div class="row gx-3 mb-3">
+                    <!-- Form Group (first name)-->
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="inputFirstName">First name</label>
+                      <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name"
+                        value="Valerie">
+                    </div>
+                    <!-- Form Group (last name)-->
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="inputLastName">Last name</label>
+                      <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name"
+                        value="Luna">
+                    </div>
+                  </div>
+                  <!-- Form Row        -->
+                  <div class="row gx-3 mb-3">
+                    <!-- Form Group (organization name)-->
+
+                    <!-- Form Group (location)-->
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="inputLocation">Location</label>
+                      <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location"
+                        value="San Francisco, CA">
+                    </div>
+                  </div>
+                  <!-- Form Group (email address)-->
+                  <div class="mb-3">
+                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                    <input class="form-control" id="inputEmailAddress" type="email"
+                      placeholder="Enter your email address" value="name@example.com">
+                  </div>
+                  <!-- Form Row-->
+                  <div class="row gx-3 mb-3">
+                    <!-- Form Group (phone number)-->
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="inputPhone">Phone number</label>
+                      <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number"
+                        value="555-123-4567">
+                    </div>
+                    <!-- Form Group (birthday)-->
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="inputBirthday">Birthday</label>
+                      <input class="form-control" id="inputBirthday" type="text" name="birthday"
+                        placeholder="Enter your birthday" value="06/10/1988">
+                    </div>
+                  </div>
+                  <!-- Save changes button-->
+                  <button class="btn btn-primary" type="button">Save changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include 'footer.html' %}
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+
+</body>
