@@ -1,15 +1,24 @@
 from django import forms
+from .models import Book, UserBooks
 
-class BookForm(forms.Form):
-    bookTitle = forms.CharField(label='Book Title', max_length=100)
-    bookAuthor = forms.CharField(label='Book Author', max_length=100)
-    ibsn = forms.CharField(label='IBSN', max_length=20, required=False)  # Assuming it's optional
-    ibsn13 = forms.CharField(label='IBSN13', max_length=20, required=False)  # Assuming it's optional
-    languageCode = forms.ChoiceField(label='Language', choices=[
-        ('', 'Choose a language'),
-        ('en', 'English (US)'),
-        ('es', 'Spanish (Spain)'),
-        ('fr', 'French (France)'),
-        ('de', 'German (Germany)'),
-    ])
-    numPages = forms.IntegerField(label='Number of Pages')
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['book_title', 'book_author', 'genre', 'published_date']  # List all fields you want from the model
+        labels = {
+            'book_title': 'Book Title',
+            'book_author': 'Book Author',
+            'genre': 'Genre',
+            'published_date': 'Publish Date',
+        }
+        widgets = {
+            'published_date': forms.DateInput(attrs={'type': 'date'}),  # For example, to use a date picker in HTML5
+        }
+
+
+class UserBooksForm(forms.ModelForm):
+    class Meta:
+        model = UserBooks
+        fields = ['owner_book_id', 'book_id', 'availability', 'booked']
+

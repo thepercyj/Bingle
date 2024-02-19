@@ -31,5 +31,6 @@ urlpatterns = [
     path('', include('messagesApp.urls')),
     path('profile/', profile, name='profile'),
     path('add-book/', addBook, name='addBook'),
-
+    path('remove-book/', removeBook, name='removeUserBook'),
+    path('update-profile/', updateProfile, name='updateProfile')
 ]
