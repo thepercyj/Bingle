@@ -25,23 +25,33 @@
             <div class="card-body">
                 <form method="post" action="{% url 'register' %}">
                     {% csrf_token %}
+
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
                         <input type="text" class="form-control" placeholder="Username" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" required>
+                        {% for error in form.username.errors %}
+                            <p style="color: red">{{ error }}</p>
+                        {% endfor %}
                     </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
                         <input type="password" class="form-control" placeholder="Password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" required>
+                        {% for error in form.password1.errors %}
+                            <p style="color: red">{{ error }}</p>
+                        {% endfor %}
                     </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
                         <input type="password" class="form-control" placeholder="Confirm Password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" required>
+                        {% for error in form.password2.errors %}
+                            <p style="color: red">{{ error }}</p>
+                        {% endfor %}
                     </div>
                     <div class="row align-items-center remember">
                         <input type="checkbox">Remember Me
