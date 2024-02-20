@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 
 from .forms import BookForm
-from .models import UserBooks, Book, User, UserProfile
+from .models import UserBooks, Book, User, UserProfile, Conversations
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -123,3 +123,30 @@ def updateProfile(request):
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
+
+
+def getConversation(request):
+    if request.method == 'POST':
+        our_username = test_user
+        their_username = request.POST.get('their_username')
+
+def getConversationList(request):
+    if request.method == 'POST':
+        our_username = test_user.username
+        conversationList = Conversations.objects.get(id_1=our_username || id_2=our_username)
+        for conversation in conversationList:
+            conversation_contents.append(get most recent conversation content and username from Messages)
+            render(messages.html, converation_contents)
+
+def loadFullConversation(request):
+    if request.method == 'POST':
+        our_id = test_user
+        their_id = post.their_id
+        messagesList = get Messages(ordered by time, messageDetails:sender_id, where recieved=our_id && sender=their_id
+                           || where recieved=thier_id && sender=our_id)
+        render(messageList)
+
+
+
+
+

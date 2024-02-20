@@ -12,6 +12,14 @@ class UserProfile(models.Model):
     review = models.IntegerField('Review Score', null=True)
 
 
+class Conversations(models.Model):
+    id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_id_1')
+    id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_id_2')
+    username_1 = models.ForeignKey(User.username, on_delete=models.CASCADE, related_name='username_1')
+    username_2 = models.ForeignKey(User.username, on_delete=models.CASCADE, related_name='username_2')
+
+
+
 class Book(models.Model):
     book_title = models.CharField('Book Title', max_length=255, null=False, default='default')
     book_author = models.CharField('Book Author', max_length=255, null=False, default='default')
