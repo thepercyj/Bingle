@@ -15,8 +15,12 @@ class UserProfile(models.Model):
 class Conversations(models.Model):
     id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_id_1')
     id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_id_2')
-    username_1 = models.ForeignKey(User.username, on_delete=models.CASCADE, related_name='username_1')
-    username_2 = models.ForeignKey(User.username, on_delete=models.CASCADE, related_name='username_2')
+
+    class Conversations(models.Model):
+        id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_1')
+        id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_2')
+        username_1 = models.CharField(max_length=150, unique=True)  # Assuming max_length to match the User model's username field
+        username_2 = models.CharField(max_length=150, unique=True)
 
 
 
