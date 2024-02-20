@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Requests</title>
+</head>
+<body>
+    <h1>Book Requests</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send Request</button>
+    </form>
+    <h2>Requests:</h2>
+    {% if requests %}
+        <ul>
+            {% for book in requests %}
+                <li>{{ book.title }} - Requested by: {{ book.borrower }}</li>
+                <a href="{% url 'approve_request' book.id %}">Approve</a>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No requests</p>
+    {% endif %}
+</body>
+</html>
