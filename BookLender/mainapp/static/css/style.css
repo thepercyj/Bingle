@@ -917,7 +917,7 @@ a:focus {
 @media (max-width: 576px) {
 
   /* Small screens */
-  .modal-content {
+ .modal-content {
     max-width: 90%;
   }
 }
@@ -925,7 +925,7 @@ a:focus {
 @media (min-width: 577px) and (max-width: 768px) {
 
   /* Medium screens */
-  .modal-content {
+ .modal-content {
     max-width: 80%;
   }
 }
@@ -975,6 +975,22 @@ a:focus {
   margin-left: 10px;
   cursor: pointer;
 }
+.submit-btn {
+  background-color: #6B92A4;
+  color: rgba(256,256,256,0.7);
+  border:0;
+  border-radius: 15px;
+  display: block;
+  margin: 15px auto;
+  padding: 15px 45px;
+  width: 100%;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: all .3s ease;
+}
 
 .btn-register {
   background-color: #ff4f5a;
@@ -986,3 +1002,17 @@ a:focus {
   margin-left: 10px;
   cursor: pointer;
 }
+
+/* code added*/
+body{
+  margin: 0;
+  padding: 0;
+  font-family: Sans-serif;
+  background-image: url("https://wallpaperaccess.com/full/2334886.jpg") ;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  overflow: auto;
+}
+
+
