@@ -11,11 +11,11 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-# Create a test user and profile for testing
-# test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
-test_user = User.objects.first()
-# test_user_profile = UserProfile.objects.create(user=test_user, primary_location="Brighton", current_location="Brighton",review= 5)
-test_user_profile = UserProfile.objects.first()
+# # Create a test user and profile for testing
+# # test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
+# test_user = User.objects.first()
+# # test_user_profile = UserProfile.objects.create(user=test_user, primary_location="Brighton", current_location="Brighton",review= 5)
+# test_user_profile = UserProfile.objects.first()
 
 
 # Index Page
