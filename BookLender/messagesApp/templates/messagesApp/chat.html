@@ -1,148 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% load static %}
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
+
+    <link href="{% static 'messagesApp/css/chat.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Your custom CSS -->
     <link href="{% static 'messagesApp/css/chat.css' %}" rel="stylesheet" />
 
 
-</head>
-<body>
-<div class="header">
-</div>
 
-<div class="container">
-    <div class="messages">
-        <div id="sse-data"></div>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-md-4 border-right">
+                <div class="settings-tray">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/filip.jpg" alt="Profile img">
+                    <h6>
+                        <div class="header" data-username="{{ request.session.username }}">
+                        </div>
+                    </h6>
+                    <span class="settings-tray--right">
+                        <i class="material-icons">cached</i>
+                        <i class="material-icons">message</i>
+                        <i class="material-icons">menu</i>
+
+                    </span>
+                </div>
+                <div class="search-box">
+                    <div class="input-wrapper">
+                        <i class="material-icons">search</i>
+                        <input placeholder="Search here" type="text">
+                    </div>
+                </div>
+                <div class="friend-drawer friend-drawer--onhover">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
+                    <div class="text">
+                        <h6>Robo Cop</h6>
+                        <p class="text-muted">Hey, you're arrested!</p>
+                    </div>
+                    <span class="time text-muted small">13:21</span>
+                </div>
+                <hr>
+                <div class="friend-drawer friend-drawer--onhover">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg" alt="">
+                    <div class="text">
+                        <h6>Optimus</h6>
+                        <p class="text-muted">Wanna grab a beer?</p>
+                    </div>
+                    <span class="time text-muted small">00:32</span>
+                </div>
+                <hr>
+                <div class="friend-drawer friend-drawer--onhover ">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/real-terminator.png" alt="">
+                    <div class="text">
+                        <h6>Skynet</h6>
+                        <p class="text-muted">Seen that canned piece of s?</p>
+                    </div>
+                    <span class="time text-muted small">13:21</span>
+                </div>
+                <hr>
+                <div class="friend-drawer friend-drawer--onhover">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/termy.jpg" alt="">
+                    <div class="text">
+                        <h6>Termy</h6>
+                        <p class="text-muted">Im studying spanish...</p>
+                    </div>
+                    <span class="time text-muted small">13:21</span>
+                </div>
+                <hr>
+                <div class="friend-drawer friend-drawer--onhover">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/rick.jpg" alt="">
+                    <div class="text">
+                        <h6>Richard</h6>
+                        <p class="text-muted">I'm not sure...</p>
+                    </div>
+                    <span class="time text-muted small">13:21</span>
+                </div>
+                <hr>
+                <div class="friend-drawer friend-drawer--onhover">
+                    <img class="profile-image"
+                        src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/rachel.jpeg" alt="">
+                    <div class="text">
+                        <h6>XXXXX</h6>
+                        <p class="text-muted">Hi, wanna see something?</p>
+                    </div>
+                    <span class="time text-muted small">13:21</span>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="settings-tray">
+                    <div class="friend-drawer no-gutters friend-drawer--grey">
+                        <img class="profile-image"
+                            src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
+                        <div class="text">
+                            <h6>Robo Cop</h6>
+                            <p class="text-muted">Layin' down the law since like before Christ...</p>
+                        </div>
+                        <span class="settings-tray--right">
+                            <i class="material-icons">cached</i>
+                            <i class="material-icons">message</i>
+                            <i class="material-icons">menu</i>
+                        </span>
+                    </div>
+                </div>
+                <div class="chat-panel">
+                    <div class="row no-gutters">
+                        <div class="col-md-3">
+                            <div class="chat-bubble chat-bubble--left">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-3 offset-md-9">
+                            <div class="chat-bubble chat-bubble--right">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-3 offset-md-9">
+                            <div class="chat-bubble chat-bubble--right">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-3">
+                            <div class="chat-bubble chat-bubble--left">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-3">
+                            <div class="chat-bubble chat-bubble--left">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-3">
+                            <div class="chat-bubble chat-bubble--left">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-3 offset-md-9">
+                            <div class="chat-bubble chat-bubble--right">
+                                Hello dude!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="chat-box-tray">
+                                <i class="material-icons">sentiment_very_satisfied</i>
+                                <input type="text" placeholder="Type your message here...">
+                                <i class="material-icons">mic</i>
+                                <i class="material-icons">send</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <form x-cloak
-          @submit.prevent="submit" x-data="{state: 'composing', errors: {}}">
-        <div>
-            <textarea name="content" @input="state = 'composing'" autofocus placeholder="Your next message..."></textarea>
-            <button class="button">
-                Send
-            </button>
+
+    <div class="container">
+        <div class="messages">
+            <div id="sse-data"></div>
         </div>
 
-        <div x-show="state === 'error'">
-            <p>
-                Error sending your message ❌
-            </p>
-        </div>
-    </form>
+        <form x-cloak @submit.prevent="submit" x-data="{state: 'composing', errors: {}}">
+            <div>
+                <textarea name="content" @input="state = 'composing'" autofocus
+                    placeholder="Your next message..."></textarea>
+                <button class="button">
+                    Send
+                </button>
+            </div>
 
-    <form action="/lobby/" method="get">
-        <button type="submit">Return to Lobby</button>
-    </form>
-</div>
+            <div x-show="state === 'error'">
+                <p>
+                    Error sending your message ❌
+                </p>
+            </div>
+        </form>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let username = '{{ request.session.username }}'; // Ensure this is safely injected
-        const usernameColor = getUsernameColor(username);
-
-        // Create the container for the welcome message
-        const welcomeMessage = document.createElement('span');
-        welcomeMessage.textContent = 'Welcome ';
-        welcomeMessage.style.color = 'black'; // Set welcome message color
-
-        // Create the container for the username
-        const usernameElement = document.createElement('span');
-        usernameElement.textContent = username;
-        usernameElement.style.fontWeight = 'bold';
-        usernameElement.style.color = usernameColor; // Set username color
-
-        // Append both the welcome message and the username to the header
-        const headerDiv = document.querySelector('.header');
-        if (headerDiv) {
-            headerDiv.appendChild(welcomeMessage); // Append "Welcome" part
-            headerDiv.appendChild(usernameElement); // Append username part
-        }
-    });
-
-    let eventSource;
-    const sseData = document.getElementById('sse-data');
-
-    const colors = ['#D32F2F', '#C2185B', '#7B1FA2', '#512DA8', '#303F9F', '#1976D2', '#0288D1',
-                '#0097A7', '#00796B', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19',
-                '#5D4037', '#616161', '#455A64'];
+        <form action="/lobby/" method="get">
+            <button type="submit">Return to Lobby</button>
+        </form>
+    </div>
 
 
-    function startSSE() {
-        eventSource = new EventSource('/stream-chat-messages/');
-        eventSource.onmessage = event => {
-            const data = JSON.parse(event.data);
-            console.log(data)
-            const color = getUsernameColor(data.author__name);
-            const formattedTime = formatTime(data.created_at); // You might need to implement formatTime
-            const messageHTML = `
-                    <div class="message-box">
-                        <br>
-                        <span class="message-time">Sent: ${formattedTime}</span>
-                        <div class="message-author" style="color: ${color};"> <strong> ${data.author__name} </strong> </div>
-                        <div class="message-content">${data.content}</div>
-                    </div>`;
-            sseData.innerHTML += messageHTML;
-        };
-    }
+    <script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-   function getUsernameColor(username) {
-        // Simple hash function to index into the array of colors
-        let hash = 0;
-        for (let i = 0; i < username.length; i++) {
-            hash = username.charCodeAt(i) + ((hash << 5) - hash);
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        hash = Math.abs(hash);
-        return colors[hash % colors.length];
-    }
+    <script src="{% static 'messagesApp/js/chat.js' %}"></script>
 
-    function formatTime(timeString) {
-        const date = new Date(timeString)
-
-        // Formats date as MM/DD/YY HH:MM
-        const formattedDate = date.toLocaleDateString('en-GB');
-        const formattedTime = date.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', hour12: false});
-        return `${formattedDate} ${formattedTime}`;
-    }
-
-
-    // On load, start SSE if the browser supports it.
-    if (typeof(EventSource) !== 'undefined') {
-        startSSE();
-    } else {
-        sseData.innerHTML = 'Whoops! Your browser doesn\'t receive server-sent events.';
-    }
-</script>
-
-<script>
-    function submit(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-
-        const endpointUrl = "/create-message/"
-        fetch(endpointUrl, {
-            method: "post",
-            body: formData,
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-            },
-        })
-            .then(response => {
-                this.state = response.ok ? 'success' : 'error';
-                document.querySelector('textarea[name="content"]').value = ''; // Clears the textbox
-                return response.json();
-            })
-            .then(data => {
-                this.errors = data.errors || {};
-            });
-    }
-</script>
-<script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
 </body>
-</html>
 
+</html>
