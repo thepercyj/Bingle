@@ -1,98 +1,108 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .models import Book, BookForm, BookRequestForm, User
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
+from .models import Book, BookForm, BorrowRequest, Notification
 
 
-def portal(request):
+class CustomLoginView(LoginView):
+    template_name = 'lendborrowapp/login1.html'
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard')
+
+
+def dashboard(request):
+    username = request.user.username
+    return render(request, 'lendborrowapp/dashboard.html', {'username': username})
+
+
+def base(request):
+    return render(request, 'lendborrowapp/base.html')
+
+
+def register(request):
     if request.method == 'POST':
-        user_name = request.POST.get('user_name')
-        # Check if the user already exists in the database
-        user, created = User.objects.get_or_create(name=user_name)
-        request.session['user_name'] = user_name  # Store username in session
-        print("Username stored in session:", request.session['user_name'])  # Debugging
-        return redirect('add_book')
-    return render(request, 'lendborrowapp/portal.html')
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page or login page
+            return redirect('login1')
+    else:
+        form = UserCreationForm()
+    return render(request, 'lendborrowapp/register1.html', {'form': form})
 
 
-def add_book(request):
-    user_name = request.session.get('user_name')
-    try:
-        user_instance = User.objects.get(name=user_name)
-    except User.DoesNotExist:
-        # Handle the case when the user does not exist
-        # You can redirect the user to an error page or take appropriate action
-        return redirect('error_page')
-
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        author = request.POST.get('author')
-        Book.objects.create(title=title, author=author, owner=user_instance)
-        return redirect('book_list')
-    return render(request, 'lendborrowapp/add_book.html', {'user_name': user_instance.name})
-
-
+@login_required
 def book_list(request):
-    # Retrieve the username from the session
-    user_name = request.session.get('user_name')
-    try:
-        # Fetch the User instance based on the username
-        user_instance = User.objects.get(name=user_name)
-        # Filter books by the fetched User instance
-        books = Book.objects.filter(owner=user_instance)
-    except User.DoesNotExist:
-        # Handle the case where the user does not exist
-        # You can redirect the user to an error page or take appropriate action
-        return render(request, 'error.html', {'error_message': 'User does not exist'})
-    return render(request, 'lendborrowapp/book_list.html', {'books': books})
+    books = Book.objects.filter(owner=request.user)
+    return render(request, 'lendborrowapp/gallery.html', {'books': books})
 
 
-def book_requests(request):
+@login_required
+def book_add(request):
     if request.method == 'POST':
-        form = BookRequestForm(request.POST)
+        form = BookForm(request.POST)
         if form.is_valid():
             book = form.save(commit=False)
-            book.owner = request.session.get('user_name')
+            book.owner = request.user
             book.save()
-            messages.success(request, 'Book request sent successfully!')
-            return redirect('book_requests')
+            messages.success(request, 'Book added successfully.')
+            return redirect('book_list')
     else:
-        form = BookRequestForm()
-    requests = Book.objects.exclude(borrower=None)
-    return render(request, 'lendborrowapp/book_requests.html', {'form': form, 'requests': requests})
+        form = BookForm()
+    return render(request, 'lendborrowapp/book_form.html', {'form': form})
 
 
-def approve_request(request, book_id):
-    book = Book.objects.get(pk=book_id)
-    book.borrower = book.owner
-    book.owner = request.session.get('user_name')
-    book.save()
-    messages.success(request, f'Book "{book.title}" approved for lending!')
-    return redirect('book_requests')
-
-
-def borrow_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    if book.borrower:
-        messages.error(request, 'This book is already borrowed by someone else.')
+@login_required
+def book_update(request, pk):
+    book = Book.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Book updated successfully.')
+            return redirect('book_list')
     else:
-        user_id = request.session.get('user_id')
-        user = get_object_or_404(User, pk=user_id)
-        book.borrower = user
-        book.save()
-        messages.success(request, f'You borrowed "{book.title}" successfully!')
-    return redirect('book_list')
+        form = BookForm(instance=book)
+    return render(request, 'lendborrowapp/book_form.html', {'form': form})
 
 
-def lend_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    if book.owner != request.session.get('user_id'):
-        messages.error(request, 'You do not own this book.')
-    elif book.borrower:
-        messages.error(request, 'This book is already lent out.')
+@login_required
+def book_delete(request, pk):
+    book = Book.objects.get(pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        messages.success(request, 'Book deleted successfully.')
+        return redirect('book_list')
+    return render(request, 'lendborrowapp/book_confirm_delete.html', {'book': book})
+
+
+@login_required
+def gallery(request):
+    query = request.GET.get('q')
+    if query:
+        books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
     else:
-        user_id = request.session.get('user_id')
-        user = get_object_or_404(User, pk=user_id)
-        book.borrower = user
-        book.save()
-        messages.success(request, f'You lent "{book.title}" successfully!')
-    return redirect('book_list')
+        books = Book.objects.all()
+    return render(request, 'lendborrowapp/gallery.html', {'books': books})
+
+
+@login_required
+def lend_books(request):
+    user_books = Book.objects.filter(owner=request.user)
+    return render(request, 'lendborrowapp/lend_books.html', {'user_books': user_books})
+
+
+@login_required
+def borrow_books(request):
+    books = Book.objects.exclude(owner=request.user)
+    return render(request, 'lendborrowapp/gallery.html', {'books': books})
+
+
+@login_required
+def notifications(request):
+    user_notifications = Notification.objects.filter(user=request.user)
+    return render(request, 'lendborrowapp/notifications.html', {'notifications': user_notifications})

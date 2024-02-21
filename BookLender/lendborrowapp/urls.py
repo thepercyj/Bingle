@@ -1,12 +1,17 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('portal/', views.portal, name='portal'),
-    path('add_book/', views.add_book, name='add_book'),
-    path('borrow/<int:book_id>/', views.borrow_book, name='borrow_book'),
-    path('lend/<int:book_id>/', views.lend_book, name='lend_book'),
-    path('book_list/', views.book_list, name='book_list'),
-    path('book_requests/', views.book_requests, name='book_requests'),
-    path('approve_request/<int:book_id>/', views.approve_request, name='approve_request'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('books/', views.book_list, name='book_list'),
+    path('books/add/', views.book_add, name='book_add'),
+    path('books/<int:pk>/update/', views.book_update, name='book_update'),
+    path('books/<int:pk>/delete/', views.book_delete, name='book_delete'),
+    path('gallery/', views.gallery, name='gallery'),
+    path('lend/', views.lend_books, name='lend_books'),
+    path('borrow/', views.borrow_books, name='borrow_books'),
+    path('login1/', views.CustomLoginView.as_view(), name='login1'),
+    path('logout1/', auth_views.LogoutView.as_view(), name='logout1'),
+    path('register1/', views.register, name='register1'),
 ]
