@@ -180,7 +180,7 @@ def sendMessage(request):
             notification_status=1
         )
         new_message.save()
-        return loadFullConversation(request)
+        return redirect('conversation')
 
 
 
