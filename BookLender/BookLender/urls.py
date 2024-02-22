@@ -34,4 +34,5 @@ urlpatterns = [
     path('remove-book/', removeBook, name='removeUserBook'),
     path('update-profile/', updateProfile, name='updateProfile'),
     path('messages/', loadFullConversation, name='conversation'),
+    path('messages/send/', sendMessage, name='sendMessage'),
 ]

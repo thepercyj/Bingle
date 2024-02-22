@@ -164,6 +164,24 @@ def loadFullConversation(request):
     # Render the conversation page with the messages
     return render(request, 'conversation.html', {'messages': messages_list})
 
+def sendMessage(request):
+    if request.method == 'POST':
+        our_id = test_user_profile
+        their_id = test_user_2_profile
+        message = request.POST.get('message')
+        new_message = Message(
+            from_user=our_id,
+            to_user=their_id,
+            details=message,
+            request_type=1,
+            request_value='default',
+            created_on=datetime.now(),
+            modified_on=datetime.now(),
+            notification_status=1
+        )
+        new_message.save()
+        return loadFullConversation(request)
+
 
 
 
