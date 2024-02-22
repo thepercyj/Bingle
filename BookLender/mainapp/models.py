@@ -12,16 +12,9 @@ class UserProfile(models.Model):
     review = models.IntegerField('Review Score', null=True)
 
 
-class Conversations(models.Model):
-    id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_id_1')
-    id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_id_2')
-
-    class Conversations(models.Model):
-        id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_1')
-        id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_2')
-        username_1 = models.CharField(max_length=150, unique=True)  # Assuming max_length to match the User model's username field
-        username_2 = models.CharField(max_length=150, unique=True)
-
+class Conversation(models.Model):
+    id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_1')
+    id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_2')
 
 
 class Book(models.Model):
@@ -32,10 +25,10 @@ class Book(models.Model):
                                       default=date(2024, 1, 1))
 
     def __str__(self):
-        return self.bookTitle
+        return self.book_title
 
 
-class UserBooks(models.Model):
+class UserBook(models.Model):
     owner_book_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='owner')
     currently_with = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='currently_with')
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, related_name='user_books_book')
@@ -43,10 +36,10 @@ class UserBooks(models.Model):
     booked = models.CharField('Booked', max_length=255, null=False, default='default')
 
 
-class Messages(models.Model):
-    user_book_id = models.ForeignKey(UserBooks, on_delete=models.CASCADE, null=True, related_name='messages_user_book')
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='from_user')
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='to_user')
+class Message(models.Model):
+    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True, related_name='messages_user_book')
+    to_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='received_messages')
+    from_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='sent_messages')
     details = models.CharField('Details', max_length=255, null=False, default='default')
     request_type = models.IntegerField('Request Type', null=False, default=1)
     request_value = models.CharField('Request Value', max_length=255, null=False, default='default')
