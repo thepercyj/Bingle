@@ -26,7 +26,7 @@ def lobby(request):
     else:
         # Display the lobby with a list of available chat rooms for GET requests
         rooms = ChatRoom.objects.all()
-        return render(request, 'lobby.html', {'rooms': rooms})
+        return render(request, 'messagesApp/lobby.html', {'rooms': rooms})
 
 def chat(request, room_name):
     """
@@ -36,7 +36,7 @@ def chat(request, room_name):
         return redirect('lobby')  # Redirect to lobby if no username is set in session
     chat_room, created = ChatRoom.objects.get_or_create(name=room_name)  # Get or create the specified chat room
     messages = Message.objects.filter(chat_room=chat_room).order_by('created_at')  # Retrieve messages for the room
-    return render(request, 'chat.html', {'room': chat_room, 'messages': messages})
+    return render(request, 'messagesApp/chat.html', {'room': chat_room, 'messages': messages})
 
 def create_message(request: HttpRequest) -> HttpResponse:
     """
