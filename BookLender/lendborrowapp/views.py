@@ -4,7 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from .models import Book, BookForm, BorrowRequest, Notification
+from django.contrib.auth.models import User
+from .models import Book, BookForm, BorrowRequest, Notification, UserProfile
 
 
 class CustomLoginView(LoginView):
@@ -25,19 +26,28 @@ def base(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
+        user_form = UserCreationForm(request.POST)
+        user_profile_form = UserProfileForm(request.POST)  # Assuming you have a UserProfileForm
+
+        if user_form.is_valid() and user_profile_form.is_valid():
+            user = user_form.save()  # Save the User instance
+            user_profile = user_profile_form.save(commit=False)  # Create a UserProfile instance but don't save it yet
+            user_profile.user = user  # Associate the UserProfile with the User instance
+            user_profile.save()  # Save the UserProfile instance
+
             # Redirect to a success page or login page
             return redirect('login1')
     else:
-        form = UserCreationForm()
-    return render(request, 'lendborrowapp/register1.html', {'form': form})
+        user_form = UserCreationForm()
+        user_profile_form = UserProfileForm()  # Assuming you have a UserProfileForm
+
+    return render(request, 'lendborrowapp/register1.html', {'user_form': user_form, 'user_profile_form': user_profile_form})
 
 
 @login_required
 def book_list(request):
-    books = Book.objects.filter(owner=request.user)
+    user_profile = request.user.userprofile
+    books = Book.objects.filter(owner=user_profile)
     return render(request, 'lendborrowapp/gallery.html', {'books': books})
 
 

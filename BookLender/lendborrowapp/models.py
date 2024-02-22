@@ -5,6 +5,10 @@ from django import forms
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100, default='')
+    last_name = models.CharField(max_length=100, default='')
+    email = models.EmailField(default='')
+    phone_number = models.CharField(max_length=20, default='')
 
 
 class Book(models.Model):
@@ -40,3 +44,9 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['title', 'author']
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['first_name', 'last_name', 'email', 'phone_number']
