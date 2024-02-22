@@ -155,7 +155,7 @@ def loadFullConversation(request):
     # Get the conversation between the two users
     messages_list = Message.objects.filter(
         Q(from_user=our_id, to_user=their_id) | Q(from_user=their_id, to_user=our_id)
-    ).order_by('created_on')
+    ).select_related('from_user__user', 'to_user__user').order_by('created_on')
 
     # Annotate each message with 'is_from_our_user' for use in styling
     for message in messages_list:

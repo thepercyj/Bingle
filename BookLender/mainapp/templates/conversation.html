@@ -8,10 +8,12 @@
 </head>
 <body>
 {% for message in messages %}
-    <div class="{% if message.is_from_our_user %}from-our-user{% else %}from-their-user{% endif %}">
-        <p>{{ message.details }}</p>
-        <small>Sent on {{ message.created_on }}</small>
-    </div>
+<div class="{% if message.is_from_our_user %}from-our-user{% else %}from-their-user{% endif %}">
+    <p>{{ message.details }}</p>
+    <small>From: {{ message.from_user.user.username }}</small> <!-- Accessing the username -->
+    <small>Sent on {{ message.created_on }}</small>
+</div>
 {% endfor %}
+
 </body>
 </html>
