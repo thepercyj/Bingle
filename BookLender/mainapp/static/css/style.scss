@@ -789,4 +789,57 @@ a:focus {
   transform: rotate(-45deg) translate(8px, -8px);
 }
 
+// half textbox for first name and last name
+.col_half {
+		width: 50%;
+		float: left;
+}
+
+// checkbox for register template
+.checkbox_option label {
+  margin-right: 1em;
+  position: relative;
+}
+.checkbox_option label:before {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.5em;
+  vertical-align: -2px;
+  border: 2px solid #cccccc;
+  padding: 0.12em;
+  background-color: transparent;
+  background-clip: content-box;
+  transition: all 0.2s ease;
+}
+.checkbox_option label:after {
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  content: "";
+  height: 20px;
+  left: 2px;
+  position: absolute;
+  top: 7px;
+  transform: scaleX(-1) rotate(135deg);
+  transform-origin: left top;
+  width: 7px;
+  display: none;
+}
+.checkbox_option input:hover + label:before {
+  border-color: #000000;
+}
+.checkbox_option input:checked + label:before {
+  border-color: #000000;
+}
+.checkbox_option input:checked + label:after {
+  -moz-animation: check 0.8s ease 0s running;
+  -webkit-animation: check 0.8s ease 0s running;
+  animation: check 0.8s ease 0s running;
+  display: block;
+  width: 7px;
+  height: 20px;
+  border-color: #000000;
+}
+
 // end navbar slide toggle style
