@@ -6,7 +6,10 @@
 </head>
 <body>
 {% for message in messages %}
-    <p>{{ message.details }}</p>
+    <div class="{% if message.is_from_our_user %}from-our-user{% else %}from-their-user{% endif %}">
+        <p>{{ message.details }}</p>
+        <small>Sent on {{ message.created_on }}</small>
+    </div>
 {% endfor %}
 </body>
 </html>

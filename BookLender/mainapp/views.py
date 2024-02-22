@@ -144,9 +144,9 @@ def updateProfile(request):
 
 def loadFullConversation(request):
     """Loads the full conversation between two users."""
-    # Uses test users for testing purposes
-    our_id = test_user_profile
-    their_id = test_user_2_profile
+    # Placeholder for actual user profile retrieval logic
+    our_id = test_user_profile  # Make sure this is a UserProfile instance
+    their_id = test_user_2_profile  # Make sure this is a UserProfile instance
 
     # If id not found, returns a bad request
     if their_id is None:
@@ -156,6 +156,10 @@ def loadFullConversation(request):
     messages_list = Message.objects.filter(
         Q(from_user=our_id, to_user=their_id) | Q(from_user=their_id, to_user=our_id)
     ).order_by('created_on')
+
+    # Annotate each message with 'is_from_our_user'
+    for message in messages_list:
+        message.is_from_our_user = (message.from_user == our_id)
 
     # Render the conversation page with the messages
     return render(request, 'conversation.html', {'messages': messages_list})
