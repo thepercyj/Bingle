@@ -1,9 +1,11 @@
 from django.contrib import admin
-from .models import UserProfile, Book, UserBooks, Messages, Booking
+from .models import UserBook, Book, UserProfile, Conversation, Message, Booking
 
-admin.site.register(UserProfile)
+admin.site.register(UserBook)
 admin.site.register(Book)
-admin.site.register(UserBooks)
-admin.site.register(Messages)
+admin.site.register(UserProfile)
+admin.site.register(Conversation)
+admin.site.register(Message)
 admin.site.register(Booking)
+
 
