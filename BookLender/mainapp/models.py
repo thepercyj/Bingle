@@ -38,6 +38,8 @@ class UserBook(models.Model):
 
 class Message(models.Model):
     user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True, related_name='messages_user_book')
+    to_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='received_messages')
+    from_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='sent_messages')
     details = models.CharField('Details', max_length=255, null=False, default='default')
     request_type = models.IntegerField('Request Type', null=False, default=1)
     request_value = models.CharField('Request Value', max_length=255, null=False, default='default')
