@@ -50,7 +50,7 @@ def profile(request):
     user_books = UserBook.objects.filter(owner_book_id=test_user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count':books_count}
+               'user_book_count': books_count}
     return render(request, 'profile_page.html', context)
 
 
@@ -62,7 +62,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(new_book)
-            return redirect('dashboard')
+            return redirect('profile')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -100,7 +100,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('dashboard') + '?remove=true')
+    return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
 def updateProfile(request):
@@ -120,7 +120,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('dashboard')
+        return redirect('profile')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
