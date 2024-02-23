@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, UserBooks
+from .models import Book, UserBook
 
 
 class BookForm(forms.ModelForm):
@@ -19,6 +19,6 @@ class BookForm(forms.ModelForm):
 
 class UserBooksForm(forms.ModelForm):
     class Meta:
-        model = UserBooks
+        model = UserBook
         fields = ['owner_book_id', 'book_id', 'availability', 'booked']
 

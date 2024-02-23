@@ -23,7 +23,7 @@ class Book(models.Model):
         return self.bookTitle
 
 
-class UserBooks(models.Model):
+class UserBook(models.Model):
     owner_book_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='owner')
     currently_with = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='currently_with')
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, related_name='user_books_book')
@@ -31,8 +31,8 @@ class UserBooks(models.Model):
     booked = models.CharField('Booked', max_length=255, null=False, default='default')
 
 
-class Messages(models.Model):
-    user_book_id = models.ForeignKey(UserBooks, on_delete=models.CASCADE, null=True, related_name='messages_user_book')
+class Message(models.Model):
+    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True, related_name='messages_user_book')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='from_user')
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='to_user')
     details = models.CharField('Details', max_length=255, null=False, default='default')

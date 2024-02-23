@@ -6,16 +6,16 @@ from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 
 from .forms import BookForm
-from .models import UserBooks, Book, User, UserProfile
+from .models import UserBook, Book, User, UserProfile
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 # Create a test user and profile for testing
-# test_user = User.objects.create_user("testUser", "testuser@email.com", password="password", first_name="Test", last_name="User")
-test_user = User.objects.first()
-# test_user_profile = UserProfile.objects.create(user=test_user, primary_location="Brighton", current_location="Brighton",review= 5)
-test_user_profile = UserProfile.objects.first()
+test_user = User.objects.get(username='testUser')
+test_user_profile = UserProfile.objects.get(user=test_user)
+test_user2 = User.objects.get(username='TestUser2')
+test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
 
 # Index Page
@@ -48,7 +48,7 @@ def profile(request):
     form = BookForm(request.POST or None)
     user = test_user
     user_profile = test_user_profile
-    user_books = UserBooks.objects.filter(owner_book_id=test_user_profile)
+    user_books = UserBook.objects.filter(owner_book_id=test_user_profile)
     context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user}
     return render(request, 'profile_page.html', context)
 
@@ -78,7 +78,7 @@ def addBook(request):
 
 def addUserBook(book):
     """Adds a book to the user's library based on the Book Form submitted"""
-    new_user_book = UserBooks(
+    new_user_book = UserBook(
         owner_book_id=test_user_profile,  # Set the current user as the user_id
         currently_with=test_user_profile,  # Defaults current user to currently_with on creation
         book_id=book,  # Set the newly created book as the book_id
@@ -94,10 +94,10 @@ def addUserBook(book):
 def removeBook(request):
     book_id = request.POST.get('book_id')
     try:
-        book = UserBooks.objects.get(id=book_id, owner_book_id=test_user_profile)
+        book = UserBook.objects.get(id=book_id, owner_book_id=test_user_profile)
         book.delete()
         messages.success(request, "Book removed successfully.")
-    except UserBooks.DoesNotExist:
+    except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
     return HttpResponseRedirect(reverse('dashboard') + '?remove=true')
 
@@ -119,7 +119,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return profile(request)
+        return redirect('dashboard')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
