@@ -1,0 +1,12 @@
+{% extends 'lendborrowapp/base.html' %}
+
+{% block title %}Lend Books{% endblock %}
+
+{% block content %}
+<h1>Lend Books</h1>
+<ul>
+    {% for book in user_books %}
+    <li>{{ book.title }} by {{ book.author }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

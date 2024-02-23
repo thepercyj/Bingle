@@ -14,13 +14,19 @@ from pathlib import Path
 import os
 
 
-
 # Static files (CSS, JavaScript, images)
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'messagesApp/static'),
+    os.path.join(BASE_DIR, 'mainapp/static'),
+
+    # Add more paths for other apps if needed
+    # os.path.join(BASE_DIR, 'app1/static'),
+    # os.path.join(BASE_DIR, 'app2/static'),
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -45,7 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
-    'messagesApp'
+    'messagesApp',
+    'lendborrowapp'
 ]
 
 MIDDLEWARE = [
@@ -63,7 +70,10 @@ ROOT_URLCONF = 'BookLender.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'templates'],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'mainapp/templates'),
+            os.path.join(BASE_DIR, 'messageApp/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,7 +94,7 @@ ASGI_APPLICATION = 'BookLender.asgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-   'default': {
+    'default': {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "esrs",
         "USER": "root",
@@ -93,7 +103,6 @@ DATABASES = {
         "PORT": "3306",
     }
 }
-
 
 
 # Password validation
@@ -137,4 +146,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

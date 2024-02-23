@@ -1,0 +1,17 @@
+{% extends 'lendborrowapp/base.html' %}
+
+{% block title %}Borrow Books{% endblock %}
+
+{% block content %}
+<h1>Borrow Books</h1>
+<ul>
+    {% for book in books %}
+    <li>{{ book.title }} by {{ book.author }} - Owner: {{ book.owner.username }}
+        <form method="post" action="{% url 'borrow_books' book.id %}">
+            {% csrf_token %}
+            <button type="submit">Request to Borrow</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

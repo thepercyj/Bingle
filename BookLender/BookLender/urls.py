@@ -29,7 +29,10 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('register/', register, name='register'),
     path('', include('messagesApp.urls')),
-    path('profile/', profile, name='profile'),
+    path('profile/', profile, name='dashboard'),
     path('add-book/', addBook, name='addBook'),
-
+    path('remove-book/', removeBook, name='removeUserBook'),
+    path('update-profile/', updateProfile, name='updateProfile'),
+    path('messages/', loadFullConversation, name='conversation'),
+    path('messages/send/', sendMessage, name='sendMessage'),
 ]
