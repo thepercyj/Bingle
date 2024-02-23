@@ -48,7 +48,9 @@ def profile(request):
     user = test_user
     user_profile = test_user_profile
     user_books = UserBook.objects.filter(owner_book_id=test_user_profile)
-    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user}
+    books_count = user_books.count()  # Count the number of books
+    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count':books_count}
     return render(request, 'profile_page.html', context)
 
 
