@@ -1,0 +1,13 @@
+.register_btn {
+    background-color: #ff4f5a;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.register_checkbox {
+    display: flex;
+    align-items: center;
+}
