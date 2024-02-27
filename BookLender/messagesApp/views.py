@@ -32,8 +32,17 @@ test_user_2_profile = UserProfile.objects.get(user=test_user2)
 #             render(messages.html, converation_contents)
 #
 
+
 def loadFullConversation(request):
-    """Loads the full conversation between two users."""
+    """
+    This function loads the full conversation between two users.
+
+    Parameters:
+    request (HttpRequest): The Django HttpRequest object.
+
+    Returns:
+    HttpResponse: Renders the conversation page with the messages between the two users.
+    """
     # Placeholder for actual user profile retrieval logic
     our_id = test_user_profile
     their_id = test_user_2_profile
@@ -54,11 +63,27 @@ def loadFullConversation(request):
     # Render the conversation page with the messages
     return render(request, 'messagesApp/conversation.html', {'messages': messages_list})
 
+
 def sendMessage(request):
+    """
+    This function handles the POST request to send a message from one user to another.
+
+    Parameters:
+    request (HttpRequest): The Django HttpRequest object.
+
+    Returns:
+    HttpResponse: Redirects to the conversation page after the message is sent.
+    """
+    # Check if the request method is POST
     if request.method == 'POST':
+        # Set the sender and receiver of the message
         our_id = test_user_profile
         their_id = test_user_2_profile
+
+        # Get the message from the POST data
         message = request.POST.get('message')
+
+        # Create a new Message object with the provided details
         new_message = Message(
             from_user=our_id,
             to_user=their_id,
@@ -69,5 +94,9 @@ def sendMessage(request):
             modified_on=datetime.now(),
             notification_status=1
         )
+
+        # Save the new message to the database
         new_message.save()
+
+        # Redirect to the conversation page
         return redirect('conversation')
