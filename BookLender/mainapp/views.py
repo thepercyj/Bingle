@@ -11,8 +11,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 
-test_user = User.objects.get(username='testUser')
-test_user_profile = UserProfile.objects.get(user=test_user)
+
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
@@ -69,9 +68,9 @@ def login_view(request):
 @never_cache
 def profile(request):
     form = BookForm(request.POST or None)
-    user = test_user
-    user_profile = test_user_profile
-    user_books = UserBook.objects.filter(owner_book_id=test_user_profile)
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count}
@@ -101,11 +100,12 @@ def addBook(request):
     return HttpResponse('Unexpected error occurred.', status=500)
 
 
-def addUserBook(book):
+def addUserBook(request, book):
+    user_profile = UserProfile.objects.get(user=request.user)
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBook(
-        owner_book_id=test_user_profile,  # Set the current user as the user_id
-        currently_with=test_user_profile,  # Defaults current user to currently_with on creation
+        owner_book_id=user_profile,  # Set the current user as the user_id
+        currently_with=user_profile,  # Defaults current user to currently_with on creation
         book_id=book,  # Set the newly created book as the book_id
         availability=True,  # Set available to true by default on creation
         booked='No'
@@ -117,9 +117,10 @@ def addUserBook(book):
 
 @never_cache
 def removeBook(request):
+    user_profile = UserProfile.objects.get(user=request.user)
     book_id = request.POST.get('book_id')
     try:
-        book = UserBook.objects.get(id=book_id, owner_book_id=test_user_profile)
+        book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
         book.delete()
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
@@ -129,7 +130,7 @@ def removeBook(request):
 
 def updateProfile(request):
     if request.method == 'POST':
-        user_id = test_user.id
+        user_id = request.user
         user = User.objects.get(id=user_id)
         user_profile = UserProfile.objects.get(user=user)  # Adjust based on your UserProfile model relation
 

@@ -44,7 +44,7 @@ def loadFullConversation(request):
     HttpResponse: Renders the conversation page with the messages between the two users.
     """
     # Placeholder for actual user profile retrieval logic
-    our_id = test_user_profile
+    our_id = UserProfile.objects.get(user=request.user)
     their_id = test_user_2_profile
 
     # If id not found, returns a bad request
@@ -77,7 +77,7 @@ def sendMessage(request):
     # Check if the request method is POST
     if request.method == 'POST':
         # Set the sender and receiver of the message
-        our_id = test_user_profile
+        our_id = UserProfile.objects.get(user=request.user)
         their_id = test_user_2_profile
 
         # Get the message from the POST data
