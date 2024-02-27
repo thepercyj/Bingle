@@ -5,14 +5,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-
 from .forms import BookForm
 from .models import UserBook, Book, User, UserProfile, Conversation, Message
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-# Create a test user and profile testing
 test_user = User.objects.get(username='testUser')
 test_user_profile = UserProfile.objects.get(user=test_user)
 test_user2 = User.objects.get(username='TestUser2')
@@ -50,7 +48,9 @@ def profile(request):
     user = test_user
     user_profile = test_user_profile
     user_books = UserBook.objects.filter(owner_book_id=test_user_profile)
-    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user}
+    books_count = user_books.count()  # Count the number of books
+    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count}
     return render(request, 'profile_page.html', context)
 
 
@@ -62,7 +62,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(new_book)
-            return redirect('dashboard')
+            return redirect('profile')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -100,7 +100,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('dashboard') + '?remove=true')
+    return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
 def updateProfile(request):
@@ -120,7 +120,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return profile(request)
+        return redirect('profile')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
