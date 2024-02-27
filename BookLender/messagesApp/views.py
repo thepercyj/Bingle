@@ -11,8 +11,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-test_user = User.objects.get(username='testUser')
-test_user_profile = UserProfile.objects.get(user=test_user)
+# Gets a second test user for testing purposes
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
