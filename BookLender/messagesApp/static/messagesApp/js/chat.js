@@ -54,23 +54,23 @@ const colors = ['#D32F2F', '#C2185B', '#7B1FA2', '#512DA8', '#303F9F', '#1976D2'
 ];
 
 
-function startSSE() {
-    eventSource = new EventSource('/stream-chat-messages/');
-    eventSource.onmessage = event => {
-        const data = JSON.parse(event.data);
-        console.log(data)
-        const color = getUsernameColor(data.author__name);
-        const formattedTime = formatTime(data.created_at); // You might need to implement formatTime
-        const messageHTML = `
-                <div class="message-box">
-                    <br>
-                    // <span class="message-time">Sent: ${formattedTime}</span>
-                    <div class="message-author" style="color: ${color};"> <strong> ${data.author__name} </strong> </div>
-                    <div class="chat-bubble chat-bubble--left">${data.content}</div>
-                </div>`;
-        sseData.innerHTML += messageHTML;
-    };
-}
+// function startSSE() {
+//     eventSource = new EventSource('/stream-chat-messages/');
+//     eventSource.onmessage = event => {
+//         const data = JSON.parse(event.data);
+//         console.log(data)
+//         const color = getUsernameColor(data.author__name);
+//         const formattedTime = formatTime(data.created_at); // You might need to implement formatTime
+//         const messageHTML = `
+//                 <div class="message-box">
+//                     <br>
+//                     // <span class="message-time">Sent: ${formattedTime}</span>
+//                     <div class="message-author" style="color: ${color};"> <strong> ${data.author__name} </strong> </div>
+//                     <div class="chat-bubble chat-bubble--left">${data.content}</div>
+//                 </div>`;
+//         sseData.innerHTML += messageHTML;
+//     };
+// }
 
 function getUsernameColor(username) {
     // Simple hash function to index into the array of colors

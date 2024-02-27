@@ -3,25 +3,16 @@
 
 <head>
     {% load static %}
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-
-    <link href="{% static 'messagesApp/css/chat.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'mainapp/css/conversation.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Your custom CSS -->
-    <link href="{% static 'messagesApp/css/chat.css' %}" rel="stylesheet" />
-
-
-
+    <meta charset="UTF-8">
+    <title>Conversation</title>
 </head>
 
 <body>
-
 
     <div class="container">
         <div class="row no-gutters">
@@ -50,7 +41,7 @@
                     <img class="profile-image"
                         src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
                     <div class="text">
-                        <h6>Robo Cop</h6>
+                        <h6> <small>{{message.from_user.user.username}}</small></h6>
                         <p class="text-muted">Hey, you're arrested!</p>
                     </div>
                     <span class="time text-muted small">13:21</span>
@@ -123,102 +114,51 @@
                     </div>
                 </div>
                 <div class="chat-panel">
+                    {% for message in messages %}
                     <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
+                        <div class="{% if message.is_from_our_user %}col-md-3 offset-md-9{% else %}col-md-3{% endif %}">
+                            <div
+                                class="chat-bubble {% if message.is_from_our_user %}chat-bubble--right{% else %}chat-bubble--left{% endif %}">
+                                {{ message.details }}
                             </div>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3 offset-md-9">
-                            <div class="chat-bubble chat-bubble--right">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3 offset-md-9">
-                            <div class="chat-bubble chat-bubble--right">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3 offset-md-9">
-                            <div class="chat-bubble chat-bubble--right">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+
                     <div class="row">
                         <div class="col-12">
                             <div class="chat-box-tray">
-                                <i class="material-icons">sentiment_very_satisfied</i>
-                                <input type="text" placeholder="Type your message here...">
-                                <i class="material-icons">mic</i>
-                                <i class="material-icons">send</i>
+                                <form action="/messages/send/" method="post" id="message">
+                                    {% csrf_token %}
+                                    <i class="material-icons">sentiment_very_satisfied</i>
+                                    <input type="text" name="message" placeholder="Type your message here...">
+                                    <i class="material-icons">mic</i>
+                                    <input type="submit" value="Send">
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
+    <!-- {% for message in messages %}
+    <div class="{% if message.is_from_our_user %}from-our-user{% else %}from-their-user{% endif %}">
+        <p>{{ message.details }}</p>
+        <small>From: <b>{{ message.from_user.user.username }}</b></small> <!-- Accessing the username -->
+        <!-- <small>Sent: {{ message.created_on|timesince }} ago</small> -->
+    <!-- </div> -->
+    <!-- {% endfor %} --> -->
 
-    <div class="container">
-        <div class="messages">
-            <div id="sse-data"></div>
-        </div>
-
-        <form x-cloak @submit.prevent="submit" x-data="{state: 'composing', errors: {}}">
-            <div>
-                <textarea name="content" @input="state = 'composing'" autofocus
-                    placeholder="Your next message..."></textarea>
-                <button class="button">
-                    Send
-                </button>
-            </div>
-
-            <div x-show="state === 'error'">
-                <p>
-                    Error sending your message ❌
-                </p>
-            </div>
-        </form>
-
-        <form action="/lobby/" method="get">
-            <button type="submit">Return to Lobby</button>
-        </form>
-    </div>
 
 
     <script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script src="{% static 'messagesApp/js/chat.js' %}"></script>
+    <script src="{% static 'mainapp/js/chat.js' %}"></script>
 
 </body>
 
