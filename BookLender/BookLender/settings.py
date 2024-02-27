@@ -93,17 +93,27 @@ ASGI_APPLICATION = 'BookLender.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "esrs",
+#         "USER": "root",
+#         "PASSWORD": "",
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
+
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "esrs",
-        "USER": "root",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "USER": "db",
+        "PASSWORD": "esrsdb@2024##",
+        "HOST": "144.21.56.167",
+        "PORT": "6969",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
