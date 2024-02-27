@@ -28,7 +28,7 @@
                 <h2 class="form-title mt-3" id="signup" style="color:black; font-family:sans-serif; font-size: 1.85rem;">WELCOME TO BINGLE</h2>
             </div>
             <div class="card-body">
-                <form method="post" action="{% url 'login' %}">
+                <form method="post" action="{% url 'login_view' %}">
                     {% csrf_token %}
                     <div class="d-flex flex-column">
                         <div class="input-group form-group">
@@ -61,7 +61,7 @@
             </div>
             <div class="card-footer">
                 <div class="d-flex justify-content-center links align-items-center">
-                    Don't have an account?<a href="{% static 'register' %}" class="ml-2" style="text-decoration: none; font-size: 0.85rem; font-weight: bold;">Sign Up</a>
+                    Don't have an account?<a href="{% url 'register' %}" class="ml-2" style="text-decoration: none; font-size: 0.85rem; font-weight: bold;">Sign Up</a>
                 </div>
             </div>
         </div>

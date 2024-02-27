@@ -15,6 +15,9 @@ class UserProfile(models.Model):
     birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
     review = models.IntegerField('Review Score', null=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Conversation(models.Model):
     id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_1')

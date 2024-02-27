@@ -31,15 +31,26 @@ class UserBooksForm(forms.ModelForm):
         fields = ['owner_book_id', 'book_id', 'availability', 'booked']
 
 
-class UserForm(UserCreationForm):
+class UserRegisterForm(UserCreationForm):
+    username = forms.CharField(max_length=30, required=True, help_text='Required.')
+    first_name = forms.CharField(max_length=30, required=True, help_text='Required.')
+    last_name = forms.CharField(max_length=30, required=True, help_text='Required.')
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+
     class Meta:
         model = User
-        fields = ('username', 'password1', 'password2')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
     def save(self, commit=True):
-        user = super(UserForm, self).save(commit=False)
+        user = super(UserRegisterForm, self).save(commit=False)
+        user.username = self.cleaned_data['username']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
         if commit:
             user.save()
+            # If you want to save the agrees_to_terms and wants_newsletter
+            # You would typically handle this separately after user creation
         return user
 
 
