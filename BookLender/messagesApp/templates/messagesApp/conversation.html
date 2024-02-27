@@ -178,7 +178,13 @@
         </div>
     </div>
 
-    
+    {% for message in messages %}
+    <div class="{% if message.is_from_our_user %}from-our-user{% else %}from-their-user{% endif %}">
+        <p>{{ message.details }}</p>
+        <small>From: <b>{{ message.from_user.user.username }}</b></small> <!-- Accessing the username -->
+        <small>Sent: {{ message.created_on|timesince }} ago</small>
+    </div>
+    {% endfor %}
 
     <form action="/messages/send/" method="post" id="message">
         {% csrf_token %}
