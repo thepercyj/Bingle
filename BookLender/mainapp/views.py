@@ -85,7 +85,7 @@ def addBook(request):
         if form.is_valid():
             new_book = form.save()
             # Adds the book to the userBooks table
-            addUserBook(new_book)
+            addUserBook(request, new_book)
             return redirect('profile')
         else:
             # Form validation failed, return error details
@@ -131,8 +131,7 @@ def removeBook(request):
 
 def updateProfile(request):
     if request.method == 'POST':
-        user_id = request.user
-        user = User.objects.get(id=user_id)
+        user = request.user
         user_profile = UserProfile.objects.get(user=user)  # Adjust based on your UserProfile model relation
 
         user.username = request.POST.get('inputUserName')
@@ -146,7 +145,8 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile')
+        return redirect('/main/profile_page')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
+
