@@ -3,6 +3,10 @@ from datetime import date, datetime
 from django.contrib.auth.models import User
 
 
+class CustomUser:
+    pass
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     primary_location = models.CharField('Primary Location', max_length=255, null=False, default='default')
@@ -10,6 +14,9 @@ class UserProfile(models.Model):
     phone_number = models.CharField('Phone Number', max_length=255, null=False, default='default')
     birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
     review = models.IntegerField('Review Score', null=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Conversation(models.Model):

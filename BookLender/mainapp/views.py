@@ -1,15 +1,15 @@
-from datetime import datetime
-
-from django.db.models import Q
+from django.template.context_processors import csrf
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-from .forms import BookForm
-from .models import UserBook, Book, User, UserProfile, Conversation, Message
+from .forms import BookForm, UserRegisterForm
+from .models import UserBook, User, UserProfile
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
 
 test_user = User.objects.get(username='testUser')
 test_user_profile = UserProfile.objects.get(user=test_user)
@@ -34,12 +34,36 @@ def work(request):
     return render(request, 'work.html')
 
 
-def login(request):
-    return render(request, 'login.html')
-
-
 def register(request):
-    return render(request, 'register.html')
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the user to the database
+            return redirect('login_view')  # Redirect to login page or wherever you'd like
+    else:
+        form = UserRegisterForm()
+    return render(request, 'register.html', {'form': form})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                # Handle the case where authentication fails
+                form.add_error(None, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+    # Prepare the context
+    token = {'form': form}
+    # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
+    return render(request, 'login.html', token)
 
 
 @never_cache
@@ -124,12 +148,3 @@ def updateProfile(request):
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
-
-
-
-
-
-
-
-
-
