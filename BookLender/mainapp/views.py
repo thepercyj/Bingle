@@ -37,7 +37,8 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the user to the database
+            form.save()
+            form.save_profile()
             return redirect('login_view')  # Redirect to login page or wherever you'd like
     else:
         form = UserRegisterForm()
