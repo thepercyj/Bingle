@@ -9,4 +9,5 @@ urlpatterns = [
     path('create-message/', views.create_message, name='create-message'),
     path('stream-chat-messages/', views.stream_chat_messages, name='stream-chat-messages'),
     path('chat/<str:room_name>/', chat, name='chat'),
+
 ]

@@ -3,6 +3,10 @@ from datetime import date, datetime
 from django.contrib.auth.models import User
 
 
+class CustomUser:
+    pass
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     primary_location = models.CharField('Primary Location', max_length=255, null=False, default='default')

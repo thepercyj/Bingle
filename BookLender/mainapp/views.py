@@ -11,6 +11,25 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.template.context_processors import csrf
+from django.contrib.auth.models import User
+from .forms import UserForm
+
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LogoutView
+from django.shortcuts import reverse
+
 test_user = User.objects.get(username='testUser')
 test_user_profile = UserProfile.objects.get(user=test_user)
 test_user2 = User.objects.get(username='TestUser2')
@@ -34,13 +53,40 @@ def work(request):
     return render(request, 'work.html')
 
 
-def login(request):
-    return render(request, 'login.html')
-
-
 def register(request):
-    return render(request, 'register.html')
+    global token
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/profile')
+    else:
+        form = UserForm()
+        token = {}
+        token.update(csrf(request))
+        token['form'] = form
+    return render(request, 'register.html', token)
 
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/profile_page')  # Or wherever you wish to redirect
+            else:
+                # Handle the case where authentication fails
+                form.add_error(None, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+    # Prepare the context
+    token = {'form': form}
+    # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
+    return render(request, 'login.html', token)
 
 @never_cache
 def profile(request):
@@ -164,6 +210,7 @@ def loadFullConversation(request):
     # Render the conversation page with the messages
     return render(request, 'conversation.html', {'messages': messages_list})
 
+
 def sendMessage(request):
     if request.method == 'POST':
         our_id = test_user_profile
@@ -181,9 +228,3 @@ def sendMessage(request):
         )
         new_message.save()
         return redirect('conversation')
-
-
-
-
-
-
