@@ -1,18 +1,13 @@
-from datetime import datetime
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.views.decorators.cache import never_cache
-from mainapp.forms import BookForm
-from mainapp.models import UserBook, Book, User, UserProfile, Conversation, Message
+from mainapp.models import User, UserProfile, Message
 from django.contrib import messages
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 
-test_user = User.objects.get(username='testUser')
-test_user_profile = UserProfile.objects.get(user=test_user)
+# Fetches second test user and their profile for testing purposes
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
@@ -33,9 +28,10 @@ test_user_2_profile = UserProfile.objects.get(user=test_user2)
 #
 
 
+@login_required
 def loadFullConversation(request):
     """
-    This function loads the full conversation between two users.
+    This function loads the full conversation between two users, ensuring the user is logged in.
 
     Parameters:
     request (HttpRequest): The Django HttpRequest object.
@@ -43,60 +39,57 @@ def loadFullConversation(request):
     Returns:
     HttpResponse: Renders the conversation page with the messages between the two users.
     """
-    # Placeholder for actual user profile retrieval logic
-    our_id = UserProfile.objects.get(user=request.user)
-    their_id = test_user_2_profile
+    try:
+        our_profile = UserProfile.objects.get(user=request.user)
+        their_profile = get_object_or_404(UserProfile, user__username='TestUser2')
 
-    # If id not found, returns a bad request
-    if their_id is None:
-        return HttpResponse("Bad Request", status=400)
+        messages_list = Message.objects.filter(
+            Q(from_user=our_profile, to_user=their_profile) | Q(from_user=their_profile, to_user=our_profile)
+        ).select_related('from_user__user', 'to_user__user').order_by('created_on')
 
-    # Get the conversation between the two users
-    messages_list = Message.objects.filter(
-        Q(from_user=our_id, to_user=their_id) | Q(from_user=their_id, to_user=our_id)
-    ).select_related('from_user__user', 'to_user__user').order_by('created_on')
+        for message in messages_list:
+            message.is_from_our_user = (message.from_user == our_profile)
 
-    # Annotate each message with 'is_from_our_user' for use in styling
-    for message in messages_list:
-        message.is_from_our_user = (message.from_user == our_id)
+        return render(request, 'messagesApp/conversation.html', {'messages': messages_list})
+    except UserProfile.DoesNotExist:
+        return HttpResponse("User profile not found", status=404)
 
-    # Render the conversation page with the messages
-    return render(request, 'messagesApp/conversation.html', {'messages': messages_list})
-
-
+@login_required
 def sendMessage(request):
     """
-    This function handles the POST request to send a message from one user to another.
+    This function handles the POST request to send a message from one user to another,
+    ensuring the user is logged in.
 
     Parameters:
     request (HttpRequest): The Django HttpRequest object.
 
     Returns:
-    HttpResponse: Redirects to the conversation page after the message is sent.
+    HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
     """
-    # Check if the request method is POST
     if request.method == 'POST':
-        # Set the sender and receiver of the message
-        our_id = UserProfile.objects.get(user=request.user)
-        their_id = test_user_2_profile
+        try:
+            our_profile = UserProfile.objects.get(user=request.user)
+            their_profile = get_object_or_404(UserProfile, user__username='TestUser2')
 
-        # Get the message from the POST data
-        message = request.POST.get('message')
+            message = request.POST.get('message')
+            if not message:
+                messages.error(request, 'Message cannot be empty.')
+                return redirect('conversation')
 
-        # Create a new Message object with the provided details
-        new_message = Message(
-            from_user=our_id,
-            to_user=their_id,
-            details=message,
-            request_type=1,
-            request_value='default',
-            created_on=datetime.now(),
-            modified_on=datetime.now(),
-            notification_status=1
-        )
-
-        # Save the new message to the database
-        new_message.save()
-
-        # Redirect to the conversation page
-        return redirect('conversation')
+            new_message = Message(
+                from_user=our_profile,
+                to_user=their_profile,
+                details=message,
+                request_type=1,
+                request_value='default',
+                created_on=now(),
+                modified_on=now(),
+                notification_status=1
+            )
+            new_message.save()
+            return redirect('conversation')
+        except UserProfile.DoesNotExist:
+            messages.error(request, 'User profile not found.')
+            return redirect('conversation')
+    else:
+        return HttpResponse("Invalid request method", status=405)
