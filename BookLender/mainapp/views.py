@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 test_user = User.objects.get(username='testUser')
 test_user_profile = UserProfile.objects.get(user=test_user)
@@ -32,6 +32,11 @@ def about(request):
 
 def work(request):
     return render(request, 'work.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
 
 
 def register(request):
