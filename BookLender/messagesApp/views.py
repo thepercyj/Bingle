@@ -59,6 +59,8 @@ def loadFullConversation(request):
     # Annotate each message with 'is_from_our_user' for use in styling
     for message in messages_list:
         message.is_from_our_user = (message.from_user == our_id)
+    
+    print("This is messages",list(messages_list))
 
     # Render the conversation page with the messages
     return render(request, 'messagesApp/conversation.html', {'messages': messages_list})

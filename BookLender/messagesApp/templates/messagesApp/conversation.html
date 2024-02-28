@@ -3,7 +3,7 @@
 
 <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'mainapp/css/conversation.css' %}">
+    <link rel="stylesheet" href="{% static 'messagesApp/css/conversation.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -21,8 +21,18 @@
                     <img class="profile-image"
                         src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/filip.jpg" alt="Profile img">
                     <h6>
-                        <div class="header" data-username="{{ request.session.username }}">
+
+                        <div class="header" >
+                            
+                            {% if messages %}
+                            {% with sender_username=messages.0.from_user.user.username %}
+                            <h6>Hello {{ sender_username }}</h6>
+                            {% endwith %}
+                            {% endif %}
                         </div>
+
+
+
                     </h6>
                     <span class="settings-tray--right">
                         <i class="material-icons">cached</i>
@@ -41,7 +51,11 @@
                     <img class="profile-image"
                         src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
                     <div class="text">
-                        <h6>Robo Cop</h6>
+                        {% if messages %}
+                        {% with sender_username=messages.0.to_user.user.username %}
+                        <h6>{{ sender_username }}</h6>
+                        {% endwith %}
+                        {% endif %}
                         <p class="text-muted">Hey, you're arrested!</p>
                     </div>
                     <span class="time text-muted small">13:21</span>
@@ -103,7 +117,11 @@
                         <img class="profile-image"
                             src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
                         <div class="text">
-                            <h6>Robo Cop</h6>
+                            {% if messages %}
+                            {% with sender_username=messages.0.to_user.user.username %}
+                            <h6>{{ sender_username }}</h6>
+                            {% endwith %}
+                            {% endif %}
                             <p class="text-muted">Layin' down the law since like before Christ...</p>
                         </div>
                         <span class="settings-tray--right">
@@ -114,88 +132,51 @@
                     </div>
                 </div>
                 <div class="chat-panel">
+                    {% for message in messages %}
                     <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
+                        <div class="{% if message.is_from_our_user %}col-md-3 offset-md-9{% else %}col-md-3{% endif %}">
+                            <div
+                                class="chat-bubble {% if message.is_from_our_user %}chat-bubble--right{% else %}chat-bubble--left{% endif %}">
+                                {{ message.details }}
                             </div>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3 offset-md-9">
-                            <div class="chat-bubble chat-bubble--right">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3 offset-md-9">
-                            <div class="chat-bubble chat-bubble--right">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3">
-                            <div class="chat-bubble chat-bubble--left">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-md-3 offset-md-9">
-                            <div class="chat-bubble chat-bubble--right">
-                                Hello dude!
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+
                     <div class="row">
                         <div class="col-12">
                             <div class="chat-box-tray">
-                                <i class="material-icons">sentiment_very_satisfied</i>
-                                <input type="text" placeholder="Type your message here...">
-                                <i class="material-icons">mic</i>
-                                <i class="material-icons">send</i>
+                                <form action="/messages/send/" method="post" id="message">
+                                    {% csrf_token %}
+                                    <i class="material-icons">sentiment_very_satisfied</i>
+                                    <input type="text" name="message" placeholder="Type your message here...">
+                                    <i class="material-icons">mic</i>
+                                    <input type="submit" value="Send">
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-
+<!-- 
     {% for message in messages %}
     <div class="{% if message.is_from_our_user %}from-our-user{% else %}from-their-user{% endif %}">
         <p>{{ message.details }}</p>
         <small>From: <b>{{ message.from_user.user.username }}</b></small> <!-- Accessing the username -->
-        <small>Sent: {{ message.created_on|timesince }} ago</small>
-    </div>
-    {% endfor %}
+        <!-- <small>Sent: {{ message.created_on|timesince }} ago</small> -->
+    <!-- </div> -->
+    <!-- {% endfor %} --> -->
 
-    <form action="/messages/send/" method="post" id="message">
-        {% csrf_token %}
-        <input type="text" name="message" placeholder="Type your message here">
-        <input type="submit" value="Send">
-    </form>
+
 
     <script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script src="{% static 'mainapp/js/chat.js' %}"></script>
+    <script src="{% static 'messagesApp/js/chat.js' %}"></script>
 
 </body>
 
