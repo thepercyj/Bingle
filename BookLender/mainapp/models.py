@@ -59,7 +59,7 @@ class Message(models.Model):
 
     def __str__(self):
         return ("Message from " + self.from_user.user.username + " to " +
-                self.to_user.user.username + "sent on " + self.created_on.strftime("%Y-%m-%d %H:%M:%S"))
+                self.to_user.user.username + " sent on " + self.created_on.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 class Booking(models.Model):
