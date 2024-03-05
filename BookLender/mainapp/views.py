@@ -43,8 +43,8 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the user to the database
-            return redirect('login_view')  # Redirect to login page or wherever you'd like
+            form.save()
+            return redirect('login_view')
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -61,13 +61,10 @@ def login_view(request):
                 login(request, user)
                 return redirect('index')
             else:
-                # Handle the case where authentication fails
                 form.add_error(None, "Invalid username or password.")
     else:
         form = AuthenticationForm()
-    # Prepare the context
     token = {'form': form}
-    # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
     return render(request, 'login.html', token)
 
 
