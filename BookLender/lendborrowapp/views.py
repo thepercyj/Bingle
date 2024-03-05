@@ -1,118 +1,58 @@
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse
+from django.views.decorators.cache import never_cache
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
-from django.contrib.auth.models import User
-from .models import Book, BookForm, BorrowRequest, Notification, UserProfile
+from .forms import BookForm
+from mainapp.models import UserProfile, UserBook
 
 
-class CustomLoginView(LoginView):
-    template_name = 'lendborrowapp/login1.html'
-
-    def get_success_url(self):
-        return reverse_lazy('dashboard')
-
-
-def dashboard(request):
-    username = request.user.username
-    return render(request, 'lendborrowapp/dashboard.html', {'username': username})
-
-
-def base(request):
-    return render(request, 'lendborrowapp/base.html')
-
-
-def register(request):
-    if request.method == 'POST':
-        user_form = UserCreationForm(request.POST)
-        user_profile_form = UserProfileForm(request.POST)  # Assuming you have a UserProfileForm
-
-        if user_form.is_valid() and user_profile_form.is_valid():
-            user = user_form.save()  # Save the User instance
-            user_profile = user_profile_form.save(commit=False)  # Create a UserProfile instance but don't save it yet
-            user_profile.user = user  # Associate the UserProfile with the User instance
-            user_profile.save()  # Save the UserProfile instance
-
-            # Redirect to a success page or login page
-            return redirect('login1')
-    else:
-        user_form = UserCreationForm()
-        user_profile_form = UserProfileForm()  # Assuming you have a UserProfileForm
-
-    return render(request, 'lendborrowapp/register1.html', {'user_form': user_form, 'user_profile_form': user_profile_form})
-
-
-@login_required
-def book_list(request):
-    user_profile = request.user.userprofile
-    books = Book.objects.filter(owner=user_profile)
-    return render(request, 'lendborrowapp/gallery.html', {'books': books})
-
-
-@login_required
-def book_add(request):
+def addBook(request):
+    """Processes the request to add a new book"""
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
-            book = form.save(commit=False)
-            book.owner = request.user
-            book.save()
-            messages.success(request, 'Book added successfully.')
-            return redirect('book_list')
+            new_book = form.save()
+            # Adds the book to the userBooks table
+            addUserBook(request, new_book)
+            return redirect('/main/profile_page')
+        else:
+            # Form validation failed, return error details
+            return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
+                                status=400)
     else:
-        form = BookForm()
-    return render(request, 'lendborrowapp/book_form.html', {'form': form})
+        # If the request method is not POST, inform the client appropriately
+        # Or render a form for GET requests if that's intended behavior
+        return HttpResponse('This endpoint expects a POST request.', status=405)
+
+    # As a last resort, return a generic response for unexpected cases
+    # This line should ideally never be reached if all cases are handled correctly above
+    return HttpResponse('Unexpected error occurred.', status=500)
 
 
-@login_required
-def book_update(request, pk):
-    book = Book.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Book updated successfully.')
-            return redirect('book_list')
-    else:
-        form = BookForm(instance=book)
-    return render(request, 'lendborrowapp/book_form.html', {'form': form})
+def addUserBook(request, book):
+    user_profile = UserProfile.objects.get(user=request.user)
+    """Adds a book to the user's library based on the Book Form submitted"""
+    new_user_book = UserBook(
+        owner_book_id=user_profile,  # Set the current user as the user_id
+        currently_with=user_profile,  # Defaults current user to currently_with on creation
+        book_id=book,  # Set the newly created book as the book_id
+        availability=True,  # Set available to true by default on creation
+        booked='No'
+    )
+
+    # Save the new userBooks instance to the database
+    new_user_book.save()
 
 
-@login_required
-def book_delete(request, pk):
-    book = Book.objects.get(pk=pk)
-    if request.method == 'POST':
+@never_cache
+def removeBook(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    book_id = request.POST.get('book_id')
+    try:
+        book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
         book.delete()
-        messages.success(request, 'Book deleted successfully.')
-        return redirect('book_list')
-    return render(request, 'lendborrowapp/book_confirm_delete.html', {'book': book})
-
-
-@login_required
-def gallery(request):
-    query = request.GET.get('q')
-    if query:
-        books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
-    else:
-        books = Book.objects.all()
-    return render(request, 'lendborrowapp/gallery.html', {'books': books})
-
-
-@login_required
-def lend_books(request):
-    user_books = Book.objects.filter(owner=request.user)
-    return render(request, 'lendborrowapp/lend_books.html', {'user_books': user_books})
-
-
-@login_required
-def borrow_books(request):
-    books = Book.objects.exclude(owner=request.user)
-    return render(request, 'lendborrowapp/gallery.html', {'books': books})
-
-
-@login_required
-def notifications(request):
-    user_notifications = Notification.objects.filter(user=request.user)
-    return render(request, 'lendborrowapp/notifications.html', {'notifications': user_notifications})
+        messages.success(request, "Book removed successfully.")
+    except UserBook.DoesNotExist:
+        messages.error(request, "Book not found.")
+    return HttpResponseRedirect(reverse('profile') + '?remove=true')
