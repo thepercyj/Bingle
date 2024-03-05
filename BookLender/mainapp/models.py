@@ -22,6 +22,7 @@ class UserProfile(models.Model):
 class Conversation(models.Model):
     id_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_1')
     id_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='conversations_as_user_2')
+    latest_message = models.CharField('Latest Message', max_length=255, null=False, default='default')
 
     def __str__(self):
         return self.id_1.user.username + " and " + self.id_2.user.username + " conversation"
@@ -59,6 +60,7 @@ class Message(models.Model):
     created_on = models.DateTimeField('Created On', null=False, default=datetime(2024, 1, 1, 12, 0))
     modified_on = models.DateTimeField('Modified On', null=False, default=datetime(2024, 1, 1, 12, 0))
     notification_status = models.IntegerField('Notification Status', null=False, default=1)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages_conversation')
 
     def __str__(self):
         return ("Message from " + self.from_user.user.username + " to " +

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversation List</title>
+</head>
+<body>
+<p> Welcome, {{ request.user.username }}</p>
+{% for conversation in conversations %}
+{{ conversation.id_1 .user.username }}
+{{ conversation.latest_message }}
+{% endfor %}
+</body>
+</html>
