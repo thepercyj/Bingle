@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from mainapp.models import User, UserProfile, Message
 from django.contrib import messages
-
+from mainapp.models import Conversation
 
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
@@ -17,15 +17,11 @@ test_user_2_profile = UserProfile.objects.get(user=test_user2)
 #         our_username = test_user
 #         their_username = request.POST.get('their_username')
 #
-# def getConversationList(request):
-# Rob
-#     if request.method == 'POST':
-#         our_username = test_user.username
-#         conversationList = Conversations.objects.get(id_1=our_username || id_2=our_username)
-#         for conversation in conversationList:
-#             conversation_contents.append(get most recent conversation content and username from Messages)
-#             render(messages.html, converation_contents)
-#
+def getConversationList(request):
+    our_profile = UserProfile.objects.get(user=request.user)
+    conversationList = Conversation.objects.filter(Q(id_1=our_profile) | Q(id_2=our_profile)).select_related('id_1__user', 'id_2__user')
+
+    return render(request, "messagesApp/conversation_list.html", {'conversations': conversationList})
 
 
 @login_required
@@ -41,7 +37,7 @@ def loadFullConversation(request):
     """
     try:
         our_profile = UserProfile.objects.get(user=request.user)
-        their_profile = get_object_or_404(UserProfile, user__username='TestUser2')
+        their_profile = get_object_or_404(UserProfile, user__username='testuser3')
 
         messages_list = Message.objects.filter(
             Q(from_user=our_profile, to_user=their_profile) | Q(from_user=their_profile, to_user=our_profile)
@@ -69,12 +65,21 @@ def sendMessage(request):
     if request.method == 'POST':
         try:
             our_profile = UserProfile.objects.get(user=request.user)
-            their_profile = get_object_or_404(UserProfile, user__username='TestUser2')
+            their_profile = get_object_or_404(UserProfile, user__username='testuser3')
 
             message = request.POST.get('message')
             if not message:
                 messages.error(request, 'Message cannot be empty.')
                 return redirect('conversation')
+            try:
+                existing_conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                                 (Q(id_2=our_profile) & Q(id_1=their_profile)))
+                conversation = existing_conversation
+
+            except Conversation.DoesNotExist:
+                Conversation(id_1=our_profile, id_2=their_profile).save()
+                conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                         (Q(id_2=our_profile) & Q(id_1=their_profile)))
 
             new_message = Message(
                 from_user=our_profile,
@@ -84,9 +89,13 @@ def sendMessage(request):
                 request_value='default',
                 created_on=now(),
                 modified_on=now(),
-                notification_status=1
+                notification_status=1,
+                conversation=conversation
             )
+
             new_message.save()
+            conversation.latest_message = message
+            conversation.save()
             return redirect('conversation')
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
