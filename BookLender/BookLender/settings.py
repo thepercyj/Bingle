@@ -44,8 +44,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'daphne',
-    'crispy_forms',
-    'crispy_bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +52,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'messagesApp',
-    'lendborrowapp'
+    'lendborrowapp',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -90,6 +90,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BookLender.wsgi.application'
 ASGI_APPLICATION = 'BookLender.asgi.application'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
 # Database
@@ -159,5 +161,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

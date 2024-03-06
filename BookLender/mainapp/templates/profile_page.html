@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+
+{% load crispy_forms_tags %}
+
 <html>
 
 <head>
@@ -57,7 +60,7 @@
             <div class="modal-content">
                 <form method="post" action="/main/add-book/" id="addBookForm">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    {{ form|crispy }}
                     <input type="submit" value="Submit">
                 </form>
               <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
