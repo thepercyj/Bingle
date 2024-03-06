@@ -186,7 +186,7 @@
     </div>
     {% endfor %}
 
-    <form action="/messages/send/" method="post" id="message">
+    <form action="{% url 'sendMessage' conversation.id %}" method="post" id="message">
         {% csrf_token %}
         <input type="text" name="message" placeholder="Type your message here">
         <input type="submit" value="Send">

@@ -11,33 +11,39 @@ from mainapp.models import Conversation
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
-# def getConversation(request):
-# Rob
-#     if request.method == 'POST':
-#         our_username = test_user
-#         their_username = request.POST.get('their_username')
-#
 def getConversationList(request):
+    """
+    View function to get the list of conversations for the logged-in user.
+    """
     our_profile = UserProfile.objects.get(user=request.user)
-    conversationList = Conversation.objects.filter(Q(id_1=our_profile) | Q(id_2=our_profile)).select_related('id_1__user', 'id_2__user')
+    conversationList = Conversation.objects.filter(
+        Q(id_1=our_profile) | Q(id_2=our_profile)
+    ).exclude(
+        Q(id_1=our_profile) & Q(id_2=our_profile)
+    ).select_related('id_1__user', 'id_2__user')
 
-    return render(request, "messagesApp/conversation_list.html", {'conversations': conversationList})
+    return render(request, "messagesApp/conversation_list.html", {'conversations': conversationList,
+                                                                  'our_profile': our_profile})
 
 
 @login_required
-def loadFullConversation(request):
+def loadFullConversation(request, conversation_id):
     """
     This function loads the full conversation between two users, ensuring the user is logged in.
 
     Parameters:
     request (HttpRequest): The Django HttpRequest object.
+    conversation_id (int): The ID of the conversation between the two users.
 
     Returns:
     HttpResponse: Renders the conversation page with the messages between the two users.
     """
     try:
         our_profile = UserProfile.objects.get(user=request.user)
-        their_profile = get_object_or_404(UserProfile, user__username='testuser3')
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
 
         messages_list = Message.objects.filter(
             Q(from_user=our_profile, to_user=their_profile) | Q(from_user=their_profile, to_user=our_profile)
@@ -46,31 +52,36 @@ def loadFullConversation(request):
         for message in messages_list:
             message.is_from_our_user = (message.from_user == our_profile)
 
-        return render(request, 'messagesApp/conversation.html', {'messages': messages_list})
+        return render(request, 'messagesApp/conversation.html', {'messages': messages_list, 'conversation': conversation})
     except UserProfile.DoesNotExist:
         return HttpResponse("User profile not found", status=404)
 
+
 @login_required
-def sendMessage(request):
+def sendMessage(request, conversation_id):
     """
     This function handles the POST request to send a message from one user to another,
     ensuring the user is logged in.
 
     Parameters:
     request (HttpRequest): The Django HttpRequest object.
+    conversation_id (int): The ID of the conversation between the two users.
 
     Returns:
     HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
     """
     if request.method == 'POST':
         try:
+            conversation = get_object_or_404(Conversation, id=conversation_id)
             our_profile = UserProfile.objects.get(user=request.user)
-            their_profile = get_object_or_404(UserProfile, user__username='testuser3')
+            their_profile = get_object_or_404(UserProfile,
+                                              (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                              ~Q(user=request.user))
 
             message = request.POST.get('message')
             if not message:
                 messages.error(request, 'Message cannot be empty.')
-                return redirect('conversation')
+                return redirect('conversation', conversation_id=conversation_id)
             try:
                 existing_conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
                                                                  (Q(id_2=our_profile) & Q(id_1=their_profile)))
@@ -79,7 +90,7 @@ def sendMessage(request):
             except Conversation.DoesNotExist:
                 Conversation(id_1=our_profile, id_2=their_profile).save()
                 conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
-                                         (Q(id_2=our_profile) & Q(id_1=their_profile)))
+                                                        (Q(id_2=our_profile) & Q(id_1=their_profile)))
 
             new_message = Message(
                 from_user=our_profile,
@@ -96,9 +107,9 @@ def sendMessage(request):
             new_message.save()
             conversation.latest_message = message
             conversation.save()
-            return redirect('conversation')
+            return redirect('conversation', conversation_id=conversation.id)
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
-            return redirect('conversation')
+            return redirect('conversation', conversation_id=conversation_id)
     else:
         return HttpResponse("Invalid request method", status=405)

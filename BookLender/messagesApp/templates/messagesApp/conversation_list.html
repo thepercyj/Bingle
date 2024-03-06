@@ -7,8 +7,17 @@
 <body>
 <p> Welcome, {{ request.user.username }}</p>
 {% for conversation in conversations %}
-{{ conversation.id_1 .user.username }}
-{{ conversation.latest_message }}
+    <a href={% url 'conversation' conversation.id %}>
+    <div>
+        {% if conversation.id_1 == our_profile %}
+            Username: {{ conversation.id_2.user.username }}<br>
+        {% else %}
+            Username: {{ conversation.id_1.user.username }}<br>
+        {% endif %}
+        Last Message: {{ conversation.latest_message }}
+    </div>
+    </a>
+    <br>
 {% endfor %}
 </body>
 </html>

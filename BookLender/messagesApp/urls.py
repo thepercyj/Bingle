@@ -2,7 +2,7 @@ from django.urls import path
 from .views import loadFullConversation, sendMessage, getConversationList
 
 urlpatterns = [
-    path('', loadFullConversation, name='conversation'),
-    path('send/', sendMessage, name='sendMessage'),
-  path('conversation_list/', getConversationList, name='conversation_list'),
+    path('conversation/<int:conversation_id>/', loadFullConversation, name='conversation'),
+    path('send/<int:conversation_id>/', sendMessage, name='sendMessage'),
+    path('', getConversationList, name='conversation_list'),
 ]
