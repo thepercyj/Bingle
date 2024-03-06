@@ -176,12 +176,27 @@ def new_conversation(request):
                 # If the conversation does not exist, create a new conversation
                 new_conversation_object = Conversation(id_1=our_profile, id_2=their_profile)
                 new_conversation_object.save()
+                if message:
+                    new_message = Message(
+                        from_user=our_profile,
+                        to_user=their_profile,
+                        details=message,
+                        request_type=1,
+                        request_value='default',
+                        created_on=now(),
+                        modified_on=now(),
+                        notification_status=1,
+                        conversation=new_conversation_object
+                    )
+                    new_message.save()
+                    new_conversation_object.latest_message = message
+                    new_conversation_object.save()
                 return redirect('conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
         except User.DoesNotExist:
             messages.error(request, 'User not found.')
             return redirect('new_conversation')
-        
+
     # If the form has not been submitted, display the new conversation page
     else:
         return render(request, 'messagesApp/new_conversation.html',
