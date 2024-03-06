@@ -1006,29 +1006,32 @@ a:focus {
  /*  Team Starts */
 .team-members {
 	transform: rotate(-45deg);
+	margin: 0;
+	margin-top: 5rem;
 }
 .team-members li > div {
 	float: left;
-	width: 20%;
+	width: 25%;
 }
 
 .team-members li:nth-child(2) > div:first-child {
-	margin-left: 20%;
+	margin-left: 25%;
 }
 
 .team-members li:last-child > div:first-child {
-	margin-left: 40%;
+	margin-left: 50%;
 }
 
 .member-details > div {
-	background-color: #ddd;
 	margin: 5px;
 }
+
 .member-details img {
-	transform: rotate(45deg) translate(0, 15px) scale(1.2);
+	transform: rotate(45deg) translate(-5px, 5px) scale(1.35);
 	display: block;
-	width: 100%;
-	height: 100%;
+	object-fit: cover;
+	width: 7rem;
+	height: 6.65rem;
 }
 
 /* hover content - style */
@@ -1137,7 +1140,7 @@ a:focus {
 /* For centering elements - optional - Can use table,tablecell instead */
 .flex-center {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column-reverse;
 	justify-content: center;
 	align-items: center;
 }
@@ -1147,6 +1150,20 @@ a:focus {
 }
 
 /* RESPONSIVE */
+@media only screen and (min-width: 993px) {
+    .row.flex-center {
+        flex-direction: row;
+    }
+
+    .member-details img {
+        transform: rotate(45deg) translate(0px, 0px) scale(1.45);
+        display: block;
+        object-fit: cover;
+        width: 7rem;
+        height: 7rem;
+    }
+}
+
 @media only screen and (max-width: 992px) {
 	.sm-no-flex {
 		display: block;
@@ -1171,6 +1188,8 @@ a:focus {
 	}
 	.team-members {
 		transform: rotate(0);
+		padding: 0;
+		margin-top: 3rem;
 	}
 	.member-details img {
 		transform: rotate(0) translate(0, 0);
@@ -1186,5 +1205,6 @@ a:focus {
 	}
 }
 
-
-
+.clearfix {
+    list-style: none;
+}
