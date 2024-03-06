@@ -11,7 +11,7 @@ from mainapp.models import Conversation
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
-def getConversationList(request):
+def get_conversation_list(request):
     """
     View function to get the list of conversations for the logged-in user.
     """
@@ -27,7 +27,7 @@ def getConversationList(request):
 
 
 @login_required
-def loadFullConversation(request, conversation_id):
+def load_full_conversation(request, conversation_id):
     """
     This function loads the full conversation between two users, ensuring the user is logged in.
 
@@ -58,7 +58,7 @@ def loadFullConversation(request, conversation_id):
 
 
 @login_required
-def sendMessage(request, conversation_id):
+def send_message(request, conversation_id):
     """
     This function handles the POST request to send a message from one user to another,
     ensuring the user is logged in.

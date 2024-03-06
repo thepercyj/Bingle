@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import loadFullConversation, sendMessage, getConversationList
+from .views import load_full_conversation, send_message, get_conversation_list
 
 urlpatterns = [
-    path('conversation/<int:conversation_id>/', loadFullConversation, name='conversation'),
-    path('send/<int:conversation_id>/', sendMessage, name='sendMessage'),
-    path('', getConversationList, name='conversation_list'),
+    path('conversation/<int:conversation_id>/', load_full_conversation, name='conversation'),
+    path('send/<int:conversation_id>/', send_message, name='sendMessage'),
+    path('', get_conversation_list, name='conversation_list'),
 ]
