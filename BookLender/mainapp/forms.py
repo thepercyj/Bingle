@@ -54,8 +54,6 @@ class UserRegisterForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         if commit:
             user.save()
-            # If you want to save the agrees_to_terms and wants_newsletter
-            # You would typically handle this separately after user creation
         return user
 
     def save_profile(self, commit=True):

@@ -9,8 +9,10 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
+test_user = User.objects.get(username='testUser')
+test_user_profile = UserProfile.objects.get(user=test_user)
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
@@ -32,13 +34,17 @@ def work(request):
     return render(request, 'work.html')
 
 
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            form.save_profile()
-            return redirect('login_view')  # Redirect to login page or wherever you'd like
+            return redirect('login_view')
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -55,30 +61,25 @@ def login_view(request):
                 login(request, user)
                 return redirect('index')
             else:
-                # Handle the case where authentication fails
                 form.add_error(None, "Invalid username or password.")
     else:
         form = AuthenticationForm()
-    # Prepare the context
     token = {'form': form}
-    # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
     return render(request, 'login.html', token)
 
 
 @never_cache
 def profile(request):
     form = BookForm(request.POST or None)
-    user = request.user
-    user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    user = test_user
+    user_profile = test_user_profile
+    user_books = UserBook.objects.filter(owner_book_id=test_user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count}
     return render(request, 'profile_page.html', context)
 
 
-<<<<<<< HEAD
-=======
 def addBook(request):
     """Processes the request to add a new book"""
     if request.method == 'POST':
@@ -102,12 +103,11 @@ def addBook(request):
     return HttpResponse('Unexpected error occurred.', status=500)
 
 
-def addUserBook(request, book):
-    user_profile = UserProfile.objects.get(user=request.user)
+def addUserBook(book):
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBook(
-        owner_book_id=user_profile,  # Set the current user as the user_id
-        currently_with=user_profile,  # Defaults current user to currently_with on creation
+        owner_book_id=test_user_profile,  # Set the current user as the user_id
+        currently_with=test_user_profile,  # Defaults current user to currently_with on creation
         book_id=book,  # Set the newly created book as the book_id
         availability=True,  # Set available to true by default on creation
         booked='No'
@@ -119,10 +119,9 @@ def addUserBook(request, book):
 
 @never_cache
 def removeBook(request):
-    user_profile = UserProfile.objects.get(user=request.user)
     book_id = request.POST.get('book_id')
     try:
-        book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
+        book = UserBook.objects.get(id=book_id, owner_book_id=test_user_profile)
         book.delete()
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
@@ -130,10 +129,9 @@ def removeBook(request):
     return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
->>>>>>> parent of c631ebc (Update views to match file structure)
 def updateProfile(request):
     if request.method == 'POST':
-        user_id = request.user
+        user_id = test_user.id
         user = User.objects.get(id=user_id)
         user_profile = UserProfile.objects.get(user=user)  # Adjust based on your UserProfile model relation
 
