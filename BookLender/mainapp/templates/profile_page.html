@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{% load crispy_forms_tags %}
+
 <head>
   <!-- Basic -->
   <meta charset="utf-8" />
@@ -55,17 +55,9 @@
 
           <div id="add-book-modal" class="modal">
             <div class="modal-content">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <form method="post" action="/main/add-books/" id="addBookForm">
-=======
-                <form method="post" action="/add-book/" id="addBookForm">
->>>>>>> parent of c631ebc (Update views to match file structure)
-=======
-                <form method="post" action="/add-book/" id="addBookForm">
->>>>>>> parent of c631ebc (Update views to match file structure)
+                <form method="post" action="/main/add-book/" id="addBookForm">
                     {% csrf_token %}
-                    {{ forms.as_p }}
+                    {{ form.as_p }}
                     <input type="submit" value="Submit">
                 </form>
               <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
@@ -95,7 +87,7 @@
                             <td>{{ user_book.book_id.published_date }}</td>
                             <td>{{ user_book.currently_with }}</td>
                             <td>
-                                <form action="/remove-book/" method="post">
+                                <form action="/main/remove-book/" method="post">
                                 {% csrf_token %}
                                  <input type="hidden" name="book_id" value="{{ user_book.id }}" />
                                 <input type="submit" value="Remove" />
@@ -176,7 +168,7 @@
               </div>
               <div class="card-body">
 
-                <form method="post" action="/update-profile/">
+                <form method="post" action="/main/update-profile/">
                     {% csrf_token %}
                   <!-- Form Group (username)-->
                   <div class="mb-3">
