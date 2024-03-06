@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.db.models import Q
@@ -27,7 +28,6 @@ def get_conversation_list(request):
     """
     View function to get the list of conversations for the logged-in user.
     """
-    print(request.user)
     our_profile = UserProfile.objects.get(user=request.user)
     conversationList = Conversation.objects.filter(
         Q(id_1=our_profile) | Q(id_2=our_profile)
@@ -126,3 +126,63 @@ def send_message(request, conversation_id):
             return redirect('conversation', conversation_id=conversation_id)
     else:
         return HttpResponse("Invalid request method", status=405)
+
+@login_required_message
+def new_conversation(request):
+    """
+    View function to start a new conversation with another user, ensuring the user is logged in.
+    """
+    # If the form has been submitted
+    if request.method == 'POST':
+        username = request.POST.get('recipient')
+        message = request.POST.get('message')
+
+        # If the username is not empty
+        try:
+            user = User.objects.get(username=username)
+            their_profile = get_object_or_404(UserProfile, user=user)
+            our_profile = get_object_or_404(UserProfile, user=request.user)
+            # Ensure the user is not trying to start a conversation with themselves
+            if their_profile == our_profile:
+                messages.error(request, 'You cannot start a conversation with yourself.')
+                return redirect('new_conversation')
+
+            # Ensure the conversation does not already exist
+            with transaction.atomic():
+                existing_conversation = Conversation.objects.filter(
+                    (Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                    (Q(id_2=our_profile) & Q(id_1=their_profile))
+                ).first()
+
+                # If the conversation already exists, add the message to the existing conversation
+                if existing_conversation:
+                    if message:
+                        new_message = Message(
+                            from_user=our_profile,
+                            to_user=their_profile,
+                            details=message,
+                            request_type=1,
+                            request_value='default',
+                            created_on=now(),
+                            modified_on=now(),
+                            notification_status=1,
+                            conversation=existing_conversation
+                        )
+                        new_message.save()
+                        existing_conversation.latest_message = message
+                        existing_conversation.save()
+                    return redirect('conversation', conversation_id=existing_conversation.id)
+
+                # If the conversation does not exist, create a new conversation
+                new_conversation_object = Conversation(id_1=our_profile, id_2=their_profile)
+                new_conversation_object.save()
+                return redirect('conversation', conversation_id=new_conversation_object.id)
+        # If the user does not exist, display an error message
+        except User.DoesNotExist:
+            messages.error(request, 'User not found.')
+            return redirect('new_conversation')
+        
+    # If the form has not been submitted, display the new conversation page
+    else:
+        return render(request, 'messagesApp/new_conversation.html',
+                      {'users': UserProfile.objects.exclude(user=request.user)})
