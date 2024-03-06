@@ -974,6 +974,18 @@ a:focus {
   margin-left: 10px;
   cursor: pointer;
 }
+
+.btn-logout {
+  background-color: #ff4f5a;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 .submit-btn {
   background-color: #6B92A4;
   color: rgba(256,256,256,0.7);

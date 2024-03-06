@@ -37,7 +37,7 @@
               </ul>
               <div class="user_option">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'logout_view' %}"><button>Logout</button></a>
+                    <a href="{% url 'logout_view' %}"><button class="btn-logout">Logout</button></a>
                 {% else %}
                     <a href="{% url 'login_view' %}"><button class="btn-login">Login</button></a>
                     <a href="{% url 'register' %}"><button class="btn-register">Register</button></a>
