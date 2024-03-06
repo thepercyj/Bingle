@@ -11,10 +11,23 @@ from mainapp.models import Conversation
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
+def login_required_message(function):
+    """
+    Custom decorator to ensure that the user is logged in before accessing a page.
+    """
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to view this page.")
+            return login_required(function)(request, *args, **kwargs)
+        return function(request, *args, **kwargs)
+    return wrapper
+
+@login_required_message
 def get_conversation_list(request):
     """
     View function to get the list of conversations for the logged-in user.
     """
+    print(request.user)
     our_profile = UserProfile.objects.get(user=request.user)
     conversationList = Conversation.objects.filter(
         Q(id_1=our_profile) | Q(id_2=our_profile)
@@ -26,7 +39,7 @@ def get_conversation_list(request):
                                                                   'our_profile': our_profile})
 
 
-@login_required
+@login_required_message
 def load_full_conversation(request, conversation_id):
     """
     This function loads the full conversation between two users, ensuring the user is logged in.
@@ -57,7 +70,7 @@ def load_full_conversation(request, conversation_id):
         return HttpResponse("User profile not found", status=404)
 
 
-@login_required
+@login_required_message
 def send_message(request, conversation_id):
     """
     This function handles the POST request to send a message from one user to another,
