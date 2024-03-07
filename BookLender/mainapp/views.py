@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 from .forms import BookForm, UserRegisterForm
-from .models import UserBook, User, UserProfile
+from .models import UserBook, User, UserProfile, Book
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -115,6 +115,17 @@ def addUserBook(request, book):
     # Save the new userBooks instance to the database
     new_user_book.save()
 
+
+def listBook(request):
+    # Retrieve all books from the mainapp_book table
+    listbooks = Book.objects.all()  # Ensure this matches the variable used in the template
+
+    # Serialize the list of books into JSON
+    serialized_books = [{'book_title': book.book_title, 'book_author': book.book_author, 'genre': book.genre,
+                         'published_date': book.published_date} for book in listbooks]
+
+    # Return the serialized books as JSON response
+    return JsonResponse(serialized_books, safe=False)
 
 @never_cache
 def removeBook(request):
