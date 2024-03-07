@@ -1,24 +1,24 @@
 window.addEventListener('DOMContentLoaded', () => {
-    let username = document.querySelector('.header').getAttribute('data-username');
-    const usernameColor = getUsernameColor(username);
+    // let username = document.querySelector('.header').getAttribute('data-username');
+    // const usernameColor = getUsernameColor(username);
 
-    // Create the container for the welcome message
-    const welcomeMessage = document.createElement('span');
-    welcomeMessage.textContent = 'Hello ';
-    welcomeMessage.style.color = 'black'; // Set welcome message color
+    // // Create the container for the welcome message
+    // const welcomeMessage = document.createElement('span');
+    // welcomeMessage.textContent = 'Hello ';
+    // welcomeMessage.style.color = 'black'; // Set welcome message color
 
-    // Create the container for the username
-    const usernameElement = document.createElement('span');
-    usernameElement.textContent = username;
-    usernameElement.style.fontWeight = 'bold';
-    usernameElement.style.color = usernameColor; // Set username color
+    // // Create the container for the username
+    // const usernameElement = document.createElement('span');
+    // usernameElement.textContent = username;
+    // usernameElement.style.fontWeight = 'bold';
+    // usernameElement.style.color = usernameColor; // Set username color
 
-    // Append both the welcome message and the username to the header
-    const headerDiv = document.querySelector('.header');
-    if (headerDiv) {
-        headerDiv.appendChild(welcomeMessage); // Append "Welcome" part
-        headerDiv.appendChild(usernameElement); // Append username part
-    }
+    // // Append both the welcome message and the username to the header
+    // const headerDiv = document.querySelector('.header');
+    // if (headerDiv) {
+    //     headerDiv.appendChild(welcomeMessage); // Append "Welcome" part
+    //     headerDiv.appendChild(usernameElement); // Append username part
+    // }
 
     function submit(event) {
         event.preventDefault();
@@ -41,6 +41,21 @@ window.addEventListener('DOMContentLoaded', () => {
                 this.errors = data.errors || {};
             });
     }
+
+    document.querySelectorAll('.friend-drawer--onhover').forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.querySelectorAll('.chat-bubble').forEach(function(bubble) {
+                bubble.style.display = 'none';
+            });
+    
+            setTimeout(function() {
+                document.querySelectorAll('.chat-bubble').forEach(function(bubble) {
+                    bubble.style.display = 'block';
+                });
+            }, 200); // Adjust the delay (in milliseconds) as needed for your animation
+        });
+    });
+    
     
 
 });
@@ -105,8 +120,25 @@ if (typeof (EventSource) !== 'undefined') {
 }
 
 
-$(function () {
-    $(".friend-drawer--onhover").on("click", function () {
-        $(".chat-bubble").hide("slow").show("slow");
-    });
-});
+function openChat(user) {
+    const users = document.querySelector('.users');
+    const chat = document.querySelector('.chat');
+    if (window.innerWidth <= 767) {
+        users.style.display = 'none';
+    }
+    chat.style.display = 'block';
+}
+function sendMessage() {
+    const input = document.getElementById('input');
+    const message = input.value.trim();
+    if (message) {
+        const newMessage = document.createElement('div');
+        newMessage.classList.add('message', 'own');
+        newMessage.textContent = message;
+        document.querySelector('.chat').appendChild(newMessage);
+        input.value = '';
+    }
+}
+
+
+
