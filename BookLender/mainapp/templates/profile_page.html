@@ -61,7 +61,10 @@
                 <div class="modal-content">
                 {% csrf_token %}
                     <table id="book-table" class="table"></table>
-
+                    <form method="post" action="/main/add-book/" id="addBookForm">
+                        {{ form|crispy }}
+                        <input type="submit" value="Submit">
+                    </form>
                     <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
                 </div>
             </div>
