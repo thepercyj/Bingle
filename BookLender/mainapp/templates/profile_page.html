@@ -59,14 +59,23 @@
             <div id="add-book-modal" class="modal">
                 <div class="modal-content">
                     <table id="book-table" class="table"></table>
-                    <form method="post" action="/main/add-book/" id="addBookForm">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <input type="submit" value="Submit">
-                    </form>
+                    <button class="" onclick="openModal('add-new-modal')">
+                        <h4>Add</h4>
+                    </button>
+                        <div id="add-new-modal" class="modal">
+                            <div class="modal-content">
+                                <form method="post" action="/main/add-book/" id="addBookForm">
+                                    {% csrf_token %}
+                                    {{ form|crispy }}
+                                    <input type="submit" value="Submit">
+                                </form>
+                                <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>
+                            </div>
+                        </div>
                     <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
                 </div>
             </div>
+
             
             <div id="remove-book-modal" class="modal">
             <div class="modal-content">
