@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -10,7 +11,6 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-
 
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
@@ -116,13 +116,23 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
+@login_required
 def listBook(request):
-    # Retrieve all books from the mainapp_book table
-    listbooks = Book.objects.all()  # Ensure this matches the variable used in the template
+    # Retrieve the logged-in user
+    user = request.user
 
-    # Serialize the list of books into JSON
+    # Filter Userbook objects based on the current user
+    user_books = UserBook.objects.filter(user=user)
+
+    # Get the IDs of books associated with the user
+    user_book_ids = [user_book.book_id_id for user_book in user_books]
+
+    # Retrieve books from the Book model based on the IDs associated with the user
+    associated_books = Book.objects.filter(id__in=user_book_ids)
+
+    # Serialize the associated books into JSON
     serialized_books = [{'book_title': book.book_title, 'book_author': book.book_author, 'genre': book.genre,
-                         'published_date': book.published_date} for book in listbooks]
+                         'published_date': book.published_date} for book in associated_books]
 
     # Return the serialized books as JSON response
     return JsonResponse(serialized_books, safe=False)
@@ -160,4 +170,3 @@ def updateProfile(request):
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
-
