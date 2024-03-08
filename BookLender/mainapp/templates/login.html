@@ -21,6 +21,13 @@
 </head>
 
 <body style="height: 100vh; background-image: url({% static 'mainapp/images/P14.jpg' %}); background-repeat: no-repeat; background-position: center; background-size: cover; backdrop-filter: blur(2.5px);">
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <div class="container h-100">
     <div class="d-flex align-items-center justify-content-center h-100">
         <div class="card h-65" style="border-radius: 7px; opacity: 0.9;">
