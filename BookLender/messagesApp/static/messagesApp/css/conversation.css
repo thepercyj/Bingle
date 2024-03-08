@@ -115,13 +115,14 @@ body {
 .row {
   flex: 1; /* Allow the row to grow and take up remaining space */
   overflow: hidden; /* Hide overflow to prevent scrolling on the entire page */
+  bottom: 0;
+
 }
 
 .col-md-8 {
   display: flex;
   flex-direction: column;
 }
-
 
 .profile-image {
   width: 50px;
@@ -253,9 +254,10 @@ hr {
 }
 
 .chat-panel {
-  flex: 1; /* Allow the chat-panel to take up remaining space */
-  overflow-y: auto; /* Enable vertical scrolling for overflow */
-  padding-bottom: 70px; /* Adjust bottom padding to accommodate chat-box-tray */
+  position: relative;
+  flex: 1; 
+  overflow-y: auto; 
+  padding-bottom: 70px; 
 }
 
 @keyframes fadeIn {
@@ -274,12 +276,11 @@ hr {
 .chat-box-tray {
   background: #eee;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   padding: 10px 15px;
-  position: fixed;
+  align-items: center;
+  margin-top: 19px;
   bottom: 0;
-  width: 1000px;
-  box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.1); /* Optional shadow for separation */
 }
 
 .chat-box-tray input {
@@ -295,4 +296,24 @@ hr {
 }
 .chat-box-tray i:last-of-type {
   margin-left: 25px;
+}
+
+.chat-panel-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 30px;
+  display: flex; /* Add this line to make child divs flex items */
+
+}
+
+.col-md-4 {
+  overflow-y: auto; /* Add this line to make the div scrollable */
+  max-height: 50%; /* Set maximum height to 100% of its parent */
+}
+
+.col-md-8,
+.col-md-4 {
+  flex: 1; /* Allow both columns to grow and take up remaining space */
 }
