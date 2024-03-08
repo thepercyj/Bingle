@@ -12,16 +12,20 @@ from mainapp.models import Conversation
 test_user2 = User.objects.get(username='TestUser2')
 test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
+
 def login_required_message(function):
     """
     Custom decorator to ensure that the user is logged in before accessing a page.
     """
+
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, "You must be logged in to view this page.")
             return login_required(function)(request, *args, **kwargs)
         return function(request, *args, **kwargs)
+
     return wrapper
+
 
 @login_required_message
 def get_conversation_list(request):
@@ -65,7 +69,8 @@ def load_full_conversation(request, conversation_id):
         for message in messages_list:
             message.is_from_our_user = (message.from_user == our_profile)
 
-        return render(request, 'messagesApp/conversation.html', {'messages': messages_list, 'conversation': conversation})
+        return render(request, 'messagesApp/conversation.html',
+                      {'messages': messages_list, 'conversation': conversation})
     except UserProfile.DoesNotExist:
         return HttpResponse("User profile not found", status=404)
 
@@ -126,6 +131,7 @@ def send_message(request, conversation_id):
             return redirect('conversation', conversation_id=conversation_id)
     else:
         return HttpResponse("Invalid request method", status=405)
+
 
 @login_required_message
 def new_conversation(request):
