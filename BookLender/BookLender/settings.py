@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'messagesApp',
-    'lendborrowapp',
     'crispy_forms',
     'crispy_bootstrap5',
 ]
@@ -163,3 +162,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+LOGIN_URL = '/main/login/'
