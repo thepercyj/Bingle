@@ -21,5 +21,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', include('mainapp.urls')),
     path('messages/', include('messagesApp.urls')),
-    path('lendborrowapp/', include('lendborrowapp.urls')),
 ]
