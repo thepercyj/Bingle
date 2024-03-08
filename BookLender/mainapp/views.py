@@ -12,9 +12,32 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 
-test_user2 = User.objects.get(username='TestUser2')
-test_user_2_profile = UserProfile.objects.get(user=test_user2)
+from BookLender import settings
 
+
+# test_user2 = User.objects.get(username='TestUser2')
+# test_user_2_profile = UserProfile.objects.get(user=test_user2)
+
+
+def login_required_message(function):
+    """
+    Decorator to display a message if the user is not logged in
+    """
+
+    def wrap(request, *args, **kwargs):
+        # If the user is logged in, call the function
+        if request.user.is_authenticated:
+            return function(request, *args, **kwargs)
+
+        # If the user is not logged in, display an error message and redirect to the login page
+        else:
+            messages.error(request, "You need to be logged in to view this page.")
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    # Retains the docstring and name of the original function
+    wrap.__doc__ = function.__doc__
+    wrap.__name__ = function.__name__
+    return wrap
 
 # Index Page
 def index(request):
@@ -66,7 +89,7 @@ def login_view(request):
     return render(request, 'login.html', token)
 
 
-@never_cache
+@login_required_message
 def profile(request):
     form = BookForm(request.POST or None)
     user = request.user
@@ -78,6 +101,7 @@ def profile(request):
     return render(request, 'profile_page.html', context)
 
 
+@login_required_message
 def addBook(request):
     """Processes the request to add a new book"""
     if request.method == 'POST':
@@ -100,7 +124,7 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
-
+@login_required_message
 def addUserBook(request, book):
     user_profile = UserProfile.objects.get(user=request.user)
     """Adds a book to the user's library based on the Book Form submitted"""
@@ -116,13 +140,15 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
-@login_required
+@login_required_message
 def listBook(request):
     # Retrieve the logged-in user
     user = request.user
+    user_profile = UserProfile.objects.get(user=user)
 
     # Filter Userbook objects based on the current user
-    user_books = UserBook.objects.filter(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    print(f"User Books: {user_books}")
 
     # Get the IDs of books associated with the user
     user_book_ids = [user_book.book_id_id for user_book in user_books]
@@ -137,7 +163,8 @@ def listBook(request):
     # Return the serialized books as JSON response
     return JsonResponse(serialized_books, safe=False)
 
-@never_cache
+
+@login_required_message
 def removeBook(request):
     user_profile = UserProfile.objects.get(user=request.user)
     book_id = request.POST.get('book_id')
@@ -150,6 +177,7 @@ def removeBook(request):
     return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
+@login_required_message
 def updateProfile(request):
     if request.method == 'POST':
         user = request.user
