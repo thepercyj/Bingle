@@ -61,3 +61,4 @@ class Booking(models.Model):
     from_date = models.DateField('From Date', null=False, default=date(2024, 1, 1))
     to_date = models.DateField('To Date', null=False, default=date(2024, 1, 1))
     returned = models.BooleanField('Returned', null=False, default=False)
+    returned_on = models.DateField('Returned On', default=None)
