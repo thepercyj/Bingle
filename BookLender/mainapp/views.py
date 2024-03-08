@@ -34,6 +34,10 @@ def work(request):
     return render(request, 'work.html')
 
 
+def forgetpass(request):
+    return render(request, 'forgetpass.html')
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
