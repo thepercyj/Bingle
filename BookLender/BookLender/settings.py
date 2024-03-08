@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'messagesApp',
-    'lendborrowapp',
     'crispy_forms',
     'crispy_bootstrap5',
 ]
