@@ -64,11 +64,11 @@ body {
 .hero_area.sub_pages {
   height: auto;
 }
-
+/*
 .header_section {
   overflow-x: hidden;
 }
-
+*/
 .header_section .container-fluid {
   padding-right: 25px;
   padding-left: 25px;
@@ -165,7 +165,6 @@ a:focus {
 
 .custom_nav-container {
   z-index: 99999;
-  padding: 0;
   height: 70px;
 }
 
@@ -1219,4 +1218,119 @@ a:focus {
 
 .clearfix {
     list-style: none;
+}
+
+
+.main-menu {
+    list-style: none;
+    text-align: center;
+    padding-top: 14px;
+    float: right;
+    margin-right: 20px; /* Adjust the margin as needed */
+}
+
+.main-menu li {
+	display: inline-block;
+	position: relative;
+}
+
+.main-menu li a {
+	display: block;
+	font-size: 16px;
+	font-weight: 500;
+	color: #fff;
+	position: relative;
+}
+
+.main-menu li a:after {
+	position: absolute;
+	content: "";
+	width: 20px;
+	height: 20px;
+	right: 0;
+	top: 1px;
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+
+.main-menu li a i {
+	color: #928d92;
+	margin-left: 5px;
+}
+
+.main-menu li a:hover {
+	color: #b01ba5;
+}
+
+.main-menu li a:hover:after {
+	background-image: url("../img/icons/arrow-down-color.png");
+}
+
+.main-menu li a:hover i {
+	color: #b01ba5;
+}
+
+.main-menu li:hover .sub-menu {
+	visibility: visible;
+	opacity: 1;
+	margin-top: 0;
+}
+
+.main-menu li:hover>a {
+	color: #b01ba5;
+}
+
+.main-menu li:hover>a:after {
+	background-image: url("../img/icons/arrow-down-color.png");
+}
+
+.main-menu li .sub-menu {
+	position: absolute;
+	list-style: none;
+	text-align: center;
+	width: 130px;
+	left: 0;
+	top: 100%;
+	padding: 10px 0;
+	visibility: hidden;
+	opacity: 0;
+	margin-top: 50px;
+	background: #fff;
+	z-index: 99;
+	-webkit-transition: all 0.4s;
+	-o-transition: all 0.4s;
+	transition: all 0.4s;
+	-webkit-box-shadow: 2px 7px 20px rgba(0, 0, 0, 0.4);
+	box-shadow: 2px 7px 20px rgba(0, 0, 0, 0.4);
+}
+
+.main-menu li .sub-menu li {
+	display: block;
+}
+
+.main-menu li .sub-menu li a {
+	display: block;
+	color: #000;
+	margin-right: 0;
+	padding: 8px 30px;
+}
+
+.main-menu li .sub-menu li a:after {
+	display: none;
+}
+
+.main-menu li .sub-menu li a:hover {
+	color: #b01ba5;
+}
+
+.slicknav_menu {
+	display: none;
+}
+
+@media only screen and (max-width: 767px) {
+
+	.main-menu.primary-menu {
+		display: none;
+	}
+
 }
