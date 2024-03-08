@@ -1,20 +1,43 @@
+from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 from .forms import BookForm, UserRegisterForm
-from .models import UserBook, User, UserProfile
+from .models import UserBook, User, UserProfile, Book
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 
+from BookLender import settings
 
-test_user2 = User.objects.get(username='TestUser2')
-test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
+# test_user2 = User.objects.get(username='TestUser2')
+# test_user_2_profile = UserProfile.objects.get(user=test_user2)
+
+
+def login_required_message(function):
+    """
+    Decorator to display a message if the user is not logged in
+    """
+
+    def wrap(request, *args, **kwargs):
+        # If the user is logged in, call the function
+        if request.user.is_authenticated:
+            return function(request, *args, **kwargs)
+
+        # If the user is not logged in, display an error message and redirect to the login page
+        else:
+            messages.error(request, "You need to be logged in to view this page.")
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    # Retains the docstring and name of the original function
+    wrap.__doc__ = function.__doc__
+    wrap.__name__ = function.__name__
+    return wrap
 
 # Index Page
 def index(request):
@@ -31,6 +54,10 @@ def about(request):
 
 def work(request):
     return render(request, 'work.html')
+
+
+def forgetpass(request):
+    return render(request, 'forgetpass.html')
 
 
 def register(request):
@@ -66,7 +93,7 @@ def login_view(request):
     return render(request, 'login.html', token)
 
 
-@never_cache
+@login_required_message
 def profile(request):
     form = BookForm(request.POST or None)
     user = request.user
@@ -78,6 +105,7 @@ def profile(request):
     return render(request, 'profile_page.html', context)
 
 
+@login_required_message
 def addBook(request):
     """Processes the request to add a new book"""
     if request.method == 'POST':
@@ -100,7 +128,7 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
-
+@login_required_message
 def addUserBook(request, book):
     user_profile = UserProfile.objects.get(user=request.user)
     """Adds a book to the user's library based on the Book Form submitted"""
@@ -116,7 +144,31 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
-@never_cache
+@login_required_message
+def listBook(request):
+    # Retrieve the logged-in user
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+
+    # Filter Userbook objects based on the current user
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    print(f"User Books: {user_books}")
+
+    # Get the IDs of books associated with the user
+    user_book_ids = [user_book.book_id_id for user_book in user_books]
+
+    # Retrieve books from the Book model based on the IDs associated with the user
+    associated_books = Book.objects.filter(id__in=user_book_ids)
+
+    # Serialize the associated books into JSON
+    serialized_books = [{'book_title': book.book_title, 'book_author': book.book_author, 'genre': book.genre,
+                         'published_date': book.published_date} for book in associated_books]
+
+    # Return the serialized books as JSON response
+    return JsonResponse(serialized_books, safe=False)
+
+
+@login_required_message
 def removeBook(request):
     user_profile = UserProfile.objects.get(user=request.user)
     book_id = request.POST.get('book_id')
@@ -129,6 +181,7 @@ def removeBook(request):
     return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
+@login_required_message
 def updateProfile(request):
     if request.method == 'POST':
         user = request.user
@@ -149,4 +202,3 @@ def updateProfile(request):
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
-

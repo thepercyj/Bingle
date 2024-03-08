@@ -1,6 +1,7 @@
 // JavaScript function to open a specified modal by ID
 function openModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
+    populateTable();
 }
 
 // JavaScript function to close a specified modal by ID
