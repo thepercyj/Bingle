@@ -68,6 +68,8 @@ def lend(request):
 def forgetpass(request):
     return render(request, 'forgetpass.html')
 
+def listBook(request):
+    return render(request, 'list-book.html')
 
 def register(request):
     if request.method == 'POST':
