@@ -1,100 +1,3 @@
-/* body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-.container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-.users {
-  background-color: #f0f0f0;
-  padding: 20px;
-  overflow-y: auto;
-  width: 100%;
-  max-width: 300px;
-}
-.user {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  padding: 10px;
-}
-.chat {
-  background-color: #f0f0f0;
-  padding: 20px;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.message
-{
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  padding: 10px;
-  left: 0;
-  border-left: 0;
-  margin-left: -20px;
-  border-radius: 9px;
-  position: relative;
-  padding: 10px 14px;
-  animation: fadeIn 1s ease-in;
-
-}
-.message--left {
-  background-color: #4dabe5;
-  left: 0;
-  border-right-color: #eee;
-  border-left: 0;
-  margin-left: -20px;
-  
-  
-}
-.message--right {
-  background-color: #54e78a;
-  right: 0;
-  border-left-color: #74b9ff;
-  border-right: 0;
-  margin-right: -20px;
-
-}
-
-.input-container {
-  position: fixed;
-  bottom: 50px;
-  left: 0;
-  width: 100%;
-  background-color: #f0f0f0;
-  padding: 20px;
-  display: flex;
-}
-.input-container input {
-  flex: 1;
-  padding: 10px;
-}
-.input-container button {
-  background-color: #007bff;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 10px;
-}
-@media (max-width: 767px) {
-  .container {
-      flex-direction: column;
-  }
-  .users {
-      display: none;
-  }
-} */
-
-
-
-/* TRY 2 */
 body {
   background-color: #3498db;
   -webkit-font-smoothing: antialiased;
@@ -116,8 +19,8 @@ body {
   flex: 1; /* Allow the row to grow and take up remaining space */
   overflow: hidden; /* Hide overflow to prevent scrolling on the entire page */
   bottom: 0;
-
 }
+
 
 .col-md-8 {
   display: flex;
@@ -158,6 +61,8 @@ body {
 .search-box {
   background: #fafafa;
   padding: 10px 13px;
+  position: sticky;
+  top: 0;
 }
 .search-box .input-wrapper {
   background: #fff;
@@ -189,7 +94,9 @@ input:focus {
   vertical-align: baseline;
   background: #fff;
   transition: 0.1s ease;
+  top: 0;
 }
+
 .friend-drawer--grey {
   background: #eee;
 }
@@ -258,6 +165,7 @@ hr {
   flex: 1; 
   overflow-y: auto; 
   padding-bottom: 70px; 
+  max-height: 600px;
 }
 
 @keyframes fadeIn {
@@ -309,11 +217,39 @@ hr {
 }
 
 .col-md-4 {
-  overflow-y: auto; /* Add this line to make the div scrollable */
   max-height: 50%; /* Set maximum height to 100% of its parent */
 }
 
 .col-md-8,
 .col-md-4 {
   flex: 1; /* Allow both columns to grow and take up remaining space */
+}
+
+.friends-panel {
+  overflow-y: auto; /* Add this line to make the div scrollable */
+  max-height: 600px;
+
+}
+
+/* Media query for small screens (e.g., mobile devices) */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column; /* Change the direction to stack columns */
+  }
+
+  .col-md-4 {
+    max-height: 100%; /* Set maximum height to 100% for small screens */
+  }
+
+  .friends-panel {
+    max-height: none; /* Remove max height on small screens */
+  }
+
+  .chat-panel-container {
+    margin: 15px; /* Adjust margin for smaller screens */
+  }
+
+  .chat-box-tray input {
+    width: 60%; /* Adjust input width for better responsiveness */
+  }
 }

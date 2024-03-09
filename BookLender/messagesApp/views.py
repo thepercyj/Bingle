@@ -207,3 +207,7 @@ def new_conversation(request):
     else:
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
+
+
+def old_conversation(request):
+    return render(request, 'messagesApp/conversation.html')
