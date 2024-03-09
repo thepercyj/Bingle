@@ -17,6 +17,9 @@ urlpatterns = [
     path('list-book/', views.listBook, name='listBook'),
     path('remove-book/', views.removeBook, name='removeUserBook'),
     path('update-profile/', views.updateProfile, name='updateProfile'),
+    path('borrow/', views.borrow, name='borrow'),
+    path('lend/', views.lend, name='lend'),
     path('register/', views.register, name='register'),
     path('forgetpass/', views.forgetpass, name='forgetpass'),
+    # path('upload-profile/', views.upload_profile_picture, name='upload_profile_picture'),
 ]

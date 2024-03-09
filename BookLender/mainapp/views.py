@@ -39,6 +39,7 @@ def login_required_message(function):
     wrap.__name__ = function.__name__
     return wrap
 
+
 # Index Page
 def index(request):
     return render(request, 'index.html')
@@ -54,6 +55,14 @@ def about(request):
 
 def work(request):
     return render(request, 'work.html')
+
+
+def borrow(request):
+    return render(request, 'borrow.html')
+
+
+def lend(request):
+    return render(request, 'lend.html')
 
 
 def forgetpass(request):
@@ -128,6 +137,7 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
+
 @login_required_message
 def addUserBook(request, book):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -146,26 +156,27 @@ def addUserBook(request, book):
 
 @login_required_message
 def listBook(request):
-    # Retrieve the logged-in user
-    user = request.user
-    user_profile = UserProfile.objects.get(user=user)
+    # Retrieve the logged-in user profile
+    user_profile = UserProfile.objects.get(user=request.user)
 
-    # Filter Userbook objects based on the current user
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    print(f"User Books: {user_books}")
+    # Get the book ID from the POST data
+    book_id = request.POST.get('book_id')
 
-    # Get the IDs of books associated with the user
-    user_book_ids = [user_book.book_id_id for user_book in user_books]
+    try:
+        # Attempt to retrieve the UserBook object to be deleted
+        book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
 
-    # Retrieve books from the Book model based on the IDs associated with the user
-    associated_books = Book.objects.filter(id__in=user_book_ids)
+        # Delete the book
+        book.delete()
 
-    # Serialize the associated books into JSON
-    serialized_books = [{'book_title': book.book_title, 'book_author': book.book_author, 'genre': book.genre,
-                         'published_date': book.published_date} for book in associated_books]
+        # Set success message
+        messages.success(request, "Book removed successfully.")
+    except UserBook.DoesNotExist:
+        # Set error message if book is not found
+        messages.error(request, "Book not found.")
 
-    # Return the serialized books as JSON response
-    return JsonResponse(serialized_books, safe=False)
+    # Redirect back to the profile page with remove parameter in URL
+    return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
 @login_required_message
@@ -198,7 +209,21 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('/main/profile_page')
+        return redirect('profile')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
+
+
+# @login_required_message
+# def upload_profile_picture(request):
+#     if request.method == 'POST':
+#         form = ProfilePictureForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             user_profile = form.save(commit=False)
+#             user_profile.user = request.user
+#             user_profile.save()
+#             return redirect('profile')  # Redirect to user profile page
+#     else:
+#         form = ProfilePictureForm()
+#     return render(request, 'profile_page.html', {'uploadpic': form})

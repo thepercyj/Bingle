@@ -30,10 +30,11 @@
 
 </head>
 
-<body>
+<body class="sub_page">
   <div class="hero_area">
     {% include 'header.html' %}
 
+  <div class="content">
     <!-- end header section -->
     <!-- slider section -->
     <section class="slider_section ">
@@ -66,15 +67,27 @@
                       It is a long established fact that a reader will be distracted by
                       the readable content of a page
                     </p>
+                    {% if user.is_authenticated %}
+                    <div class="btn-box">
+                      <a href="{% url 'borrow' %}" class="btn-1">
+                        Borrow
+                        <!-- We -->
+                      </a>
+                      <a href=" {% url 'lend' %}" class="btn-2">
+                        Lend
+                      </a>
+                    </div>
+                    {% else %}
                     <div class="btn-box">
                       <a href="{% url 'login_view' %}" class="btn-1">
-                        Login 
+                        Login
                         <!-- We -->
                       </a>
                       <a href=" {% url 'register' %}" class="btn-2">
                         Register
                       </a>
                     </div>
+                    {% endif %}
                   </div>
                 </div>
                 <div class="offset-md-1 col-md-4 img-container">
@@ -156,7 +169,7 @@
     </section>
     <!-- end slider section -->
   </div>
-
+</div>
 
   <!-- experience section -->
 

@@ -42,7 +42,7 @@
     <!-- end header section -->
   </div>
 
-  <section class="category_section layout_padding">
+  <section class="content category_section layout_padding">
     <div class="container">
       <div class="heading_container">
         <h2>
@@ -51,30 +51,31 @@
       </div>
       <div class="category_container">
         <div class="box">
-          <h2>My Library</h2>
-          <span>{{ user_book_count }}</span>
-          <button class="add-books-btn" onclick="openModal('add-book-modal')">
-            <h4>View</h4>
-          </button>
-            <div id="add-book-modal" class="modal">
-                <div class="modal-content">
-                    <table id="book-table" class="table"></table>
-                    <button class="" onclick="openModal('add-new-modal')">
-                        <h4>Add</h4>
-                    </button>
-                        <div id="add-new-modal" class="modal">
-                            <div class="modal-content">
-                                <form method="post" action="/main/add-book/" id="addBookForm">
-                                    {% csrf_token %}
-                                    {{ form|crispy }}
-                                    <input type="submit" value="Submit">
-                                </form>
-                                <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>
-                            </div>
-                        </div>
-                    <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
-                </div>
-            </div>
+<!--          <h2>My Library</h2>-->
+<!--          <span>{{ user_book_count }}</span>-->
+<!--          <button class="add-books-btn" onclick="openModal('add-book-modal')">-->
+<!--            <h4>View</h4>-->
+<!--          </button>-->
+<!--            <div id="add-book-modal" class="modal">-->
+<!--                <div class="modal-content">-->
+<!--                    <table id="book-table" class="table">-->
+<!--                    </table>-->
+<!--                    <button class="" onclick="openModal('add-new-modal')">-->
+<!--                        <h4>Add</h4>-->
+<!--                    </button>-->
+<!--                        <div id="add-new-modal" class="modal">-->
+<!--                            <div class="modal-content">-->
+<!--                                <form method="post" action="/main/add-book/" id="addBookForm">-->
+<!--                                    {% csrf_token %}-->
+<!--                                    {{ form|crispy }}-->
+<!--                                    <input type="submit" value="Submit">-->
+<!--                                </form>-->
+<!--                                <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>-->
+<!--                </div>-->
+<!--            </div>-->
 
             
             <div id="remove-book-modal" class="modal">
@@ -82,14 +83,13 @@
                 <div class="user_books">
                     {% csrf_token %}
                     {% if user_books %}
-                    <table>
+                    <table class="table">
                         <tr>
                             <th>Title</th>
                             <th>Author</th>
                             <th>Genre</th>
                             <th>Publish Date</th>
                             <th>Currently With</th>
-                            <th>Remove</th>
                         </tr>
                     {% for user_book in user_books %}
                         <tr>
@@ -99,15 +99,28 @@
                             <td>{{ user_book.book_id.published_date }}</td>
                             <td>{{ user_book.currently_with }}</td>
                             <td>
-                                <form action="/main/remove-book/" method="post">
+                                <form action="/remove-book/" method="post">
                                 {% csrf_token %}
                                  <input type="hidden" name="book_id" value="{{ user_book.id }}" />
-                                <input type="submit" value="Remove" />
+                                <input type="submit" class="btn-close" value="" />
                                 </form>
                             </td>
                         </tr>
                     {% endfor %}
                     </table>
+                    <button class="" onclick="openModal('add-new-modal')">
+                        <h4>Add</h4>
+                    </button>
+                    <div id="add-new-modal" class="modal">
+                        <div class="modal-content">
+                            <form method="post" action="/add-book/" id="addBookForm">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <input type="submit" value="Submit">
+                            </form>
+                            <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>
+                        </div>
+                    </div>
                 {% else %}
                         <div>You don't have any books, getting adding!</div>
                 {% endif %}
@@ -117,14 +130,12 @@
           </div>
 
         </div>
-        <div class="box">
-          <h2>Books Borrowed</h2>
-          <span>6</span>
-          <button class="remove-books-btn" onclick="openModal('remove-book-modal')">
-            <h4>Remove Books</h4>
-          </button>
-
-        </div>
+          <div class="box">
+              {% if user_books %}
+              <h2>My Library</h2>
+                <h2><a class=" nav-link remove-books-btn" href="#" onclick="openModal('remove-book-modal')">{{ user_book_count }}</a></h2>
+              {% endif %}
+          </div>
         <div class="box">
           <h2>Books Lended</h2>
           <span>9</span>
@@ -166,7 +177,17 @@
                 <!-- Profile picture help block-->
                 <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                 <!-- Profile picture upload button-->
-                <button class="btn btn-primary" type="button">Upload new image</button>
+                  <div id="profile-pic-modal" class="modal">
+                      <div class="modal-content">
+                          <form method="post" action="/upload-profile/" id="addProfileForm">
+                              {% csrf_token %}
+                              {{ uploadpic|crispy }}
+                              <input class="btn btn-primary" type="submit" value="Upload New Image">
+                          </form>
+                          <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>
+                      </div>
+                  </div>
+<!--                <button class="btn btn-primary" type="button">Upload new image</button>-->
               </div>
             </div>
           </div>
@@ -180,7 +201,7 @@
               </div>
               <div class="card-body">
 
-                <form method="post" action="/main/update-profile/">
+                <form method="post" action="/update-profile/">
                     {% csrf_token %}
                   <!-- Form Group (username)-->
                   <div class="mb-3">
