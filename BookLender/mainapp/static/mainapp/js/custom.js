@@ -20,7 +20,7 @@ function getCurrentYear() {
 getCurrentYear();
 
 function populateTable() {
-    fetch('/main/list-book/')
+    fetch('/list-book/')
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('book-table');

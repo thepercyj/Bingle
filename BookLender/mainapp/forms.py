@@ -1,6 +1,5 @@
 from django import forms
 from .models import Book, UserBook, UserProfile
-from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext as _
@@ -41,7 +40,6 @@ class UserRegisterForm(UserCreationForm):
     birth_date = forms.DateField(help_text='Required. Format: YYYY-MM-DD',
                                  widget=forms.DateInput(attrs={'type': 'date'}))
 
-
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
@@ -61,13 +59,12 @@ class UserRegisterForm(UserCreationForm):
     def save_profile(self, commit=True):
         new_profile = UserProfile.objects.create(user=self.instance,
                                                  primary_location=self.cleaned_data['primary_location'],
-                                                current_location=self.cleaned_data['current_location'],
-                                                phone_number=self.cleaned_data['phone_number'],
-                                                birth_date=self.cleaned_data['birth_date'])
+                                                 current_location=self.cleaned_data['current_location'],
+                                                 phone_number=self.cleaned_data['phone_number'],
+                                                 birth_date=self.cleaned_data['birth_date'])
         if commit:
             new_profile.save()
         return new_profile
-
 
 
 class LoginForm(forms.Form):

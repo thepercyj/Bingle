@@ -2,7 +2,16 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #0c0c0c;
   background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+.content {
+  flex: 1; /* Expand to fill remaining vertical space */
+}
+
+
 .layout_padding {
   padding-top: 90px;
   padding-bottom: 90px;
@@ -799,6 +808,7 @@ a:focus {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  flex-shrink: 0;
   background-color: #fdfeff;
 }
 
@@ -1333,4 +1343,13 @@ a:focus {
 		display: none;
 	}
 
+}
+
+.about-team {
+    height: 100vh;
+    background-image: url('../images/about-background.jpg');
+    background-repeat: no-repeat;
+    background-position: cover;
+    background-size: cover;
+    backdrop-filter: blur(2.5px);
 }
