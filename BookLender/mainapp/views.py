@@ -154,29 +154,29 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
-@login_required_message
-def listBook(request):
-    # Retrieve the logged-in user profile
-    user_profile = UserProfile.objects.get(user=request.user)
-
-    # Get the book ID from the POST data
-    book_id = request.POST.get('book_id')
-
-    try:
-        # Attempt to retrieve the UserBook object to be deleted
-        book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
-
-        # Delete the book
-        book.delete()
-
-        # Set success message
-        messages.success(request, "Book removed successfully.")
-    except UserBook.DoesNotExist:
-        # Set error message if book is not found
-        messages.error(request, "Book not found.")
-
-    # Redirect back to the profile page with remove parameter in URL
-    return HttpResponseRedirect(reverse('profile') + '?remove=true')
+# @login_required_message
+# def listBook(request):
+#     # Retrieve the logged-in user profile
+#     user_profile = UserProfile.objects.get(user=request.user)
+#
+#     # Get the book ID from the POST data
+#     book_id = request.POST.get('book_id')
+#
+#     try:
+#         # Attempt to retrieve the UserBook object to be deleted
+#         book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
+#
+#         # Delete the book
+#         book.delete()
+#
+#         # Set success message
+#         messages.success(request, "Book removed successfully.")
+#     except UserBook.DoesNotExist:
+#         # Set error message if book is not found
+#         messages.error(request, "Book not found.")
+#
+#     # Redirect back to the profile page with remove parameter in URL
+#     return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
 @login_required_message
