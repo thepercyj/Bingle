@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    {% include 'header.html' %}
+
     <!-- Basic -->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -20,6 +20,7 @@
     <link href="{% static 'mainapp/css/style.css' %}" rel="stylesheet"/>
     <link href="{% static 'mainapp/css/responsive.css' %}" rel="stylesheet"/>
 </head>
+<body style="height: 100vh; background-image: url({% static 'mainapp/images/about-background.jpg' %}); background-repeat: no-repeat; background-position: center; background-size: cover; backdrop-filter: blur(2.5px);">
 <body class="sub_page about-team">
 <div class="hero_area">
 {% include 'header.html' %}
