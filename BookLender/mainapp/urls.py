@@ -19,4 +19,6 @@ urlpatterns = [
     path('update-profile/', views.updateProfile, name='updateProfile'),
     path('register/', views.register, name='register'),
     path('forgetpass/', views.forgetpass, name='forgetpass'),
+    #path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+
 ]

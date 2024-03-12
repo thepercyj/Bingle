@@ -91,7 +91,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'BookLender.wsgi.application'
 ASGI_APPLICATION = 'BookLender.asgi.application'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+
 
 
 # Database

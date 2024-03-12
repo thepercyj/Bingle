@@ -963,6 +963,29 @@ a:focus {
 
 }
 
+.add-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 5px;
+  border: none;
+  cursor: pointer;
+  max-width: 30%;
+
+}
+
+
+.-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  max-width: 30%;
+
+}
+
 .btn-login {
   background-color: #ff4f5a;
   color: #fff;
