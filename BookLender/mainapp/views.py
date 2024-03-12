@@ -11,7 +11,6 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-
 from BookLender import settings
 
 
