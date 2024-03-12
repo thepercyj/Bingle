@@ -215,6 +215,9 @@ def updateProfile(request):
         return render(request, 'profile_page.html')
 
 
+def new_home(request):
+    return render(request, 'new_home.html')
+
 # @login_required_message
 # def upload_profile_picture(request):
 #     if request.method == 'POST':

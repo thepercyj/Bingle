@@ -21,5 +21,6 @@ urlpatterns = [
     path('lend/', views.lend, name='lend'),
     path('register/', views.register, name='register'),
     path('forgetpass/', views.forgetpass, name='forgetpass'),
+    path('new_home/',views.new_home, name='new_home'),
     # path('upload-profile/', views.upload_profile_picture, name='upload_profile_picture'),
 ]
