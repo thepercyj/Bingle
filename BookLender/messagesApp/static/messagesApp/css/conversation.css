@@ -7,7 +7,6 @@ body {
 
 .container-fluid {
   height: 85vh;
-  /* Make the container fill the viewport height */
   display: flex;
   flex-direction: column;
   margin: 60px auto;
@@ -18,9 +17,7 @@ body {
 
 .row {
   flex: 1;
-  /* Allow the row to grow and take up remaining space */
   overflow: hidden;
-  /* Hide overflow to prevent scrolling on the entire page */
   bottom: 0;
 }
 
