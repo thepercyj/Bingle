@@ -218,6 +218,9 @@ def updateProfile(request):
 def new_home(request):
     return render(request, 'new_home.html')
 
+def chat(request):
+    return render(request, 'chat.html')
+
 # @login_required_message
 # def upload_profile_picture(request):
 #     if request.method == 'POST':
