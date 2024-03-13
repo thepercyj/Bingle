@@ -216,7 +216,7 @@ def updateProfile(request):
 
 
 def new_home(request):
-    return render(request, 'new_home.html')
+    return render(request, 'newhome.html')
 
 def chat(request):
     return render(request, 'chat.html')

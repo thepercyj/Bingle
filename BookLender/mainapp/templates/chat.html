@@ -1,53 +1,8 @@
-<!DOCTYPE html>
-<html data-navigation-type="default" data-navbar-horizontal-shape="default" lang="en-US" dir="ltr">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% load static %}
+{% extends 'base.html' %}
+{% load static %}
 
 
-    <title>Phoenix</title>
-
-    <link rel="manifest" href="../assets/img/favicons/manifest.json">
-    <meta name="theme-color" content="#ffffff">
-    <script src="{% static 'mainapp/js/simplebar.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/config.js' %}"></script>
-    <!-- ===============================================-->
-    <!--    Stylesheets-->
-    <!-- ===============================================-->
-    <link href="{% static 'mainapp/css/glightbox.min.css' %}" rel="stylesheet" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
-        rel="stylesheet">
-    <link href="{% static 'mainapp/css/simplebar.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'mainapp/css/line.css' %}" rel="stylesheet" />
-    <link href="{% static 'mainapp/css/theme-rtl.min.css' %}" rel="stylesheet" type="text/css" id="style-rtl" />
-    <link href="{% static 'mainapp/css/theme.min.css' %}" rel="stylesheet" type="text/css" id="style-default" />
-    <link href="{% static 'mainapp/css/user-rtl.min.css' %}" rel="stylesheet" type="text/css" id="user-style-rtl" />
-    <!-- <link href="{% static 'mainapp/css/user.min.css' %}" rel="stylesheet" type="text/css" id="user-style-default" /> -->
-
-    <script>
-        var phoenixIsRTL = window.config.config.phoenixIsRTL;
-        if (phoenixIsRTL) {
-            var linkDefault = document.getElementById('style-default');
-            var userLinkDefault = document.getElementById('user-style-default');
-            linkDefault.setAttribute('disabled', true);
-            userLinkDefault.setAttribute('disabled', true);
-            document.querySelector('html').setAttribute('dir', 'rtl');
-        } else {
-            var linkRTL = document.getElementById('style-rtl');
-            var userLinkRTL = document.getElementById('user-style-rtl');
-            linkRTL.setAttribute('disabled', true);
-            userLinkRTL.setAttribute('disabled', true);
-        }
-    </script>
-</head>
-
-<body>
+{% block content%}
     <!-- ===============================================-->
     <!--    Main Content-->
     <!-- ===============================================-->
@@ -16659,19 +16614,4 @@
             </div><small class="text-uppercase text-body-tertiary fw-bold py-2 pe-2 ps-1 rounded-end">customize</small>
         </div>
     </a>
-    <script src="{% static 'mainapp/js/popper.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/anchor.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/is.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/all.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/lodash.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/list.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/feather.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/dayjs.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/index.js' %}"></script>
-    <script src="{% static 'mainapp/js/umd-index.js' %}"></script>
-    <script src="{% static 'mainapp/js/lottie.min.js' %}"></script>
-    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script> -->
-    <script src="../assets/js/phoenix.js"></script>
-</body>
+{% endblock %}
