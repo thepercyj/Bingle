@@ -172,22 +172,21 @@
               </div>
               <div class="card-body text-center">
                 <!-- Profile picture image-->
-                <img class="img-account-profile rounded-circle mb-2"
+                  {% if user_profile.profile_pic %}
+                  <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
+                  {% else %}
+                  <img class="img-account-profile rounded-circle mb-2 custom-img"
                   src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                  {% endif %}
+                                 <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      {{ uploadpic.as_p }}
+                      <button type="submit">Upload</button>
+                  </form>
                 <!-- Profile picture help block-->
                 <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                <!-- Profile picture upload button-->
-                  <div id="profile-pic-modal" class="modal">
-                      <div class="modal-content">
-                          <form method="post" action="/upload-profile/" id="addProfileForm">
-                              {% csrf_token %}
-                              {{ uploadpic|crispy }}
-                              <input class="btn btn-primary" type="submit" value="Upload New Image">
-                          </form>
-                          <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>
-                      </div>
-                  </div>
-<!--                <button class="btn btn-primary" type="button">Upload new image</button>-->
+                  <!-- Profile picture upload button-->
+
               </div>
             </div>
           </div>

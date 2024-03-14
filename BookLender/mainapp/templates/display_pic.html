@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Profile Picture</title>
+</head>
+<body>
+    <h2>Profile Picture</h2>
+    {% if user_profile.profile_pic %}
+        <img src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
+    {% else %}
+        <p>No profile picture uploaded yet.</p>
+    {% endif %}
+</body>
+</html>

@@ -1353,3 +1353,9 @@ a:focus {
     background-size: cover;
     backdrop-filter: blur(2.5px);
 }
+
+.custom-img {
+    width: 315px;
+    height: 315px;
+
+}

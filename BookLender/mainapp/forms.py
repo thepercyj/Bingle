@@ -82,3 +82,9 @@ class LoginForm(forms.Form):
                 raise forms.ValidationError("Invalid username or password")
             self.cleaned_data['user'] = user
         return self.cleaned_data
+
+
+class ProfilePicForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_pic']
