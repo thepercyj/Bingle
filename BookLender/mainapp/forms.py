@@ -20,7 +20,7 @@ class BookForm(forms.ModelForm):
         }
         widgets = {
             'published_date': forms.DateInput(attrs={'type': 'date'}),  # For example, to use a date picker in HTML5
-        }
+        },
 
 
 class UserBooksForm(forms.ModelForm):
@@ -88,3 +88,9 @@ class ProfilePicForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['profile_pic']
+        labels = {
+            'profile_pic': 'Profile Picture',
+        }
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'accept': 'images/*'}),  # Restrict to image files only
+        }

@@ -5,271 +5,269 @@
 <html>
 
 <head>
-  <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-  {% load static %}
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    {% load static %}
 
-  <title>BookLender</title>
-  <link rel="stylesheet" type="text/css" href="{% static 'mainapp/css/bootstrap.css' %}">
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-  <link href="{% static 'mainapp/css/style.css' %}" rel="stylesheet" />
-  <link href="{% static 'mainapp/css/responsive.css' %}" rel="stylesheet" />
+    <title>BookLender</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/css/bootstrap.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <link href="{% static 'mainapp/css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'mainapp/css/responsive.css' %}" rel="stylesheet" />
 
 
-  <!-- Favicons-->
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
+    <!-- Favicons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 
 </head>
 
 <body class="sub_page">
-  <div class="hero_area">
+<div class="hero_area">
     <!-- header section strats -->
     {% include 'header.html' %}
 
     <!-- end header section -->
-  </div>
+</div>
 
-  <section class="content category_section layout_padding">
+<section class="content category_section layout_padding">
     <div class="container">
-      <div class="heading_container">
-        <h2>
-          Profile Page
-        </h2>
-      </div>
-      <div class="category_container">
-        <div class="box">
-<!--          <h2>My Library</h2>-->
-<!--          <span>{{ user_book_count }}</span>-->
-<!--          <button class="add-books-btn" onclick="openModal('add-book-modal')">-->
-<!--            <h4>View</h4>-->
-<!--          </button>-->
-<!--            <div id="add-book-modal" class="modal">-->
-<!--                <div class="modal-content">-->
-<!--                    <table id="book-table" class="table">-->
-<!--                    </table>-->
-<!--                    <button class="" onclick="openModal('add-new-modal')">-->
-<!--                        <h4>Add</h4>-->
-<!--                    </button>-->
-<!--                        <div id="add-new-modal" class="modal">-->
-<!--                            <div class="modal-content">-->
-<!--                                <form method="post" action="/main/add-book/" id="addBookForm">-->
-<!--                                    {% csrf_token %}-->
-<!--                                    {{ form|crispy }}-->
-<!--                                    <input type="submit" value="Submit">-->
-<!--                                </form>-->
-<!--                                <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>-->
-<!--                </div>-->
-<!--            </div>-->
+        <div class="heading_container">
+            <h2>
+                Profile Page
+            </h2>
+        </div>
+        <div class="category_container">
+            <div class="box">
+                <!--          <h2>My Library</h2>-->
+                <!--          <span>{{ user_book_count }}</span>-->
+                <!--          <button class="add-books-btn" onclick="openModal('add-book-modal')">-->
+                <!--            <h4>View</h4>-->
+                <!--          </button>-->
+                <!--            <div id="add-book-modal" class="modal">-->
+                <!--                <div class="modal-content">-->
+                <!--                    <table id="book-table" class="table">-->
+                <!--                    </table>-->
+                <!--                    <button class="" onclick="openModal('add-new-modal')">-->
+                <!--                        <h4>Add</h4>-->
+                <!--                    </button>-->
+                <!--                        <div id="add-new-modal" class="modal">-->
+                <!--                            <div class="modal-content">-->
+                <!--                                <form method="post" action="/main/add-book/" id="addBookForm">-->
+                <!--                                    {% csrf_token %}-->
+                <!--                                    {{ form|crispy }}-->
+                <!--                                    <input type="submit" value="Submit">-->
+                <!--                                </form>-->
+                <!--                                <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>-->
+                <!--                </div>-->
+            </div>
 
-            
-            <div id="remove-book-modal" class="modal">
-            <div class="modal-content">
-                <div class="user_books">
-                    {% csrf_token %}
-                    {% if user_books %}
-                    <table class="table">
-                        <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Genre</th>
-                            <th>Publish Date</th>
-                            <th>Currently With</th>
-                        </tr>
-                    {% for user_book in user_books %}
-                        <tr>
-                            <td>{{ user_book.book_id.book_title }}</td>
-                            <td>{{ user_book.book_id.book_author }}</td>
-                            <td>{{ user_book.book_id.genre }}</td>
-                            <td>{{ user_book.book_id.published_date }}</td>
-                            <td>{{ user_book.currently_with }}</td>
-                            <td>
-                                <form action="/remove-book/" method="post">
-                                {% csrf_token %}
-                                 <input type="hidden" name="book_id" value="{{ user_book.id }}" />
-                                <input type="submit" class="btn-close" value="" />
+
+            <div id="book-modal" class="modal">
+                <div class="modal-content">
+                    <div class="user_books">
+                        {% csrf_token %}
+                        {% if user_books %}
+                        <table class="table">
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Publish Date</th>
+                                <th>Currently With</th>
+                            </tr>
+                            {% for user_book in user_books %}
+                            <tr>
+                                <td>{{ user_book.book_id.book_title }}</td>
+                                <td>{{ user_book.book_id.book_author }}</td>
+                                <td>{{ user_book.book_id.genre }}</td>
+                                <td>{{ user_book.book_id.published_date }}</td>
+                                <td>{{ user_book.currently_with }}</td>
+                                <td>
+                                    <form action="/remove-book/" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="book_id" value="{{ user_book.id }}" />
+                                        <input type="submit" class="btn-close" value="" />
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <button class="" onclick="openBookModal('add-book-modal')">
+                            <h4>Add</h4>
+                        </button>
+                        <div id="add-book-modal" class="modal">
+                            <div class="modal-content">
+                                <form method="post" action="/add-book/">
+                                    {% csrf_token %}
+                                    {{ bookform|crispy }}
+                                    <input type="submit" value="Submit">
                                 </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </table>
-                    <button class="" onclick="openModal('add-new-modal')">
-                        <h4>Add</h4>
-                    </button>
-                    <div id="add-new-modal" class="modal">
-                        <div class="modal-content">
-                            <form method="post" action="/add-book/" id="addBookForm">
-                                {% csrf_token %}
-                                {{ form|crispy }}
-                                <input type="submit" value="Submit">
-                            </form>
-                            <button class="close-btn" onclick="closeModal('add-new-modal')">Close</button>
+                                <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div>You don't have any books, getting adding!</div>
+                        {% endif %}
+                    </div>
+                    <button class="close-btn" onclick="closeModal('book-modal')">Close</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="box">
+            {% if user_books %}
+            <h2>My Library</h2>
+            <h2><a class=" nav-link remove-books-btn" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
+            {% endif %}
+        </div>
+        <div class="box">
+            <!--                <h2>Books Lended</h2>-->
+            <!--                <span>9</span>-->
+        </div>
+
+    </div>
+
+    </div>
+</section>
+<section class=" client_section">
+    <div class="container-xl px-4 mt-4">
+        <!-- Account page navigation-->
+        <div class="container">
+
+            <hr class="mt-0 mb-4">
+            <div class="row">
+                <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="heading_container">
+                            <h2>
+                                Profile Picture
+                            </h2>
+                        </div>
+                        <div class="card-body text-center">
+                            <!-- Profile picture image-->
+                            {% if user_profile.profile_pic %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
+                            {% else %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img"
+                                 src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                            {% endif %}
+                            <div id="picture-modal" class="modal">
+                                <div class="modal-content">
+                                    <form method="post" action="/img_upload/" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
+                                        <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                                        <button class="btn btn-primary" type="submit">Upload</button>
+                                    </form>
+                                    <button class="close-btn" onclick="closeModal('picture-modal')">Close</button>
+                                </div>
+                            </div>
+                            <!-- Profile picture help block-->
+                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                            <!-- Profile picture upload button-->
+                            <a><button class="btn btn-primary" onclick="openUploadModal('picture-modal')">Upload</button></a>
+
                         </div>
                     </div>
-                {% else %}
-                        <div>You don't have any books, getting adding!</div>
-                {% endif %}
                 </div>
-              <button class="close-btn" onclick="closeModal('remove-book-modal')">Close</button>
+                <div class="col-xl-8">
+                    <!-- Account details card-->
+                    <div class="card mb-4">
+                        <div class="heading_container">
+                            <h2>
+                                Account Details
+                            </h2>
+                        </div>
+                        <div class="card-body">
+
+                            <form method="post" action="/update-profile/">
+                                {% csrf_token %}
+                                <!-- Form Group (username)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on
+                                        the site)</label>
+                                    <input class="form-control" name="inputUserName" id="inputUsername" type="text" placeholder="Enter your username"
+                                           value={{ user.username }} >
+                                </div>
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (first name)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputFirstName">First name</label>
+                                        <input class="form-control" name="inputFirstName" id="inputFirstName" type="text" placeholder="Enter your first name"
+                                               value={{ user.first_name }}>
+                                    </div>
+                                    <!-- Form Group (last name)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputLastName">Last name</label>
+                                        <input class="form-control" name="inputLastName" id="inputLastName" type="text" placeholder="Enter your last name"
+                                               value={{ user.last_name }}>
+                                    </div>
+                                </div>
+                                <!-- Form Row        -->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (organization name)-->
+
+                                    <!-- Form Group (location)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputLocation">Location</label>
+                                        <input class="form-control" name="inputLocation" id="inputLocation" type="text" placeholder="Enter your location"
+                                               value={{ user_profile.primary_location }}>
+                                    </div>
+                                </div>
+                                <!-- Form Group (email address)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                    <input class="form-control" name="inputEmailAddress" id="inputEmailAddress" type="email"
+                                           placeholder="Enter your email address" value={{ user.email }}>
+                                </div>
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (phone number)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputPhone">Phone number</label>
+                                        <input class="form-control" name="inputPhone" id="inputPhone" type="tel" placeholder="Enter your phone number"
+                                               value={{ user_profile.phone_number }}>
+                                    </div>
+                                </div>
+                                <!-- Form Group (birthday)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="birthday">Birthday</label>
+                                    <div>{{ user_profile.birth_date }}</div>
+                                </div><br><div></div>
+
+                                <!-- Save changes button-->
+                                <button class="btn btn-primary" type="submit">Save changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
         </div>
-          <div class="box">
-              {% if user_books %}
-              <h2>My Library</h2>
-                <h2><a class=" nav-link remove-books-btn" href="#" onclick="openModal('remove-book-modal')">{{ user_book_count }}</a></h2>
-              {% endif %}
-          </div>
-        <div class="box">
-          <h2>Books Lended</h2>
-          <span>9</span>
-        </div>
-
-      </div>
-
     </div>
+</section>
 
-  <script>
-      document.addEventListener("DOMContentLoaded", function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const remove = urlParams.get('remove');
-    if (remove === 'true') {
-        openModal('remove-book-modal')
-    }
-});
-  </script>
-  </section>
-  <section class=" client_section">
-    <div class="container-xl px-4 mt-4">
-      <!-- Account page navigation-->
-      <div class="container">
-
-        <hr class="mt-0 mb-4">
-        <div class="row">
-          <div class="col-xl-4">
-            <!-- Profile picture card-->
-            <div class="card mb-4 mb-xl-0">
-              <div class="heading_container">
-                <h2>
-                  Profile Picture
-                </h2>
-              </div>
-              <div class="card-body text-center">
-                <!-- Profile picture image-->
-                  {% if user_profile.profile_pic %}
-                  <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
-                  {% else %}
-                  <img class="img-account-profile rounded-circle mb-2 custom-img"
-                  src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                  {% endif %}
-                                 <form method="post" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      {{ uploadpic.as_p }}
-                      <button type="submit">Upload</button>
-                  </form>
-                <!-- Profile picture help block-->
-                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                  <!-- Profile picture upload button-->
-
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-8">
-            <!-- Account details card-->
-            <div class="card mb-4">
-              <div class="heading_container">
-                <h2>
-                  Account Details
-                </h2>
-              </div>
-              <div class="card-body">
-
-                <form method="post" action="/update-profile/">
-                    {% csrf_token %}
-                  <!-- Form Group (username)-->
-                  <div class="mb-3">
-                    <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on
-                      the site)</label>
-                    <input class="form-control" name="inputUserName" id="inputUsername" type="text" placeholder="Enter your username"
-                      value={{ user.username }} >
-                  </div>
-                  <!-- Form Row-->
-                  <div class="row gx-3 mb-3">
-                    <!-- Form Group (first name)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputFirstName">First name</label>
-                      <input class="form-control" name="inputFirstName" id="inputFirstName" type="text" placeholder="Enter your first name"
-                        value={{ user.first_name }}>
-                    </div>
-                    <!-- Form Group (last name)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLastName">Last name</label>
-                      <input class="form-control" name="inputLastName" id="inputLastName" type="text" placeholder="Enter your last name"
-                        value={{ user.last_name }}>
-                    </div>
-                  </div>
-                  <!-- Form Row        -->
-                  <div class="row gx-3 mb-3">
-                    <!-- Form Group (organization name)-->
-
-                    <!-- Form Group (location)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLocation">Location</label>
-                      <input class="form-control" name="inputLocation" id="inputLocation" type="text" placeholder="Enter your location"
-                        value={{ user_profile.primary_location }}>
-                    </div>
-                  </div>
-                  <!-- Form Group (email address)-->
-                  <div class="mb-3">
-                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                    <input class="form-control" name="inputEmailAddress" id="inputEmailAddress" type="email"
-                      placeholder="Enter your email address" value={{ user.email }}>
-                  </div>
-                  <!-- Form Row-->
-                  <div class="row gx-3 mb-3">
-                    <!-- Form Group (phone number)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputPhone">Phone number</label>
-                      <input class="form-control" name="inputPhone" id="inputPhone" type="tel" placeholder="Enter your phone number"
-                        value={{ user_profile.phone_number }}>
-                    </div>
-                    <!-- Form Group (birthday)-->
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="birthday">Birthday</label>
-                      <div>{{ user_profile.birth_date }}<br><div>
-                    </div>
-                  </div>
-                  <!-- Save changes button-->
-                  <button class="btn btn-primary" type="submit">Save changes</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {% include 'footer.html' %}
-  <script src="{% static 'mainapp/js/jquery-3.4.1.min.js' %}"></script>
-  <script src="{% static 'mainapp/js/bootstrap.js' %}"></script>
-  <script src="{% static 'mainapp/js/custom.js' %}"></script>
-  <script src="{% static 'mainapp/js/modal.js' %}"></script>
+{% include 'footer.html' %}
+<script src="{% static 'mainapp/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'mainapp/js/bootstrap.js' %}"></script>
+<script src="{% static 'mainapp/js/custom.js' %}"></script>
+<script src="{% static 'mainapp/js/modal.js' %}"></script>
 
 </body>
