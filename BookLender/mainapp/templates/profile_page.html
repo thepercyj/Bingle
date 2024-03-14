@@ -80,6 +80,10 @@
 
             <div id="book-modal" class="modal">
                 <div class="modal-content">
+                    <button class="btn btn-primary-left" onclick="openBookModal('add-book-modal')">
+                        Add
+                    </button>
+                    <br>
                     <div class="user_books">
                         {% csrf_token %}
                         {% if user_books %}
@@ -108,16 +112,14 @@
                             </tr>
                             {% endfor %}
                         </table>
-                        <button class="" onclick="openBookModal('add-book-modal')">
-                            <h4>Add</h4>
-                        </button>
                         <div id="add-book-modal" class="modal">
                             <div class="modal-content">
                                 <form method="post" action="/add-book/">
                                     {% csrf_token %}
                                     {{ bookform|crispy }}
-                                    <input type="submit" value="Submit">
+                                    <input class="btn btn-primary" type="submit" value="Submit">
                                 </form>
+                                <br>
                                 <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
                             </div>
                         </div>
@@ -129,19 +131,18 @@
                 </div>
             </div>
 
-        </div>
-        <div class="box">
-            {% if user_books %}
-            <h2>My Library</h2>
-            <h2><a class=" nav-link remove-books-btn" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
-            {% endif %}
-        </div>
-        <div class="box">
-            <!--                <h2>Books Lended</h2>-->
-            <!--                <span>9</span>-->
-        </div>
+            <div class="box">
+                {% if user_books %}
+                <h2>My Library</h2>
+                <h2><a class=" nav-link remove-books-btn" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
+                {% endif %}
+            </div>
+            <div class="box">
+                <!--                <h2>Books Lended</h2>-->
+                <!--                <span>9</span>-->
+            </div>
 
-    </div>
+        </div>
 
     </div>
 </section>
