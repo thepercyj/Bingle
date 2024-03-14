@@ -4,13 +4,14 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-from .forms import BookForm, UserRegisterForm, ProfilePicForm
+from .forms import BookForm, UserRegisterForm
 from .models import UserBook, User, UserProfile, Book
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
+
 from BookLender import settings
 
 
@@ -214,29 +215,21 @@ def updateProfile(request):
         return render(request, 'profile_page.html')
 
 
-@login_required_message
-def image_request(request):
-    if request.method == 'POST':
-        form = ProfilePicForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Check if the user is authenticated
-            if request.user.is_authenticated:
-                user_profile, created = UserProfile.objects.get_or_create(user=request.user)
-                user_profile.profile_pic = form.cleaned_data['profile_pic']
-                user_profile.save()
-                return redirect('profile')  # Redirect to a page where you display the uploaded picture
-            else:
-                # Handle case where user is not authenticated
-                # You might want to redirect to the login page or display an error message
-                return redirect('login')  # Example redirect to login page
-    else:
-        form = ProfilePicForm()
-    return render(request, 'profile_page.html', {'uploadpic': form})
+def new_home(request):
+    return render(request, 'newhome.html')
 
+def chat(request):
+    return render(request, 'chat.html')
 
-@login_required_message
-def display_pic(request):
-    # Assuming you have a UserProfile instance associated with the currently logged-in user
-    user_profile = request.user.profile
-
-    return render(request, 'profile_page.html', {'user_profile': user_profile})
+# @login_required_message
+# def upload_profile_picture(request):
+#     if request.method == 'POST':
+#         form = ProfilePictureForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             user_profile = form.save(commit=False)
+#             user_profile.user = request.user
+#             user_profile.save()
+#             return redirect('profile')  # Redirect to user profile page
+#     else:
+#         form = ProfilePictureForm()
+#     return render(request, 'profile_page.html', {'uploadpic': form})

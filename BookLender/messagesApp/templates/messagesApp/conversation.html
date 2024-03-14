@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Conversation</title>
 </head>
@@ -28,6 +28,8 @@
                                 <h6>Hello {{ sender_username }}</h6>
                                 {% endwith %}
                                 {% endif %}
+                                <p class="text-muted">Show Status if any</p>
+
                             </div>
                         </div>
                     </div>
@@ -62,6 +64,7 @@
                             </div>
                             <span class="time text-muted small">00:32</span>
                         </div>
+                        <hr>
                         <div class="friend-drawer friend-drawer--onhover">
                             <img class="profile-image"
                                 src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
@@ -72,67 +75,37 @@
                             </div>
                             <span class="time text-muted small">00:32</span>
                         </div>
+                        {% for conversation in conversations %}
+                        <a href={% url 'conversation' conversation.id %}>
+                            <div class="friend-drawer friend-drawer--onhover">
+                                <img class="profile-image"
+                                    src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
+                                    alt="">
+                                <div class="text">
+                                    <h6> {% if conversation.id_1 == our_profile %}
+                                        {{ conversation.id_2.user.username }}<br>
+                                        {% else %}
+                                        {{ conversation.id_1.user.username }}<br>
+                                        {% endif %}
+                                    </h6>
+                                    <p class="text-muted">{{ conversation.latest_message }}</p>
+                                </div>
+                            </div>
+                        </a>
+                        <br>
+                        {% endfor %}
                         <div class="friend-drawer friend-drawer--onhover">
                             <img class="profile-image"
                                 src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
                                 alt="">
                             <div class="text">
-                                <h6>Optimus</h6>
-                                <p class="text-muted">Wanna grab a beer?</p>
+                                <h6></h6>
+                                <p class="text-muted"></p>
                             </div>
-                            <span class="time text-muted small">00:32</span>
+                            <span class="time text-muted small"></span>
                         </div>
-                        <div class="friend-drawer friend-drawer--onhover">
-                            <img class="profile-image"
-                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
-                                alt="">
-                            <div class="text">
-                                <h6>Optimus</h6>
-                                <p class="text-muted">Wanna grab a beer?</p>
-                            </div>
-                            <span class="time text-muted small">00:32</span>
-                        </div>
-                        <hr>
-                        <div class="friend-drawer friend-drawer--onhover ">
-                            <img class="profile-image"
-                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/real-terminator.png"
-                                alt="">
-                            <div class="text">
-                                <h6>Skynet</h6>
-                                <p class="text-muted">Seen that canned piece of s?</p>
-                            </div>
-                            <span class="time text-muted small">13:21</span>
-                        </div>
-                        <hr>
-                        <div class="friend-drawer friend-drawer--onhover">
-                            <img class="profile-image"
-                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/termy.jpg" alt="">
-                            <div class="text">
-                                <h6>Termy</h6>
-                                <p class="text-muted">Im studying spanish...</p>
-                            </div>
-                            <span class="time text-muted small">13:21</span>
-                        </div>
-                        <hr>
-                        <div class="friend-drawer friend-drawer--onhover">
-                            <img class="profile-image"
-                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/rick.jpg" alt="">
-                            <div class="text">
-                                <h6>Richard</h6>
-                                <p class="text-muted">I'm not sure...</p>
-                            </div>
-                            <span class="time text-muted small">13:21</span>
-                        </div>
-                        <hr>
-                        <div class="friend-drawer friend-drawer--onhover">
-                            <img class="profile-image"
-                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/rachel.jpeg" alt="">
-                            <div class="text">
-                                <h6>XXXXX</h6>
-                                <p class="text-muted">Hi, wanna see something?</p>
-                            </div>
-                            <span class="time text-muted small">13:21</span>
-                        </div>
+
+
                     </div>
                 </div>
 
@@ -143,24 +116,17 @@
                             <img class="profile-image"
                                 src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
                             <div class="text">
-                                <h6>Robo Cop</h6>
+                                {% if messages %}
+                                {% with sender_username=messages.0.to_user.user.username %}
+                                <h6>{{ sender_username }}</h6>
+                                {% endwith %}
+                                {% endif %}
+                                <p class="text-muted">Show Status if any</p>
                             </div>
-                            <span class="settings-tray--right">
-                                <i class="material-icons">cached</i>
-                                <i class="material-icons">message</i>
-                                <i class="material-icons">menu</i>
-                            </span>
+
                         </div>
                     </div>
                     <div class="chat-panel">
-                        <div class="row no-gutters">
-                            <div class="col-md-3">
-                                <div class="chat-bubble chat-bubble--left">
-                                    Hello dude!
-                                </div>
-                            </div>
-                        </div>
-
                         {% for message in messages %}
                         <div
                             class="{% if message.is_from_our_user %}col-md-3 offset-md-9{% else %}col-md-3 {% endif %}">
@@ -172,7 +138,6 @@
                                 <!-- Accessing the username -->
                             </div>
                             <small>Sent: {{ message.created_on|timesince }} ago</small>
-
                         </div>
                         {% endfor %}
                     </div>
@@ -199,7 +164,7 @@
     <script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script src="{% static 'mainapp/js/chat.js' %}"></script>
+    <script src="{% static 'messagesApp/js/chat.js' %}"></script>
 
 </body>
 

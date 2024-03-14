@@ -6,8 +6,7 @@ body {
 }
 
 .container-fluid {
-  height: 100vh;
-  /* Make the container fill the viewport height */
+  height: 85vh;
   display: flex;
   flex-direction: column;
   margin: 60px auto;
@@ -18,9 +17,7 @@ body {
 
 .row {
   flex: 1;
-  /* Allow the row to grow and take up remaining space */
   overflow: hidden;
-  /* Hide overflow to prevent scrolling on the entire page */
   bottom: 0;
 }
 
@@ -187,10 +184,9 @@ hr {
   overflow-x: hidden;
   padding-bottom: 70px;
   max-width: 100%;
-  /* Adjust the maximum width of the chat panel */
   box-sizing: border-box;
-  /* Include padding and border in the total width */
-  max-height: 600px;
+  max-height: 550px;
+
 }
 
 @keyframes fadeIn {
@@ -260,7 +256,7 @@ hr {
 .friends-panel {
   overflow-y: auto;
   /* Add this line to make the div scrollable */
-  max-height: 600px;
+  max-height: 565px;
 
 }
 
