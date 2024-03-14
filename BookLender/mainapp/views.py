@@ -1,10 +1,13 @@
+import smtplib
+import ssl
+
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-from .forms import BookForm, UserRegisterForm, ProfilePicForm
+from .forms import BookForm, UserRegisterForm
 from .models import UserBook, User, UserProfile, Book
 from django.contrib import messages
 from django.urls import reverse
@@ -57,14 +60,6 @@ def work(request):
     return render(request, 'work.html')
 
 
-def borrow(request):
-    return render(request, 'borrow.html')
-
-
-def lend(request):
-    return render(request, 'lend.html')
-
-
 def forgetpass(request):
     return render(request, 'forgetpass.html')
 
@@ -109,7 +104,7 @@ def profile(request):
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
-    context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
+    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count}
     return render(request, 'profile_page.html', context)
 
@@ -154,29 +149,28 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
-# @login_required_message
-# def listBook(request):
-#     # Retrieve the logged-in user profile
-#     user_profile = UserProfile.objects.get(user=request.user)
-#
-#     # Get the book ID from the POST data
-#     book_id = request.POST.get('book_id')
-#
-#     try:
-#         # Attempt to retrieve the UserBook object to be deleted
-#         book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
-#
-#         # Delete the book
-#         book.delete()
-#
-#         # Set success message
-#         messages.success(request, "Book removed successfully.")
-#     except UserBook.DoesNotExist:
-#         # Set error message if book is not found
-#         messages.error(request, "Book not found.")
-#
-#     # Redirect back to the profile page with remove parameter in URL
-#     return HttpResponseRedirect(reverse('profile') + '?remove=true')
+@login_required_message
+def listBook(request):
+    # Retrieve the logged-in user
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+
+    # Filter Userbook objects based on the current user
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    print(f"User Books: {user_books}")
+
+    # Get the IDs of books associated with the user
+    user_book_ids = [user_book.book_id_id for user_book in user_books]
+
+    # Retrieve books from the Book model based on the IDs associated with the user
+    associated_books = Book.objects.filter(id__in=user_book_ids)
+
+    # Serialize the associated books into JSON
+    serialized_books = [{'book_title': book.book_title, 'book_author': book.book_author, 'genre': book.genre,
+                         'published_date': book.published_date} for book in associated_books]
+
+    # Return the serialized books as JSON response
+    return JsonResponse(serialized_books, safe=False)
 
 
 @login_required_message
@@ -209,43 +203,62 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile')
+        return redirect('/main/profile_page')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
 
 
-def new_home(request):
-    return render(request, 'newhome.html')
 
 
-def chat(request):
-    return render(request, 'chat.html')
+#The code provided below was written with using smtp built in function
+
+#from django.contrib.auth.tokens import default_token_generator
+#from django.contrib.auth.models import User
+from django.core.mail import send_mail
+#from django.urls import reverse
+#from django.utils.http import urlsafe_base64_encode
+#from django.utils.encoding import force_bytes
+#from django.shortcuts import render, redirect
+#from django.contrib.auth import views as auth_views
+#from django.shortcuts import render
 
 
-@login_required_message
-def img_upload(request):
-    if request.method == 'POST':
-        form = ProfilePicForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Check if the user is authenticated
-            if request.user.is_authenticated:
-                user_profile, created = UserProfile.objects.get_or_create(user=request.user)
-                user_profile.profile_pic = form.cleaned_data['profile_pic']
-                user_profile.save()
-                return redirect('profile')  # Redirect to a page where you display the uploaded picture
-            else:
-                # Handle case where user is not authenticated
-                # You might want to redirect to the login page or display an error message
-                return redirect('login')  # Example redirect to login page
-    else:
-        form = ProfilePicForm()
-    return render(request, 'profile_page.html', {'uploadpic': form})
+#def password_reset_confirm(request, uidb64, token):
+ #   return auth_views.PasswordResetConfirmView.as_view()(request, uidb64=uidb64, token=token,
+    #                                                     template_name='reset.html')
 
 
-@login_required_message
-def display_pic(request):
-    # Assuming you have a UserProfile instance associated with the currently logged-in user
-    user_profile = request.user.profile
+#def forgot_password(request):
+ #   if request.method == 'POST':
+  #      email = request.POST.get('email')
+   #     try:
+    #        user = User.objects.get(email=email)
+     #   except User.DoesNotExist:
+      #      return render(request, 'forgot.html', {'error_message': 'User with this email does not exist.'})
 
-    return render(request, 'profile_page.html', {'user_profile': user_profile})
+        # Generate password reset token
+       # token = default_token_generator.make_token(user)
+
+        # Construct the reset password link
+        #uid = urlsafe_base64_encode(force_bytes(user.pk))
+       # reset_url = reverse('password_reset_confirm', args=[uid, token])
+       # reset_link = request.build_absolute_uri(reset_url)
+
+        # Compose the email
+        #subject = 'Reset your password'
+        #message = f'Hi {user.username},\n\nPlease click on the following link to reset your password:\n\n{reset_link}\n\nBest regards,\nYour Website Team'
+
+        # Send email
+        #try:
+         #   with smtplib.SMTP('', ) as server:
+          #      server.starttls()
+           #     server.login('', '')
+            #    server.sendmail('', [email], message)
+        #except Exception as e:
+         #   return render(request, 'forgot.html', {'error_message': f'Failed to send email: {e}'})
+
+        #return render(request, 'forgot.html', {'success_message': 'Password reset link has been sent to your email.'})
+
+    #return render(request, 'forgot.html')
+
