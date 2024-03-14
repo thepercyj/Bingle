@@ -45,10 +45,6 @@ def index(request):
     return render(request, 'index.html')
 
 
-def category(request):
-    return render(request, 'category.html')
-
-
 def about(request):
     return render(request, 'about.html')
 
@@ -59,10 +55,6 @@ def borrow(request):
 
 def lend(request):
     return render(request, 'lend.html')
-
-
-def work(request):
-    return render(request, 'work.html')
 
 
 def forgetpass(request):
