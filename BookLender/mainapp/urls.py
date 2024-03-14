@@ -1,7 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
 
@@ -24,6 +23,4 @@ urlpatterns = [
     path('forgetpass/', views.forgetpass, name='forgetpass'),
     path('new_home/', views.new_home, name='new_home'),
     path('chat/', views.chat, name='chat'),
-
-    # path('upload-profile/', views.upload_profile_picture, name='upload_profile_picture'),
 ]
