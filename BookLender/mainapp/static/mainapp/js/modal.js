@@ -25,3 +25,49 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
     }
 };
+
+
+$(document).ready(function(){
+    // Function to close modal
+    function closeModal(modalId) {
+        $('#' + modalId).css('display', 'none');
+    }
+
+    // Handle click on upload button
+    $('#upload-btn').click(function(){
+        var formData = new FormData($('#upload-form')[0]);
+        $.ajax({
+            url: '/img_upload/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response){
+                if(response.success){
+                    // Redirect or do something on success
+                    window.location.href = "{% url 'profile' %}";
+                } else {
+                    // Show error message in modal
+                    $('#error-message').text(response.error);
+                    $('#picture-modal').css('display', 'flex');
+                }
+            },
+            error: function(xhr, status, error){
+                console.error(xhr.responseText);
+                // Handle other errors if needed
+            }
+        });
+    });
+
+    // Close modal when clicking on the close button
+    $('.close-btn').click(function(){
+        closeModal('picture-modal');
+    });
+
+    // Close modal when clicking outside of it
+    $(window).click(function(event){
+        if(event.target == $('#picture-modal')[0]){
+            closeModal('picture-modal');
+        }
+    });
+});

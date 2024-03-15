@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     phone_number = models.CharField('Phone Number', max_length=255, null=False, default='default')
     birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
     review = models.IntegerField('Review Score', null=True)
-    profile_pic = models.ImageField(upload_to='images', blank=True)
+    profile_pic = encrypt(models.ImageField(upload_to='images', blank=True))
 
     def __str__(self):
         return self.user.username

@@ -1,9 +1,8 @@
-from django.contrib.auth.decorators import login_required
-from django.template.context_processors import csrf
+from io import BytesIO
+from PIL import Image
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.views.decorators.cache import never_cache
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book
 from django.contrib import messages
@@ -11,7 +10,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-
+from django.core.files.base import ContentFile
+from django.http import HttpResponseBadRequest
 from BookLender import settings
 
 
@@ -221,18 +221,45 @@ def img_upload(request):
         if form.is_valid():
             # Check if the user is authenticated
             if request.user.is_authenticated:
+                image_file = form.cleaned_data['profile_pic']
+
+                # Check file size
+                if image_file.size > 2 * 1024 * 1024:  # 2 MB limit
+                    return JsonResponse({'error': "File size exceeds the limit of 2 MB."})
+
+                # Image compression
+                img = Image.open(image_file)
+                img = img.convert('RGB')
+                img.thumbnail((1024, 1024))  # Resize to maximum dimensions of 1024x1024
+                img_io = BytesIO()
+
+                # Save in JPEG format
+                img.save(img_io, format='JPEG', quality=70)  # Adjust quality as needed
+                img_io.seek(0)
                 user_profile, created = UserProfile.objects.get_or_create(user=request.user)
-                user_profile.profile_pic = form.cleaned_data['profile_pic']
-                user_profile.save()
-                return redirect('profile')  # Redirect to a page where you display the uploaded picture
+                user_profile.profile_pic.save(image_file.name + '.jpg', ContentFile(img_io.getvalue()), save=True)
+
+                # Save in PNG format if the uploaded file is not already PNG
+                if image_file.name.lower().endswith('.png'):
+                    img_io = BytesIO()
+                    img.save(img_io, format='PNG', optimize=True)
+                    img_io.seek(0)
+                    user_profile.profile_pic.save(image_file.name, ContentFile(img_io.getvalue()), save=True)
+
+                # Save in WebP format if the uploaded file is not already WebP
+                if image_file.name.lower().endswith('.webp'):
+                    img_io = BytesIO()
+                    img.save(img_io, format='WEBP', quality=70)
+                    img_io.seek(0)
+                    user_profile.profile_pic.save(image_file.name, ContentFile(img_io.getvalue()), save=True)
+
+                return JsonResponse({'success': True})  # Indicate success
             else:
                 # Handle case where user is not authenticated
-                # You might want to redirect to the login page or display an error message
-                return redirect('login')  # Example redirect to login page
+                return JsonResponse({'error': "User not authenticated"}, status=401)
     else:
         form = ProfilePicForm()
     return render(request, 'profile_page.html', {'uploadpic': form})
-
 
 @login_required_message
 def display_pic(request):
