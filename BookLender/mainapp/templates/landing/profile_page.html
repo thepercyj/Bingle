@@ -134,13 +134,14 @@
                             {% endif %}
                             <div id="picture-modal" class="modal">
                                 <div class="modal-content">
-                                    <form method="post" action="/img_upload/" enctype="multipart/form-data">
+                                    <form id="upload-form" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
                                         <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
-                                        <button class="btn btn-primary" type="submit">Upload</button>
+                                        <button id="upload-btn" class="btn btn-primary" type="button">Upload</button>
                                     </form>
                                     <button class="close-btn" onclick="closeModal('picture-modal')">Close</button>
+                                    <p id="error-message" style="color: red;"></p>
                                 </div>
                             </div>
                             <!-- Profile picture help block-->
