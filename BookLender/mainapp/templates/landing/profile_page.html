@@ -77,9 +77,9 @@
                         </table>
                         <div id="add-book-modal" class="modal">
                             <div class="modal-content">
-                                <form method="post" action="/add-book/">
+                                <form method="POST" action="/add-book/">
                                     {% csrf_token %}
-                                    {{ bookform|crispy }}
+                                    {{ bookform |crispy }}
                                     <input class="btn btn-primary" type="submit" value="Submit">
                                 </form>
                                 <br>
