@@ -97,7 +97,7 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     # Prepare the context
-    token = {'form': form}
+    token = {'form_log': form}
     # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
     return render(request, 'login.html', token)
 

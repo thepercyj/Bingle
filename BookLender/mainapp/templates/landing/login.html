@@ -42,7 +42,7 @@
                 {% load crispy_forms_tags %}
                 <form method="post" action="{% url 'login_view' %}">
                     {% csrf_token %}
-                    {{ form|crispy }}
+                    {{ form_log |crispy }}
                     <div class="align-items-center remember">
                         <input class="mr-2" type="checkbox"> Remember Me
                     </div>
