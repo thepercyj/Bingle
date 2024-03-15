@@ -75,7 +75,7 @@ def register(request):
         if form.is_valid():
             form.save()
             form.save_profile()
-            return redirect('login_view')  # Redirect to login page or wherever you'd like
+            return redirect('login_view')  # Redirect to login page
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
