@@ -2427,6 +2427,13 @@ fieldset:disabled a.btn {
   border-color: #007bff;
 }
 
+.btn-primary-left {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  margin-left: auto;
+}
+
 .btn-primary:hover {
   color: #fff;
   background-color: #0069d9;
@@ -5817,7 +5824,7 @@ a.close.disabled {
 }
 
 .modal-content {
-  position: relative;
+  position: right;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;

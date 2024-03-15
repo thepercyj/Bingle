@@ -9,9 +9,6 @@ from mainapp.models import User, UserProfile, Message
 from django.contrib import messages
 from mainapp.models import Conversation
 
-test_user2 = User.objects.get(username='TestUser2')
-test_user_2_profile = UserProfile.objects.get(user=test_user2)
-
 
 def login_required_message(function):
     """
@@ -207,7 +204,6 @@ def new_conversation(request):
     else:
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
-
 
 def old_conversation(request):
     return render(request, 'messagesApp/conversation.html')

@@ -74,7 +74,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'mainapp/templates'),
+            os.path.join(BASE_DIR, 'mainapp/templates/landing/'),
+            os.path.join(BASE_DIR, 'mainapp/templates/mainapp/'),
             os.path.join(BASE_DIR, 'messageApp/templates'),
         ],
         'APP_DIRS': True,
@@ -158,6 +159,10 @@ STATIC_URL = 'static/'
 
 LOGIN_URL = '/main/login'
 
+# Handle Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -168,4 +173,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 LOGIN_URL = '/main/login/'
-LOGOUT_REDIRECT_URL = '/main/'
+LOGOUT_REDIRECT_URL = '/'

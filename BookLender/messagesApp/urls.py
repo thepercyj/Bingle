@@ -1,5 +1,4 @@
 from django.urls import path
-
 from .views import load_full_conversation, send_message, get_conversation_list, new_conversation, rate_user, \
     old_conversation
 
