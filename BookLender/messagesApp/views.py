@@ -3,14 +3,11 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from mainapp.models import User, UserProfile, Message
 from django.contrib import messages
 from mainapp.models import Conversation
-
-test_user2 = User.objects.get(username='TestUser2')
-test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
 
 def login_required_message(function):
@@ -207,3 +204,29 @@ def new_conversation(request):
     else:
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
+
+
+def rate_user(request, conversation_id):
+    if request.method == 'POST':
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
+
+        rating = request.POST.get('rating')
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, "Rating must be an integer between 1 and 5.")
+                return HttpResponseBadRequest("Rating must be an integer between 1 and 5.")
+        except ValueError:
+            messages.error(request, "Invalid input. Rating must be an integer.")
+            return HttpResponseBadRequest("Invalid input. Rating must be an integer.")
+
+        current_rating = their_profile.review
+        if current_rating:
+            their_profile.review = (current_rating + rating) / 2
+        else:
+            their_profile.review = rating
+        their_profile.save()
+        return redirect('conversation', conversation_id=conversation_id)
