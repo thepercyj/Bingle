@@ -97,12 +97,14 @@
             <div class="box">
                 {% if user_books %}
                 <h2>My Library</h2>
-                <h2><a class=" nav-link remove-books-btn" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
+                <h2><a class=" nav-link" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
                 {% endif %}
             </div>
             <div class="box">
-                <!--                <h2>Books Lended</h2>-->
-                <!--                <span>9</span>-->
+                {% if book %}
+                <h2>Bingle Store</h2>
+                <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">{{ book_count }}</a></h2>
+                {% endif %}
             </div>
 
         </div>

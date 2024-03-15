@@ -8,6 +8,10 @@ function openBookModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
 }
 
+function openLibraryModal(modalId) {
+    document.getElementById(modalId).style.display = 'flex';
+}
+
 function openUploadModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
 }

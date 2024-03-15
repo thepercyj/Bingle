@@ -74,3 +74,11 @@ if (picture === 'true') {
  openUploadModal('picture-modal')
 }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const library = urlParams.get('library');
+if (library === 'true') {
+ openLibraryModal('library-modal')
+}
+});

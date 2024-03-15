@@ -154,28 +154,19 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
-# @login_required_message
-# def listBook(request):
-#     # Retrieve the logged-in user
-#     user = request.user
-#     user_profile = UserProfile.objects.get(user=user)
-#
-#     # Filter Userbook objects based on the current user
-#     user_books = UserBook.objects.filter(owner_book_id=user_profile)
-#     print(f"User Books: {user_books}")
-#
-#     # Get the IDs of books associated with the user
-#     user_book_ids = [user_book.book_id_id for user_book in user_books]
-#
-#     # Retrieve books from the Book model based on the IDs associated with the user
-#     associated_books = Book.objects.filter(id__in=user_book_ids)
-#
-#     # Serialize the associated books into JSON
-#     serialized_books = [{'book_title': book.book_title, 'book_author': book.book_author, 'genre': book.genre,
-#                          'published_date': book.published_date} for book in associated_books]
-#
-#     # Return the serialized books as JSON response
-#     return JsonResponse(serialized_books, safe=False)
+@login_required_message
+def library(request):
+    # Perform a left join between Book and UserBook models
+    library = Book.objects.prefetch_related('user_books_book').all()
+
+    # Debug output to check the related UserBook objects and currently_with field
+    for book in library:
+        for user_book in book.user_books_book.all():
+            print(
+                f"Book: {book.book_title}, Currently with: {user_book.currently_with.user if user_book.currently_with else 'Not currently owned'}")
+
+    # Pass the result to the template
+    return render(request, 'library.html', {'library': library})
 
 
 @login_required_message
@@ -260,6 +251,7 @@ def img_upload(request):
     else:
         form = ProfilePicForm()
     return render(request, 'profile_page.html', {'uploadpic': form})
+
 
 @login_required_message
 def display_pic(request):
