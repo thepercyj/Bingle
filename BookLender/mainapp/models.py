@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     current_location = models.CharField('Current Location', max_length=255, null=False, default='default')
     phone_number = models.CharField('Phone Number', max_length=255, null=False, default='default')
     birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
-    review = models.IntegerField('Review Score', null=True)
+    review = models.DecimalField('Review Score', max_digits=3, decimal_places=1, null=True)
 
     def __str__(self):
         return self.user.username
