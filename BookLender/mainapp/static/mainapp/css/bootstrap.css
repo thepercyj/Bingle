@@ -4570,6 +4570,8 @@ input[type="button"].btn-block {
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+  margin: 10px; /* Adds 10px margin on all sides */
+  padding: 20px; /* Adds 20px padding on all sides */
 }
 
 .card > hr {
@@ -10013,6 +10015,8 @@ a.text-dark:hover, a.text-dark:focus {
   }
   .container {
     min-width: 992px !important;
+    padding: 20px; /* Example padding */
+    margin: 20px auto; /* Example margin;
   }
   .navbar {
     display: none;
