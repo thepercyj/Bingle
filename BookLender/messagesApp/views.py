@@ -205,6 +205,8 @@ def new_conversation(request):
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
 
+def old_conversation(request):
+    return render(request, 'messagesApp/conversation.html')
 
 def rate_user(request, conversation_id):
     if request.method == 'POST':
