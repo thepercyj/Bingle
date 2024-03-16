@@ -106,11 +106,12 @@ def login_view(request):
 def profile(request):
     form = BookForm(request.POST or None)
     user = request.user
+    library = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count}
+               'user_book_count': books_count, 'library' : library}
     return render(request, 'profile_page.html', context)
 
 
@@ -156,14 +157,12 @@ def addUserBook(request, book):
 
 @login_required_message
 def library(request):
-    # Perform a left join between Book and UserBook models
-    library = Book.objects.prefetch_related('user_books_book').all()
+    # Fetch all Book records without prefetch_related
+    library = Book.objects.all()
 
-    # Debug output to check the related UserBook objects and currently_with field
+    # Debug output to check the books
     for book in library:
-        for user_book in book.user_books_book.all():
-            print(
-                f"Book: {book.book_title}, Currently with: {user_book.currently_with.user if user_book.currently_with else 'Not currently owned'}")
+        print(f"Book: {book.book_title}")
 
     # Pass the result to the template
     return render(request, 'library.html', {'library': library})
@@ -257,5 +256,6 @@ def img_upload(request):
 def display_pic(request):
     # Assuming you have a UserProfile instance associated with the currently logged-in user
     user_profile = request.user.profile
+    library = Book.objects.all()
 
     return render(request, 'profile_page.html', {'user_profile': user_profile})
