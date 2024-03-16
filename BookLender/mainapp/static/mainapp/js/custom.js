@@ -49,3 +49,36 @@ function populateTable() {
         })
         .catch(error => console.error('Error fetching data:', error));
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const addbook = urlParams.get('add-book');
+if (addbook === 'true') {
+ openBookModal('add-book-modal')
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const book = urlParams.get('book');
+if (book === 'true') {
+ openViewModal('book-modal')
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const picture = urlParams.get('picture');
+if (picture === 'true') {
+ openUploadModal('picture-modal')
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const library = urlParams.get('library');
+if (library === 'true') {
+ openLibraryModal('library-modal')
+}
+});

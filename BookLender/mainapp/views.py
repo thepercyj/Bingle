@@ -1,17 +1,17 @@
-from django.contrib.auth.decorators import login_required
-from django.template.context_processors import csrf
+from io import BytesIO
+from PIL import Image
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.views.decorators.cache import never_cache
-from .forms import BookForm, UserRegisterForm
+from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-
+from django.core.files.base import ContentFile
+from django.http import HttpResponseBadRequest
 from BookLender import settings
 
 
@@ -45,16 +45,8 @@ def index(request):
     return render(request, 'index.html')
 
 
-def category(request):
-    return render(request, 'category.html')
-
-
 def about(request):
     return render(request, 'about.html')
-
-
-def work(request):
-    return render(request, 'work.html')
 
 
 def borrow(request):
@@ -69,13 +61,21 @@ def forgetpass(request):
     return render(request, 'forgetpass.html')
 
 
+def new_home(request):
+    return render(request, 'newhome.html')
+
+
+def chat(request):
+    return render(request, 'chat.html')
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             form.save_profile()
-            return redirect('login_view')  # Redirect to login page or wherever you'd like
+            return redirect('login_view')  # Redirect to login page
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -97,7 +97,7 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     # Prepare the context
-    token = {'form': form}
+    token = {'form_log': form}
     # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
     return render(request, 'login.html', token)
 
@@ -109,7 +109,7 @@ def profile(request):
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
-    context = {'form': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
+    context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count}
     return render(request, 'profile_page.html', context)
 
@@ -154,29 +154,19 @@ def addUserBook(request, book):
     new_user_book.save()
 
 
-# @login_required_message
-# def listBook(request):
-#     # Retrieve the logged-in user profile
-#     user_profile = UserProfile.objects.get(user=request.user)
-#
-#     # Get the book ID from the POST data
-#     book_id = request.POST.get('book_id')
-#
-#     try:
-#         # Attempt to retrieve the UserBook object to be deleted
-#         book = UserBook.objects.get(id=book_id, owner_book_id=user_profile)
-#
-#         # Delete the book
-#         book.delete()
-#
-#         # Set success message
-#         messages.success(request, "Book removed successfully.")
-#     except UserBook.DoesNotExist:
-#         # Set error message if book is not found
-#         messages.error(request, "Book not found.")
-#
-#     # Redirect back to the profile page with remove parameter in URL
-#     return HttpResponseRedirect(reverse('profile') + '?remove=true')
+@login_required_message
+def library(request):
+    # Perform a left join between Book and UserBook models
+    library = Book.objects.prefetch_related('user_books_book').all()
+
+    # Debug output to check the related UserBook objects and currently_with field
+    for book in library:
+        for user_book in book.user_books_book.all():
+            print(
+                f"Book: {book.book_title}, Currently with: {user_book.currently_with.user if user_book.currently_with else 'Not currently owned'}")
+
+    # Pass the result to the template
+    return render(request, 'library.html', {'library': library})
 
 
 @login_required_message
@@ -209,27 +199,63 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile')
+        return redirect('profile_page')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
 
 
-def new_home(request):
-    return render(request, 'newhome.html')
+@login_required_message
+def img_upload(request):
+    if request.method == 'POST':
+        form = ProfilePicForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Check if the user is authenticated
+            if request.user.is_authenticated:
+                image_file = form.cleaned_data['profile_pic']
 
-def chat(request):
-    return render(request, 'chat.html')
+                # Check file size
+                if image_file.size > 2 * 1024 * 1024:  # 2 MB limit
+                    return JsonResponse({'error': "File size exceeds the limit of 2 MB."})
 
-# @login_required_message
-# def upload_profile_picture(request):
-#     if request.method == 'POST':
-#         form = ProfilePictureForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             user_profile = form.save(commit=False)
-#             user_profile.user = request.user
-#             user_profile.save()
-#             return redirect('profile')  # Redirect to user profile page
-#     else:
-#         form = ProfilePictureForm()
-#     return render(request, 'profile_page.html', {'uploadpic': form})
+                # Image compression
+                img = Image.open(image_file)
+                img = img.convert('RGB')
+                img.thumbnail((1024, 1024))  # Resize to maximum dimensions of 1024x1024
+                img_io = BytesIO()
+
+                # Save in JPEG format
+                img.save(img_io, format='JPEG', quality=70)  # Adjust quality as needed
+                img_io.seek(0)
+                user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+                user_profile.profile_pic.save(image_file.name + '.jpg', ContentFile(img_io.getvalue()), save=True)
+
+                # Save in PNG format if the uploaded file is not already PNG
+                if image_file.name.lower().endswith('.png'):
+                    img_io = BytesIO()
+                    img.save(img_io, format='PNG', optimize=True)
+                    img_io.seek(0)
+                    user_profile.profile_pic.save(image_file.name, ContentFile(img_io.getvalue()), save=True)
+
+                # Save in WebP format if the uploaded file is not already WebP
+                if image_file.name.lower().endswith('.webp'):
+                    img_io = BytesIO()
+                    img.save(img_io, format='WEBP', quality=70)
+                    img_io.seek(0)
+                    user_profile.profile_pic.save(image_file.name, ContentFile(img_io.getvalue()), save=True)
+
+                return JsonResponse({'success': True})  # Indicate success
+            else:
+                # Handle case where user is not authenticated
+                return JsonResponse({'error': "User not authenticated"}, status=401)
+    else:
+        form = ProfilePicForm()
+    return render(request, 'profile_page.html', {'uploadpic': form})
+
+
+@login_required_message
+def display_pic(request):
+    # Assuming you have a UserProfile instance associated with the currently logged-in user
+    user_profile = request.user.profile
+
+    return render(request, 'profile_page.html', {'user_profile': user_profile})

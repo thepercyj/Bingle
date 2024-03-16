@@ -973,6 +973,29 @@ a:focus {
 
 }
 
+.add-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 5px;
+  border: none;
+  cursor: pointer;
+  max-width: 30%;
+
+}
+
+
+.-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  max-width: 30%;
+
+}
+
 .btn-login {
   background-color: #ff4f5a;
   color: #fff;
@@ -1352,4 +1375,33 @@ a:focus {
     background-position: cover;
     background-size: cover;
     backdrop-filter: blur(2.5px);
+}
+
+.custom-img {
+    width: 260px;
+    height: 270px;
+
+}
+
+.file-upload-btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    font-size: inherit;
+    padding: 6px 12px;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 4px;
+}
+.file-upload-btn input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
 }

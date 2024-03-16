@@ -1,0 +1,19 @@
+<!-- password_reset_confirm.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Confirmation</title>
+</head>
+<body>
+    <h2>Password Reset Confirmation</h2>
+    <p>Please enter your new password below:</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Reset Password</button>
+    </form>
+</body>
+</html>
