@@ -19,36 +19,36 @@ function getCurrentYear() {
 
 getCurrentYear();
 
-function populateTable() {
-    fetch('/list-book/')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.getElementById('book-table');
-            // Clear existing table content
-            tableBody.innerHTML = '';
-            // Create table header row
-            const headerRow = document.createElement('tr');
-            headerRow.innerHTML = `
-                <th>Title</th>
-                <th>Author</th>
-                <th>Genre</th>
-                <th>Published Date</th>
-            `;
-            tableBody.appendChild(headerRow);
-            // Populate table with fetched data
-            data.forEach(book => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${book.book_title}</td>
-                    <td>${book.book_author}</td>
-                    <td>${book.genre}</td>
-                    <td>${book.published_date}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
+//function populateTable() {
+//    fetch('/list-book/')
+//        .then(response => response.json())
+//        .then(data => {
+//            const tableBody = document.getElementById('book-table');
+//            // Clear existing table content
+//            tableBody.innerHTML = '';
+//            // Create table header row
+//            const headerRow = document.createElement('tr');
+//            headerRow.innerHTML = `
+//                <th>Title</th>
+//                <th>Author</th>
+//                <th>Genre</th>
+//                <th>Published Date</th>
+//            `;
+//            tableBody.appendChild(headerRow);
+//            // Populate table with fetched data
+//            data.forEach(book => {
+//                const row = document.createElement('tr');
+//                row.innerHTML = `
+//                    <td>${book.book_title}</td>
+//                    <td>${book.book_author}</td>
+//                    <td>${book.genre}</td>
+//                    <td>${book.published_date}</td>
+//                `;
+//                tableBody.appendChild(row);
+//            });
+//        })
+//        .catch(error => console.error('Error fetching data:', error));
+//}
 
 
 document.addEventListener("DOMContentLoaded", function() {

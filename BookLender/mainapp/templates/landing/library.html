@@ -4,34 +4,49 @@
 {% block title %} Library | Bingle {% endblock %}
 
 {% block content %}
-<h1>Library Books</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Book Title</th>
-        <th>Book Author</th>
-        <th>Current Owner(s)</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for book in library %}
-    <tr>
-        <td>{{ book.book_title }}</td>
-        <td>{{ book.book_author }}</td>
-        <td>
-            {% for user_book in book.user_books_book.all %}
-            {% if user_book.currently_with %}
-            {{ user_book.currently_with.user }}
-            {% if not forloop.last %}, {% endif %}
-            {% else %}
-            Not currently owned
-            {% endif %}
-            {% empty %}
-            Not currently owned
-            {% endfor %}
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+            <div id="library-modal" class="modal">
+                <div class="modal-content">
+                    <div class="library">
+                        {% csrf_token %}
+
+                        <h1>Library Books</h1>
+                        {% if library %}
+                        <table class="table">
+                            <tr>
+                                <th>Book Title</th>
+                                <th>Book Author</th>
+                                <th>Current Owner(s)</th>
+                            </tr>
+                            {% for book in library %}
+                            <tr>
+                                <td>{{ book.book_title }}</td>
+                                <td>{{ book.book_author }}</td>
+                                <td>
+                                    {% for user_book in book.user_books_book.all %}
+                                    {% if user_book.currently_with %}
+                                    {{ user_book.currently_with.user }}
+                                    {% if not forloop.last %}, {% endif %}
+                                    {% else %}
+                                    Not currently owned
+                                    {% endif %}
+                                    {% empty %}
+                                    Not currently owned
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+                          </div>
+                    <button class="close-btn" onclick="closeModal('library-modal')">Close</button>
+                </div>
+            </div>
+            <div class="box">
+                Library size: {{ library|length }}
+                {% if library %}
+                <h2>Bingle Store</h2>
+                <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">0</a></h2>
+                {% endif %}
+            </div>
+
 {% endblock %}

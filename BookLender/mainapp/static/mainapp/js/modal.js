@@ -1,7 +1,7 @@
 // JavaScript function to open a specified modal by ID
 function openViewModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
-    populateTable();
+    //populateTable();
 }
 
 function openBookModal(modalId) {
