@@ -273,6 +273,9 @@ def search(request):
     user_profiles = UserProfile.objects.all()
     return render(request, 'search.html', {'user_profiles': user_profiles})
 
+def search_users(request):
+    user_profiles = UserProfile.objects.all()
+    return render(request, 'search.html', {'user_profiles': user_profiles})
 
 @login_required_message
 def borrow(request, book_id):
