@@ -273,9 +273,59 @@ def search(request):
     user_profiles = UserProfile.objects.all()
     return render(request, 'search.html', {'user_profiles': user_profiles})
 
-def search_users(request):
-    user_profiles = UserProfile.objects.all()
-    return render(request, 'search.html', {'user_profiles': user_profiles})
+
+def user_profile(request, profile_id):
+    # Fetch the UserProfile object based on the provided profile_id
+    user_profile = get_object_or_404(UserProfile, pk=profile_id)
+
+    # Access the user associated with the user_profile
+    user = user_profile.user
+
+    if request.method == 'POST':
+        selected_owner_profile_id = request.POST.get('owner_id')
+
+        if selected_owner_profile_id:
+            selected_owner = get_object_or_404(UserProfile, pk=selected_owner_profile_id)
+
+            try:
+                with transaction.atomic():
+                    existing_conversation = Conversation.objects.filter(
+                        (Q(id_1=user_profile) & Q(id_2=selected_owner)) |
+                        (Q(id_2=user_profile) & Q(id_1=selected_owner))
+                    ).first()
+
+                    if existing_conversation:
+                        # If conversation already exists, redirect to conversation
+                        return redirect('conversation', conversation_id=existing_conversation.id)
+                    else:
+                        # If conversation doesn't exist, create a new one
+                        new_conversation_object = Conversation(id_1=user_profile, id_2=selected_owner)
+                        new_conversation_object.save()
+                        # Create a pre-message to notify both parties
+                        pre_message_content = f"{user.username} wants to connect with you."
+                        new_message = Message(
+                            from_user=user_profile,
+                            to_user=selected_owner,
+                            details=pre_message_content,
+                            request_type=1,  # Assuming 1 represents a simple message
+                            request_value='Simple Message',
+                            created_on=now(),
+                            modified_on=now(),
+                            notification_status=1,
+                            conversation=new_conversation_object
+                        )
+                        new_message.save()
+                        # Display a popup alert to both parties
+                        messages.success(request, pre_message_content)
+                        return redirect('new_conversation')  # Redirect to new conversation page
+            except Exception as e:
+                messages.error(request, 'An error occurred.')
+                return redirect('search')
+        else:
+            messages.error(request, 'Please select an owner.')
+            return redirect('user_profile', profile_id=profile_id)
+
+    return render(request, 'users_profiles.html', {'user_profiles': user_profile, 'user': user})
 
 @login_required_message
 def borrow(request, book_id):
