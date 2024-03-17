@@ -95,7 +95,7 @@
             </div>
 
             <div id="library-modal" class="modal">
-                <div class="modal-content">
+                <div class="modal-content-lib">
                     <div class="library">
                         {% csrf_token %}
                         <h1>Library Books</h1>
@@ -121,6 +121,9 @@
                                     {% empty %}
                                     Not currently owned
                                     {% endfor %}
+                                </td>
+                                <td>
+                                        <input type="submit" class="btn btn-primary"  value="Borrow" />
                                 </td>
                             </tr>
                             {% endfor %}

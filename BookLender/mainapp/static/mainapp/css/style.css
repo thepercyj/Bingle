@@ -919,6 +919,18 @@ a:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+
+.modal-content-lib {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow-y: auto;
   height: 700px;
 }
