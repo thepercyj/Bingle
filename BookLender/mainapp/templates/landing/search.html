@@ -4,20 +4,26 @@
 
 {% block content %}
 
-<form class="d-flex" role="search" method="POST">
- {% csrf_token %}
- <input
-    class="form-control me-2"
-    type="search"
-    placeholder="Search"
-    name="search_query"
-    required aria-label="Search"
- >
- <button class="btn btn-outline-success" type="submit">Search</button>
-</form>
+    <form class="d-flex" role="search" method="POST">
+     {% csrf_token %}
+        <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                name="search_query"
+                required aria-label="Search"
+        >
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
+    {% if user_profiles %}
+        {% for profile in user_profiles %}
+             <h2>Search Results for "{{ profile.user.username }}"</h2>
+        {% endfor %}
+    {% endif %}
 
 {% if user_profiles %}
-    <h2>Search Results for "{{ search_query }}"</h2>
+
     <table class="table">
         <thead>
         <tr>

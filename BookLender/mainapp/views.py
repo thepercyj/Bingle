@@ -268,10 +268,6 @@ def search(request):
 
 
 def search_users(request):
-    if request.method == 'POST':
-        search_query = request.POST.get('search_query')
-        # Perform search in UserProfile based on the search_query
-        user_profiles = UserProfile.objects.filter(user__username__icontains=search_query)
-        return render(request, 'search.html', {'user_profiles': user_profiles, 'search_query': search_query})
-    else:
-        return render(request, 'search.html')  # Render an empty page for GET requests
+    user_profiles = UserProfile.objects.all()
+    return render(request, 'search.html', {'user_profiles': user_profiles})
+
