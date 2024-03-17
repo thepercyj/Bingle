@@ -111,7 +111,7 @@ def profile(request):
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library' : library}
+               'user_book_count': books_count, 'library': library}
     return render(request, 'profile_page.html', context)
 
 
@@ -259,3 +259,14 @@ def display_pic(request):
     library = Book.objects.all()
 
     return render(request, 'profile_page.html', {'user_profile': user_profile})
+
+
+def users_chat(request):
+    user_profiles = UserProfile.objects.all()
+
+    # Debug output to check the user profiles
+    for profile in user_profiles:
+        print(f"User: {profile.user.username}")
+
+    # Pass the user profiles to the template
+    return render(request, 'users_chat.html', {'users_chat': users_chat})

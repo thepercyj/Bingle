@@ -4,9 +4,6 @@
 {% block title %} Library | Bingle {% endblock %}
 
 {% block content %}
-            <div id="library-modal" class="modal">
-                <div class="modal-content">
-                    <div class="library">
                         {% csrf_token %}
 
                         <h1>Library Books</h1>
@@ -37,16 +34,6 @@
                             {% endfor %}
                         </table>
                         {% endif %}
-                          </div>
-                    <button class="close-btn" onclick="closeModal('library-modal')">Close</button>
-                </div>
-            </div>
-            <div class="box">
-                Library size: {{ library|length }}
-                {% if library %}
-                <h2>Bingle Store</h2>
-                <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">0</a></h2>
-                {% endif %}
-            </div>
+
 
 {% endblock %}

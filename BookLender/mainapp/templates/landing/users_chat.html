@@ -1,0 +1,18 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Profile | Bingle {% endblock %}
+
+
+{% block content %}
+    {% csrf_token %}
+        <h1>All users</h1>
+        {% if users_chat %}
+        <table class="table">
+            <tr>
+                <th>Book Title</th>
+            </tr>
+        </table>
+        {% endif %}
+{% endblock %}
