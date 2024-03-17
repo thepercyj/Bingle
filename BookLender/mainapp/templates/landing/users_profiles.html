@@ -1,0 +1,105 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+{% block title %} Search | Bingle {% endblock %}
+
+{% block content %}
+<section class=" client_section">
+    <div class="container-xl px-4 mt-4">
+        <!-- Account page navigation-->
+        <div class="container">
+
+            <hr class="mt-0 mb-4">
+            <div class="row">
+                <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="heading_container">
+                            <h2>
+                                Profile Picture
+                            </h2>
+                        </div>
+                        <div class="card-body text-center">
+                            <!-- Profile picture image-->
+                            {% if user_profile.profile_pic %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
+                            {% else %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img"
+                                 src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <!-- Account details card-->
+                    <div class="card mb-4">
+                        <div class="heading_container">
+                            <h2>
+                                Account Details
+                            </h2>
+                        </div>
+                        <div class="card-body">
+
+                            <form method="post" action="/update-profile/">
+                                {% csrf_token %}
+                                <!-- Form Group (username)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on
+                                        the site)</label>
+                                    <input class="form-control" name="inputUserName" id="inputUsername" type="text" placeholder="Enter your username"
+                                           value={{ user.username }} >
+                                </div>
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (first name)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputFirstName">First name</label>
+                                        <input class="form-control" name="inputFirstName" id="inputFirstName" type="text" placeholder="Enter your first name"
+                                               value={{ user.first_name }}>
+                                    </div>
+                                    <!-- Form Group (last name)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputLastName">Last name</label>
+                                        <input class="form-control" name="inputLastName" id="inputLastName" type="text" placeholder="Enter your last name"
+                                               value={{ user.last_name }}>
+                                    </div>
+                                </div>
+                                <!-- Form Row        -->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (organization name)-->
+
+                                    <!-- Form Group (location)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputLocation">Location</label>
+                                        <input class="form-control" name="inputLocation" id="inputLocation" type="text" placeholder="Enter your location"
+                                               value={{ user_profile.primary_location }}>
+                                    </div>
+                                </div>
+                                <!-- Form Group (email address)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                    <input class="form-control" name="inputEmailAddress" id="inputEmailAddress" type="email"
+                                           placeholder="Enter your email address" value={{ user.email }}>
+                                </div>
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (phone number)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputPhone">Phone number</label>
+                                        <input class="form-control" name="inputPhone" id="inputPhone" type="tel" placeholder="Enter your phone number"
+                                               value={{ user_profile.phone_number }}>
+                                    </div>
+                                </div>
+                                <!-- Form Group (birthday)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="birthday">Birthday</label>
+                                    <div>{{ user_profile.birth_date }}</div>
+                                </div><br><div></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

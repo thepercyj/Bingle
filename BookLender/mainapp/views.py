@@ -115,6 +115,13 @@ def profile(request):
     return render(request, 'profile_page.html', context)
 
 
+def profiles(request):
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    context = {'user_profile': user_profile, 'user': user}
+    return render(request, 'users_profiles.html', context)
+
+
 @login_required_message
 def addBook(request):
     """Processes the request to add a new book"""
@@ -270,4 +277,3 @@ def search(request):
 def search_users(request):
     user_profiles = UserProfile.objects.all()
     return render(request, 'search.html', {'user_profiles': user_profiles})
-

@@ -31,6 +31,7 @@
             <th>Username</th>
             <th>Location</th>
             <th>Review</th>
+            <th>User profile</th>
         </tr>
         </thead>
         <tbody>
@@ -46,6 +47,9 @@
             <td>{{ profile.user.username }}</td>
             <td>{{ profile.current_location }}</td>
             <td>{{ profile.review }}</td>
+            <td>
+                <a href="{% url 'profiles' id=profile.id %}" class="btn btn-primary">View</a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>
