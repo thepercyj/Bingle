@@ -1,16 +1,20 @@
 from io import BytesIO
 from PIL import Image
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book
+from .models import UserBook, User, UserProfile, Book, Conversation, Message
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
+from django.db.models import Q
+from django.db import transaction
+from django.utils.timezone import now
 from django.http import HttpResponseBadRequest
 from BookLender import settings
 
@@ -47,10 +51,6 @@ def index(request):
 
 def about(request):
     return render(request, 'about.html')
-
-
-def borrow(request):
-    return render(request, 'borrow.html')
 
 
 def lend(request):
@@ -162,7 +162,14 @@ def library(request):
 
     # Debug output to check the books
     for book in library:
-        print(f"Book: {book.book_title}")
+        print(f"Book: {book.book_title}, Added by: {book.added_by}")
+
+    # Filter out books added by the current user
+    library = library.exclude(added_by=request.user)
+
+    # Debug output to check the filtered books
+    for book in library:
+        print(f"Filtered Book: {book.book_title}, Added by: {book.added_by}")
 
     # Pass the result to the template
     return render(request, 'library.html', {'library': library})
@@ -265,3 +272,59 @@ def display_pic(request):
 def search(request):
     user_profiles = UserProfile.objects.all()
     return render(request, 'search.html', {'user_profiles': user_profiles})
+
+
+@login_required_message
+def borrow(request, book_id):
+    """
+    View function to initiate a borrow request for a book.
+    """
+    book = get_object_or_404(Book, id=book_id)
+    user_books = book.user_books_book.all()
+
+    if request.method == 'POST':
+        selected_owner_username = request.POST.get('owner')
+
+        if selected_owner_username:
+            selected_owner = get_object_or_404(UserProfile, user__username=selected_owner_username)
+            our_profile = UserProfile.objects.get(user=request.user)
+
+            try:
+                with transaction.atomic():
+                    existing_conversation = Conversation.objects.filter(
+                        (Q(id_1=our_profile) & Q(id_2=selected_owner)) |
+                        (Q(id_2=our_profile) & Q(id_1=selected_owner))
+                    ).first()
+
+                    if existing_conversation:
+                        # If conversation already exists, redirect to conversation
+                        return redirect('conversation', conversation_id=existing_conversation.id)
+                    else:
+                        # If conversation doesn't exist, create a new one
+                        new_conversation_object = Conversation(id_1=our_profile, id_2=selected_owner)
+                        new_conversation_object.save()
+                        # Create a pre-message to notify both parties
+                        pre_message_content = f"{request.user.username} wants to borrow a book from you."
+                        new_message = Message(
+                            from_user=our_profile,
+                            to_user=selected_owner,
+                            details=pre_message_content,
+                            request_type=2,  # Assuming 2 represents borrow request
+                            request_value='Borrow Request',
+                            created_on=now(),
+                            modified_on=now(),
+                            notification_status=1,
+                            conversation=new_conversation_object
+                        )
+                        new_message.save()
+                        # Display a popup alert to both parties
+                        messages.success(request, pre_message_content)
+                        return redirect('new_conversation')  # Redirect to new conversation page
+            except Exception as e:
+                messages.error(request, 'An error occurred.')
+                return redirect('library')
+        else:
+            messages.error(request, 'Please select an owner.')
+            return redirect('borrow', book_id=book_id)
+
+    return render(request, 'borrow.html', {'book': book, 'user_books': user_books})
