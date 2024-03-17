@@ -41,8 +41,7 @@
                     </ul>
                 </div>
                 <div class="user_option">
-                </div>
-                <div class="user_option">
+                    {% if user.is_authenticated %}
                     <ul class=" main-menu notification-drop">
                         <li class="">
                             <i class="fa fa-bell-o bell-color" aria-hidden="true"></i> <span class="btn__badge pulse-button ">4</span>
@@ -53,7 +52,6 @@
                             </ul>
                         </li>
                     </ul>
-                    {% if user.is_authenticated %}
                     <ul class="main-menu primary-menu">
                         <li><a> Welcome, {{ user.username }}</a>
                             <ul class="sub-menu">
