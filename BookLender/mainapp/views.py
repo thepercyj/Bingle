@@ -261,12 +261,7 @@ def display_pic(request):
     return render(request, 'profile_page.html', {'user_profile': user_profile})
 
 
-def users_chat(request):
+@login_required_message
+def search(request):
     user_profiles = UserProfile.objects.all()
-
-    # Debug output to check the user profiles
-    for profile in user_profiles:
-        print(f"User: {profile.user.username}")
-
-    # Pass the user profiles to the template
-    return render(request, 'users_chat.html', {'users_chat': users_chat})
+    return render(request, 'search.html', {'user_profiles': user_profiles})

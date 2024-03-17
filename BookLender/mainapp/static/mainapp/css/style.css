@@ -1397,6 +1397,12 @@ a:focus {
 
 }
 
+.custom-img-small {
+    width: 60px;
+    height: 60px;
+
+}
+
 .file-upload-btn {
     position: relative;
     overflow: hidden;
