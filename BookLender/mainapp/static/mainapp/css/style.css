@@ -927,12 +927,12 @@ a:focus {
   padding: 20px;
   border-radius: 5px;
   text-align: center;
-  display: flex;
+  display: block;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  height: 700px;
+  height: 400px;
 }
 
 /* Responsive styles */
@@ -1424,4 +1424,8 @@ a:focus {
     font-size: 20px;
     cursor: pointer;
     opacity: 0;
+}
+
+.modal-black {
+    color: black;
 }
