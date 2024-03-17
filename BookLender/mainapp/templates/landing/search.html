@@ -1,0 +1,34 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+{% block title %} Search | Bingle {% endblock %}
+
+{% block content %}
+<h1>User Profiles</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Username</th>
+        <th>Location</th>
+        <th>Review</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for profile in user_profiles %}
+    <tr>
+        <td>
+            {% if profile.profile_pic %}
+            <img class="rounded-circle custom-img-small" src="{{ profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+            {% else %}
+            <img class="rounded-circle custom-img-small" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+            {% endif %}
+        </td>
+        <td>{{ profile.user.username }}</td>
+        <td>{{ profile.primary_location }}</td>
+        <td>{{ profile.current_location }}</td>
+        <td>{{ profile.review }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -111,7 +111,7 @@ def profile(request):
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library' : library}
+               'user_book_count': books_count, 'library': library}
     return render(request, 'profile_page.html', context)
 
 
@@ -259,3 +259,9 @@ def display_pic(request):
     library = Book.objects.all()
 
     return render(request, 'profile_page.html', {'user_profile': user_profile})
+
+
+@login_required_message
+def search(request):
+    user_profiles = UserProfile.objects.all()
+    return render(request, 'search.html', {'user_profiles': user_profiles})

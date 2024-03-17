@@ -12,6 +12,7 @@ urlpatterns = [
     path('profile_page/', views.profile, name='profile'),
     path('add-book/', views.addBook, name='addBook'),
     path('library/', views.library, name='library'),
+    path('search/', views.search, name='search'),
     path('remove-book/', views.removeBook, name='removeUserBook'),
     path('img_upload/', views.img_upload, name='img_upload'),
     path('borrow/', views.borrow, name='borrow'),
