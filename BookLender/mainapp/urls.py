@@ -21,6 +21,4 @@ urlpatterns = [
     path('forgetpass/', views.forgetpass, name='forgetpass'),
     path('new_home/', views.new_home, name='new_home'),
     path('chat/', views.chat, name='chat'),
-    path('users_chat/', views.users_chat, name='users_chat'),
-
 ]
