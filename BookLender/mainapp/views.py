@@ -290,10 +290,9 @@ def search(request):
                                                'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
     else:
         # Handle GET request
-        #return render(request, 'search.html')
+        # return render(request, 'search.html')
         user_profiles = UserProfile.objects.all()
         return render(request, 'search.html', {'user_profiles': user_profiles})
-
 
 
 def user_profile(request, profile_id):
@@ -301,7 +300,7 @@ def user_profile(request, profile_id):
     user_profile = get_object_or_404(UserProfile, pk=profile_id)
 
     # Access the user associated with the user_profile
-    user = user_profile.user
+    users = user_profile.user
 
     if request.method == 'POST':
         selected_owner_profile_id = request.POST.get('owner_id')
@@ -324,7 +323,7 @@ def user_profile(request, profile_id):
                         new_conversation_object = Conversation(id_1=user_profile, id_2=selected_owner)
                         new_conversation_object.save()
                         # Create a pre-message to notify both parties
-                        pre_message_content = f"{user.username} wants to connect with you."
+                        pre_message_content = f"{users.username} wants to connect with you."
                         new_message = Message(
                             from_user=user_profile,
                             to_user=selected_owner,
@@ -347,7 +346,7 @@ def user_profile(request, profile_id):
             messages.error(request, 'Please select an owner.')
             return redirect('user_profile', profile_id=profile_id)
 
-    return render(request, 'users_profiles.html', {'user_profiles': user_profile, 'user': user})
+    return render(request, 'users_profiles.html', {'user_profiles': user_profile, 'users': users})
 
 
 @login_required_message
