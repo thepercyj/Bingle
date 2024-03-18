@@ -282,7 +282,6 @@ def display_pic(request):
 
 @login_required_message
 def search(request):
-    # Handle POST request
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
@@ -291,7 +290,9 @@ def search(request):
                                                'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
     else:
         # Handle GET request
-        return render(request, 'search.html')
+        #return render(request, 'search.html')
+        user_profiles = UserProfile.objects.all()
+        return render(request, 'search.html', {'user_profiles': user_profiles})
 
 
 
