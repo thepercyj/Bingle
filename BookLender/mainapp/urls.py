@@ -22,4 +22,5 @@ urlpatterns = [
     path('new_home/', views.new_home, name='new_home'),
     path('chat/', views.chat, name='chat'),
     path('users_profiles/<int:profile_id>/', views.user_profile, name='user_profile'),
+    path('test/', views.test, name='test'),
 ]

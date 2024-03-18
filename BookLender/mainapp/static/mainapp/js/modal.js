@@ -75,3 +75,25 @@ $(document).ready(function(){
         }
     });
 });
+
+// Function to show search results
+function showSearchResults() {
+    document.getElementById('search-results').style.display = 'block';
+}
+
+// Function to hide search results
+function hideSearchResults() {
+    document.getElementById('search-results').style.display = 'none';
+}
+
+// Event listener for form submission
+document.getElementById('search-form').addEventListener('submit', function(event) {
+    // Show search results when the form is submitted
+    showSearchResults();
+});
+
+
+function hideTable() {
+    document.getElementById('user-profile-table').style.display = 'none';
+}
+
