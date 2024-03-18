@@ -44,6 +44,18 @@ def login_required_message(function):
     return wrap
 
 
+# test page
+def test(request):
+    if request.method == "POST":
+        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
+        user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
+
+        return render(request, 'test.html', {'searchquery': searchquery,
+                                             'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
+    else:
+        return render(request, 'about.html')
+
+
 # Index Page
 def index(request):
     return render(request, 'index.html')
@@ -326,6 +338,7 @@ def user_profile(request, profile_id):
             return redirect('user_profile', profile_id=profile_id)
 
     return render(request, 'users_profiles.html', {'user_profiles': user_profile, 'user': user})
+
 
 @login_required_message
 def borrow(request, book_id):
