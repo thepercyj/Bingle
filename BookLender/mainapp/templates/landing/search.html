@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <form class="d-flex" role="search" method="POST" action="{% url 'test' %}">
+    <form class="d-flex hidden" role="search" method="POST"  onclick="hideTable()" id="search-form">
      {% csrf_token %}
         <input
                 class="form-control me-2"
@@ -12,19 +12,27 @@
                 placeholder="Search"
                 name="searchquery"
                 required aria-label="Search"
+                onclick="hideTable()"
         >
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="btn btn-outline-success" type="submit"  onclick="hideTable()">Search</button>
     </form>
 
-    {% if user_profiles %}
-        {% for profile in user_profiles %}
-             <h2>Search Results for "{{ profile.user.username }}"</h2>
-        {% endfor %}
-    {% endif %}
+    <div id="search-results" style="display: none;">
+        {% if user_profiles %}
+            <h2>Users with username '{{ searchquery }}':</h2>
+            <ul>
+                {% for user_profile in user_profiles %}
+                    <li>{{ user_profile.user.get_full_name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No users found with the username '{{ searchquery }}'.</p>
+        {% endif %}
+    </div>
 
 {% if user_profiles %}
 
-    <table class="table">
+    <table class="table" id="user-profile-table">
         <thead>
         <tr>
             <th></th>
