@@ -72,7 +72,13 @@ def new_home(request):
     return render(request, 'newhome.html', context)
 
 def sample(request):
-    return render(request, 'new_home.html')
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    books_count = user_books.count()  # Count the number of books
+    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count}
+    return render(request, 'new_home.html', context)
 
 
 def chat(request):
