@@ -353,6 +353,7 @@ def borrow(request, book_id):
         if selected_owner_username:
             selected_owner = get_object_or_404(UserProfile, user__username=selected_owner_username)
             our_profile = UserProfile.objects.get(user=request.user)
+            userbookid = get_object_or_404(UserBook, book_id=book_id, owner_book_id=selected_owner)
 
             try:
                 with transaction.atomic():
@@ -363,22 +364,36 @@ def borrow(request, book_id):
 
                     if existing_conversation:
                         # If conversation already exists, redirect to conversation
+                        pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
+                        new_message = Message(
+                            from_user=our_profile,
+                            to_user=selected_owner,
+                            details=pre_message_content,
+                            request_type=2,
+                            request_value='Borrow Request',
+                            created_on=now(),
+                            user_book_id=userbookid,
+                            conversation=existing_conversation
+                        )
+                        new_message.save()
+                        # Display a popup alert to both parties
+                        messages.success(request, pre_message_content)
+
                         return redirect('conversation', conversation_id=existing_conversation.id)
                     else:
                         # If conversation doesn't exist, create a new one
                         new_conversation_object = Conversation(id_1=our_profile, id_2=selected_owner)
                         new_conversation_object.save()
                         # Create a pre-message to notify both parties
-                        pre_message_content = f"{request.user.username} wants to borrow a book from you."
+                        pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
                         new_message = Message(
                             from_user=our_profile,
                             to_user=selected_owner,
                             details=pre_message_content,
-                            request_type=2,  # Assuming 2 represents borrow request
+                            request_type=2,
                             request_value='Borrow Request',
                             created_on=now(),
-                            modified_on=now(),
-                            notification_status=1,
+                            user_book_id=userbookid,
                             conversation=new_conversation_object
                         )
                         new_message.save()

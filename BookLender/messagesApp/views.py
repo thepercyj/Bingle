@@ -114,8 +114,6 @@ def send_message(request, conversation_id):
                 request_type=1,
                 request_value='default',
                 created_on=now(),
-                modified_on=now(),
-                notification_status=1,
                 conversation=conversation
             )
 
@@ -167,8 +165,6 @@ def new_conversation(request):
                             request_type=1,
                             request_value='default',
                             created_on=now(),
-                            modified_on=now(),
-                            notification_status=1,
                             conversation=existing_conversation
                         )
                         new_message.save()
@@ -187,8 +183,6 @@ def new_conversation(request):
                         request_type=1,
                         request_value='default',
                         created_on=now(),
-                        modified_on=now(),
-                        notification_status=1,
                         conversation=new_conversation_object
                     )
                     new_message.save()
