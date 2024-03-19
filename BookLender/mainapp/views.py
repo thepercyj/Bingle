@@ -299,6 +299,7 @@ def viewprofile(request, profile_id):
     viewprofile = get_object_or_404(UserProfile, pk=profile_id)
 
     # Access the user associated with the user_profile
+    user = request.user
     users = viewprofile.user
 
     if request.method == 'POST':
@@ -322,7 +323,7 @@ def viewprofile(request, profile_id):
                         new_conversation_object = Conversation(id_1=viewprofile, id_2=selected_owner)
                         new_conversation_object.save()
                         # Create a pre-message to notify both parties
-                        pre_message_content = f"{users.username} wants to connect with you."
+                        pre_message_content = f"{ user.username } wants to connect with you."
                         new_message = Message(
                             from_user=viewprofile,
                             to_user=selected_owner,
@@ -378,7 +379,7 @@ def borrow(request, book_id):
                         new_conversation_object = Conversation(id_1=our_profile, id_2=selected_owner)
                         new_conversation_object.save()
                         # Create a pre-message to notify both parties
-                        pre_message_content = f"{request.user.username} wants to borrow a book from you."
+                        pre_message_content = f"{request.users.username} wants to borrow a book from you."
                         new_message = Message(
                             from_user=our_profile,
                             to_user=selected_owner,
@@ -393,7 +394,7 @@ def borrow(request, book_id):
                         new_message.save()
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
-                        return redirect('new_conversation')  # Redirect to new conversation page
+                        return redirect('owner_select')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
                 return redirect('library')
