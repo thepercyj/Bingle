@@ -49,7 +49,7 @@ $(document).ready(function(){
             success: function(response){
                 if(response.success){
                     // Redirect or do something on success
-                    window.location.href = "{% url 'profile' %}";
+                    window.location.href = "";
                 } else {
                     // Show error message in modal
                     $('#error-message').text(response.error);

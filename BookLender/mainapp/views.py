@@ -246,7 +246,7 @@ def img_upload(request):
                 img.save(img_io, format='JPEG', quality=70)  # Adjust quality as needed
                 img_io.seek(0)
                 user_profile, created = UserProfile.objects.get_or_create(user=request.user)
-                user_profile.profile_pic.save(image_file.name + '.jpg', ContentFile(img_io.getvalue()), save=True)
+                user_profile.profile_pic.save(image_file.name, ContentFile(img_io.getvalue()), save=True)
 
                 # Save in PNG format if the uploaded file is not already PNG
                 if image_file.name.lower().endswith('.png'):
@@ -274,33 +274,32 @@ def img_upload(request):
 @login_required_message
 def display_pic(request):
     # Assuming you have a UserProfile instance associated with the currently logged-in user
-    user_profile = request.user.profile
-    library = Book.objects.all()
+    display = request.user.profile
 
-    return render(request, 'profile_page.html', {'user_profile': user_profile})
+    return render(request, 'profile_page.html', {'display': display})
 
 
 @login_required_message
 def search(request):
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
+        users_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
 
         return render(request, 'search.html', {'searchquery': searchquery,
-                                               'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
+                                               'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
     else:
         # Handle GET request
         # return render(request, 'search.html')
-        user_profiles = UserProfile.objects.all()
-        return render(request, 'search.html', {'user_profiles': user_profiles})
+        users_profiles = UserProfile.objects.all()
+        return render(request, 'search.html', {'users_profiles': users_profiles})
 
 
-def user_profile(request, profile_id):
+def viewprofile(request, profile_id):
     # Fetch the UserProfile object based on the provided profile_id
-    user_profile = get_object_or_404(UserProfile, pk=profile_id)
+    viewprofile = get_object_or_404(UserProfile, pk=profile_id)
 
     # Access the user associated with the user_profile
-    users = user_profile.user
+    users = viewprofile.user
 
     if request.method == 'POST':
         selected_owner_profile_id = request.POST.get('owner_id')
@@ -311,8 +310,8 @@ def user_profile(request, profile_id):
             try:
                 with transaction.atomic():
                     existing_conversation = Conversation.objects.filter(
-                        (Q(id_1=user_profile) & Q(id_2=selected_owner)) |
-                        (Q(id_2=user_profile) & Q(id_1=selected_owner))
+                        (Q(id_1=viewprofile) & Q(id_2=selected_owner)) |
+                        (Q(id_2=viewprofile) & Q(id_1=selected_owner))
                     ).first()
 
                     if existing_conversation:
@@ -320,12 +319,12 @@ def user_profile(request, profile_id):
                         return redirect('conversation', conversation_id=existing_conversation.id)
                     else:
                         # If conversation doesn't exist, create a new one
-                        new_conversation_object = Conversation(id_1=user_profile, id_2=selected_owner)
+                        new_conversation_object = Conversation(id_1=viewprofile, id_2=selected_owner)
                         new_conversation_object.save()
                         # Create a pre-message to notify both parties
                         pre_message_content = f"{users.username} wants to connect with you."
                         new_message = Message(
-                            from_user=user_profile,
+                            from_user=viewprofile,
                             to_user=selected_owner,
                             details=pre_message_content,
                             request_type=1,  # Assuming 1 represents a simple message
@@ -346,7 +345,7 @@ def user_profile(request, profile_id):
             messages.error(request, 'Please select an owner.')
             return redirect('user_profile', profile_id=profile_id)
 
-    return render(request, 'users_profiles.html', {'user_profiles': user_profile, 'users': users})
+    return render(request, 'users_profiles.html', {'viewprofile': viewprofile, 'users': users})
 
 
 @login_required_message

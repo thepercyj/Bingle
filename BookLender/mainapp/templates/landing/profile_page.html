@@ -122,13 +122,19 @@
             <div class="box">
                 {% if user_books %}
                 <h2>My Library</h2>
-                <h2><a class=" nav-link" href="#" onclick="hideViewModal('book-modal')">{{ user_book_count }}</a></h2>
+                <h2><a class=" nav-link" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
+                {% else %}
+                <h2>My Library</h2>
+                <h2><a class=" nav-link" href="#" onclick="openViewModal('book-modal')">0</a></h2>
                 {% endif %}
             </div>
             <div class="box">
                 {% if library %}
                 <h2>Bingle Store</h2>
                 <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">{{ library|length }}</a></h2>
+                {% else %}
+                <h2>Bingle Store</h2>
+                <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">0</a></h2>
                 {% endif %}
             </div>
         </div>

@@ -15,8 +15,8 @@
                     </div>
                     <div class="card-body text-center">
                         <!-- Profile picture image -->
-                        {% if user_profiles.profile_pic %}
-                            <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ user_profiles.profile_pic.url }}" alt="Profile Picture">
+                        {% if viewprofile.profile_pic %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ viewprofile.profile_pic.url }}" alt="Profile Picture">
                         {% else %}
                             <img class="img-account-profile rounded-circle mb-2 custom-img" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                         {% endif %}
@@ -36,14 +36,14 @@
                         <p><strong>Last Name:</strong> {{ users.last_name }}</p>
                         <p><strong>Email:</strong> {{ users.email }}</p>
                         <!-- Display user profile details -->
-                        <p><strong>Primary Location:</strong> {{ user_profiles.primary_location }}</p>
-                        <p><strong>Current Location:</strong> {{ user_profiles.current_location }}</p>
-                        <p><strong>Phone Number:</strong> {{ user_profiles.phone_number }}</p>
-                        <p><strong>Birth Date:</strong> {{ user_profiles.birth_date }}</p>
-                        <p><strong>Review Score:</strong> {{ user_profiles.review }}</p>
-                        <form action="{% url 'user_profile' profile_id=user_profiles.pk %}" method="post">
+                        <p><strong>Primary Location:</strong> {{ viewprofile.primary_location }}</p>
+                        <p><strong>Current Location:</strong> {{ viewprofile.current_location }}</p>
+                        <p><strong>Phone Number:</strong> {{ viewprofile.phone_number }}</p>
+                        <p><strong>Birth Date:</strong> {{ viewprofile.birth_date }}</p>
+                        <p><strong>Review Score:</strong> {{ viewprofile.review }}</p>
+                        <form action="{% url 'viewprofile' profile_id=viewprofile.pk %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="owner_id" value="{{ user_profiles.pk }}">
+                            <input type="hidden" name="owner_id" value="{{ viewprofile.pk }}">
                             <input type="submit" class="btn btn-primary" value="Send Message" />
                         </form>
                     </div>
