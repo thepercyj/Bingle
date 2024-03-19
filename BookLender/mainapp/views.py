@@ -172,17 +172,6 @@ def library(request):
     # Fetch all Book records without prefetch_related
     library = Book.objects.all()
 
-    # Debug output to check the books
-    for book in library:
-        print(f"Book: {book.book_title}, Added by: {book.added_by}")
-
-    # Filter out books added by the current user
-    library = library.exclude(added_by=request.user)
-
-    # Debug output to check the filtered books
-    for book in library:
-        print(f"Filtered Book: {book.book_title}, Added by: {book.added_by}")
-
     # Pass the result to the template
     return render(request, 'library.html', {'library': library})
 
@@ -300,10 +289,11 @@ def viewprofile(request, profile_id):
 
     # Access the user associated with the user_profile
     user = request.user
-    users = viewprofile.user
+    muser = viewprofile.user
 
     if request.method == 'POST':
         selected_owner_profile_id = request.POST.get('owner_id')
+        recipient_username = request.POST.get('recipient')
 
         if selected_owner_profile_id:
             selected_owner = get_object_or_404(UserProfile, pk=selected_owner_profile_id)
@@ -338,7 +328,7 @@ def viewprofile(request, profile_id):
                         new_message.save()
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
-                        return redirect('new_conversation')  # Redirect to new conversation page
+                        return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={recipient_username}')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
                 return redirect('search')
@@ -346,7 +336,7 @@ def viewprofile(request, profile_id):
             messages.error(request, 'Please select an owner.')
             return redirect('user_profile', profile_id=profile_id)
 
-    return render(request, 'users_profiles.html', {'viewprofile': viewprofile, 'users': users})
+    return render(request, 'users_profiles.html', {'viewprofile': viewprofile, 'muser': muser})
 
 
 @login_required_message
@@ -379,7 +369,7 @@ def borrow(request, book_id):
                         new_conversation_object = Conversation(id_1=our_profile, id_2=selected_owner)
                         new_conversation_object.save()
                         # Create a pre-message to notify both parties
-                        pre_message_content = f"{request.users.username} wants to borrow a book from you."
+                        pre_message_content = f"{request.user.username} wants to borrow a book from you."
                         new_message = Message(
                             from_user=our_profile,
                             to_user=selected_owner,
@@ -394,7 +384,7 @@ def borrow(request, book_id):
                         new_message.save()
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
-                        return redirect('owner_select')
+                        return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
                 return redirect('library')

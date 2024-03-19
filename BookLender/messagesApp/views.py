@@ -194,6 +194,7 @@ def new_conversation(request):
                     new_message.save()
                     new_conversation_object.latest_message = message
                     new_conversation_object.save()
+
                 return redirect('conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
         except User.DoesNotExist:
@@ -205,8 +206,10 @@ def new_conversation(request):
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
 
+
 def old_conversation(request):
     return render(request, 'messagesApp/conversation.html')
+
 
 def rate_user(request, conversation_id):
     if request.method == 'POST':
