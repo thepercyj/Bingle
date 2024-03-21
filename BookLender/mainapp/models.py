@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date, datetime
 from django.contrib.auth.models import User
+from django.db.models import F
 from django_cryptography.fields import encrypt
 
 
@@ -15,10 +16,16 @@ class UserProfile(models.Model):
     phone_number = models.CharField('Phone Number', max_length=255, null=False, default='default')
     birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
     review = models.IntegerField('Review Score', null=True)
+    notification_counter = models.IntegerField(default=0)
     profile_pic = encrypt(models.ImageField(upload_to='images', blank=True))
 
     def __str__(self):
         return self.user.username
+
+    def increment_notification_counter(self):
+        # Increment the notification counter
+        self.notification_counter = F('notification_counter') + 1
+        self.save()
 
 
 class Conversation(models.Model):
@@ -79,3 +86,5 @@ class Booking(models.Model):
 class Notification(models.Model):
     notify_type = models.IntegerField('Notify Type', null=False, default=1)
     notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
+    details = models.CharField('Details', max_length=255, null=False, default='default')
+

@@ -21,6 +21,7 @@ urlpatterns = [
     path('forgetpass/', views.forgetpass, name='forgetpass'),
     path('new_home/', views.new_home, name='new_home'),
     path('chat/', views.chat, name='chat'),
-    path('viewprofile/<int:profile_id>/', views.viewprofile, name='viewprofile'),
+    path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
+    path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
     path('test/', views.test, name='test'),
 ]

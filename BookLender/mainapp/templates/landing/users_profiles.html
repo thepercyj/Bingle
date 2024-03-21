@@ -31,10 +31,10 @@
                     </div>
                     <div class="card-body">
                         <!-- Display user details -->
-                        <p><strong>Username:</strong> {{ muser.username }}</p>
-                        <p><strong>First Name:</strong> {{ muser.first_name }}</p>
-                        <p><strong>Last Name:</strong> {{ muser.last_name }}</p>
-                        <p><strong>Email:</strong> {{ muser.email }}</p>
+                        <p><strong>Username:</strong> {{ viewprofile.user.username }}</p>
+                        <p><strong>First Name:</strong> {{ viewprofile.user.first_name }}</p>
+                        <p><strong>Last Name:</strong> {{ viewprofile.user.last_name }}</p>
+                        <p><strong>Email:</strong> {{ viewprofile.user.email }}</p>
                         <!-- Display user profile details -->
                         <p><strong>Primary Location:</strong> {{ viewprofile.primary_location }}</p>
                         <p><strong>Current Location:</strong> {{ viewprofile.current_location }}</p>
@@ -43,8 +43,6 @@
                         <p><strong>Review Score:</strong> {{ viewprofile.review }}</p>
                         <form action="{% url 'viewprofile' profile_id=viewprofile.pk %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="owner_id" value="{{ viewprofile.pk }}">
-                            <input type="hidden" name="recipient" value="{{ muser }}">
                             <input type="submit" class="btn btn-primary" value="Send Message" />
                         </form>
                     </div>

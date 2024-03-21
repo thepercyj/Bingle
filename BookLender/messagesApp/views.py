@@ -112,7 +112,7 @@ def send_message(request, conversation_id):
                 to_user=their_profile,
                 details=message,
                 request_type=1,
-                request_value='default',
+                request_value='Simple Message',
                 created_on=now(),
                 conversation=conversation
             )
@@ -120,6 +120,8 @@ def send_message(request, conversation_id):
             new_message.save()
             conversation.latest_message = message
             conversation.save()
+            # Increment notification counters for both users
+            their_profile.increment_notification_counter()
             return redirect('conversation', conversation_id=conversation.id)
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')

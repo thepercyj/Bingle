@@ -88,3 +88,47 @@ $(document).ready(function() {
     $(this).find('ul').toggle();
   });
 });
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if the cookie name matches the specified name
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Get all sub-menu items
+    var subMenuItems = document.querySelectorAll(".notification-drop .sub-menu li");
+
+    // Add event listener to each sub-menu item
+    subMenuItems.forEach(function(item) {
+        item.addEventListener("click", function() {
+            callDecrementNotificationCounterFunction();
+        });
+    });
+
+    function callDecrementNotificationCounterFunction() {
+        // Send an AJAX request to call the decrement_notification_counter function
+        var xhr = new XMLHttpRequest();
+        var csrftoken = getCookie('csrftoken');
+        xhr.open("POST", "/decrement_counter/", true);
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Handle response if needed
+                // For example, you can update the UI here if necessary
+            }
+        };
+        xhr.send();
+    }
+});
