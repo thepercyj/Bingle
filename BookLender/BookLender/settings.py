@@ -49,9 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cryptography',
     'mainapp',
     'messagesApp',
-    'lendborrowapp'
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'BookLender.urls'
@@ -70,7 +73,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'mainapp/templates'),
+            os.path.join(BASE_DIR, 'mainapp/templates/landing/'),
+            os.path.join(BASE_DIR, 'mainapp/templates/mainapp/'),
             os.path.join(BASE_DIR, 'messageApp/templates'),
         ],
         'APP_DIRS': True,
@@ -87,6 +91,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BookLender.wsgi.application'
 ASGI_APPLICATION = 'BookLender.asgi.application'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
 # Database
@@ -150,8 +156,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+LOGIN_URL = '/login'
+
+# Handle Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'

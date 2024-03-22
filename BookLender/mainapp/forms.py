@@ -1,11 +1,9 @@
 from django import forms
-from .models import Book, UserBook
-from django import forms
+from .models import Book, UserBook, UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext as _
 from django.contrib.auth import authenticate
-
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import CustomUser  # Import your CustomUser model
 
@@ -22,7 +20,7 @@ class BookForm(forms.ModelForm):
         }
         widgets = {
             'published_date': forms.DateInput(attrs={'type': 'date'}),  # For example, to use a date picker in HTML5
-        }
+        },
 
 
 class UserBooksForm(forms.ModelForm):
@@ -36,6 +34,11 @@ class UserRegisterForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, help_text='Required.')
     last_name = forms.CharField(max_length=30, required=True, help_text='Required.')
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    primary_location = forms.CharField(max_length=30, required=True, help_text='Required.')
+    current_location = forms.CharField(max_length=30, required=True, help_text='Required.')
+    phone_number = forms.CharField(max_length=30, required=True, help_text='Required.')
+    birth_date = forms.DateField(help_text='Required. Format: YYYY-MM-DD',
+                                 widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = User
@@ -53,6 +56,16 @@ class UserRegisterForm(UserCreationForm):
             # You would typically handle this separately after user creation
         return user
 
+    def save_profile(self, commit=True):
+        new_profile = UserProfile.objects.create(user=self.instance,
+                                                 primary_location=self.cleaned_data['primary_location'],
+                                                 current_location=self.cleaned_data['current_location'],
+                                                 phone_number=self.cleaned_data['phone_number'],
+                                                 birth_date=self.cleaned_data['birth_date'])
+        if commit:
+            new_profile.save()
+        return new_profile
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -69,3 +82,15 @@ class LoginForm(forms.Form):
                 raise forms.ValidationError("Invalid username or password")
             self.cleaned_data['user'] = user
         return self.cleaned_data
+
+
+class ProfilePicForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_pic']
+        labels = {
+            'profile_pic': 'Profile Picture',
+        }
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'accept': 'images/*'}),  # Restrict to image files only
+        }

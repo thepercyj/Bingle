@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'messagesApp/css/conversation.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Conversation</title>
+</head>
+
+<body>
+
+    <div class="chat-panel-container">
+        <div class="container-fluid">
+            <div class="row no-gutters">
+                <div class="col-md-4 border-right">
+                    <div class="settings-tray">
+                        <div class="friend-drawer no-gutters friend-drawer--grey">
+                            <img class="profile-image"
+                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
+                            <div class="text">
+                                {% if messages %}
+                                {% with sender_username=messages.0.from_user.user.username %}
+                                <h6>Hello {{ sender_username }}</h6>
+                                {% endwith %}
+                                {% endif %}
+                                <p class="text-muted">Show Status if any</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-box">
+                        <div class="input-wrapper">
+                            <i class="material-icons">search</i>
+                            <input placeholder="Search here" type="text">
+                        </div>
+                    </div>
+                    <div class="friends-panel">
+                        <div class="friend-drawer friend-drawer--onhover">
+                            <img class="profile-image"
+                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
+                            <div class="text">
+                                {% if messages %}
+                                {% with sender_username=messages.0.to_user.user.username %}
+                                <h6>{{ sender_username }}</h6>
+                                {% endwith %}
+                                {% endif %}
+                                <p class="text-muted">Hey, you're arrested!</p>
+                            </div>
+                            <span class="time text-muted small">13:21</span>
+                        </div>
+                        <hr>
+                        <div class="friend-drawer friend-drawer--onhover">
+                            <img class="profile-image"
+                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
+                                alt="">
+                            <div class="text">
+                                <h6>Optimus</h6>
+                                <p class="text-muted">Wanna grab a beer?</p>
+                            </div>
+                            <span class="time text-muted small">00:32</span>
+                        </div>
+                        <hr>
+                        <div class="friend-drawer friend-drawer--onhover">
+                            <img class="profile-image"
+                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
+                                alt="">
+                            <div class="text">
+                                <h6>Optimus</h6>
+                                <p class="text-muted">Wanna grab a beer?</p>
+                            </div>
+                            <span class="time text-muted small">00:32</span>
+                        </div>
+                        {% for conversation in conversations %}
+                        <a href={% url 'conversation' conversation.id %}>
+                            <div class="friend-drawer friend-drawer--onhover">
+                                <img class="profile-image"
+                                    src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
+                                    alt="">
+                                <div class="text">
+                                    <h6> {% if conversation.id_1 == our_profile %}
+                                        {{ conversation.id_2.user.username }}<br>
+                                        {% else %}
+                                        {{ conversation.id_1.user.username }}<br>
+                                        {% endif %}
+                                    </h6>
+                                    <p class="text-muted">{{ conversation.latest_message }}</p>
+                                </div>
+                            </div>
+                        </a>
+                        <br>
+                        {% endfor %}
+                        <div class="friend-drawer friend-drawer--onhover">
+                            <img class="profile-image"
+                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/optimus-prime.jpeg"
+                                alt="">
+                            <div class="text">
+                                <h6></h6>
+                                <p class="text-muted"></p>
+                            </div>
+                            <span class="time text-muted small"></span>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- Messages Side -->
+                <div class="col-md-8">
+                    <div class="settings-tray">
+                        <div class="friend-drawer no-gutters friend-drawer--grey">
+                            <img class="profile-image"
+                                src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg" alt="">
+                            <div class="text">
+                                {% if messages %}
+                                {% with sender_username=messages.0.to_user.user.username %}
+                                <h6>{{ sender_username }}</h6>
+                                {% endwith %}
+                                {% endif %}
+                                <p class="text-muted">Show Status if any</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="chat-panel">
+                        {% for message in messages %}
+                        <div
+                            class="{% if message.is_from_our_user %}col-md-3 offset-md-9{% else %}col-md-3 {% endif %}">
+
+                            <div
+                                class="{% if message.is_from_our_user %}chat-bubble chat-bubble--right {% else %}chat-bubble chat-bubble--left{% endif %}">
+                                <p>{{ message.details }}</p>
+                                <!-- <small>From: <b>{{ message.from_user.user.username }}</b></small>  -->
+                                <!-- Accessing the username -->
+                            </div>
+                            <small>Sent: {{ message.created_on|timesince }} ago</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="settings-tray">
+                        <form action="{% url 'sendMessage' conversation.id %}" method="post" id="message">
+                            {% csrf_token %}
+                            <i class="material-icons">mic</i>
+                            <input type="text" name="message" placeholder="Type your message here...">
+                            <input type="submit" value="Send">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <form action="{% url 'sendMessage' conversation.id %}" method="post" id="message">
+        {% csrf_token %}
+        <input type="text" name="message" placeholder="Type your message here">
+        <input type="submit" value="Send">
+    </form> -->
+
+    <form action = "{% url 'rate_user' conversation.id %}" method="post" name="rating">
+        {% csrf_token %}
+        <label for="rating">
+            <input type="number" name="rating" min="1" max="5">
+        </label>
+        <input type="submit" value="Rate">
+    </form>
+
+    <script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="{% static 'messagesApp/js/chat.js' %}"></script>
+
+</body>
+
+</html>

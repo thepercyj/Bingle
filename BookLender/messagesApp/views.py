@@ -1,113 +1,234 @@
-# Adapted from https://www.photondesigner.com/articles/instant-messenger?ref=rdjango-instant-messenger
-
-
-# Import necessary Django and Python libraries for handling HTTP requests, asynchronous operations, and JSON serialization.
-from django.core.serializers.json import DjangoJSONEncoder
-from asgiref.sync import sync_to_async
-from typing import AsyncGenerator
-import asyncio
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, StreamingHttpResponse, HttpResponse
-from . import models  # Import local models module for database access
-import json
-from .models import ChatRoom, Message  # Import specific models used in this application
+from mainapp.models import User, UserProfile, Message
+from django.contrib import messages
+from mainapp.models import Conversation
 
-def lobby(request):
+
+def login_required_message(function):
     """
-    View function for the chat lobby. Users can select an existing chat room or create a new one.
+    Custom decorator to ensure that the user is logged in before accessing a page.
+    """
+
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to view this page.")
+            return login_required(function)(request, *args, **kwargs)
+        return function(request, *args, **kwargs)
+
+    return wrapper
+
+
+@login_required_message
+def get_conversation_list(request):
+    """
+    View function to get the list of conversations for the logged-in user.
+    """
+    our_profile = UserProfile.objects.get(user=request.user)
+    conversationList = Conversation.objects.filter(
+        Q(id_1=our_profile) | Q(id_2=our_profile)
+    ).exclude(
+        Q(id_1=our_profile) & Q(id_2=our_profile)
+    ).select_related('id_1__user', 'id_2__user')
+
+    return render(request, "messagesApp/conversation_list.html", {'conversations': conversationList,
+                                                                  'our_profile': our_profile})
+
+
+@login_required_message
+def load_full_conversation(request, conversation_id):
+    """
+    This function loads the full conversation between two users, ensuring the user is logged in.
+
+    Parameters:
+    request (HttpRequest): The Django HttpRequest object.
+    conversation_id (int): The ID of the conversation between the two users.
+
+    Returns:
+    HttpResponse: Renders the conversation page with the messages between the two users.
+    """
+    try:
+        our_profile = UserProfile.objects.get(user=request.user)
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
+
+        messages_list = Message.objects.filter(
+            Q(from_user=our_profile, to_user=their_profile) | Q(from_user=their_profile, to_user=our_profile)
+        ).select_related('from_user__user', 'to_user__user').order_by('created_on')
+
+        for message in messages_list:
+            message.is_from_our_user = (message.from_user == our_profile)
+
+        return render(request, 'messagesApp/conversation.html',
+                      {'messages': messages_list, 'conversation': conversation})
+    except UserProfile.DoesNotExist:
+        return HttpResponse("User profile not found", status=404)
+
+
+@login_required_message
+def send_message(request, conversation_id):
+    """
+    This function handles the POST request to send a message from one user to another,
+    ensuring the user is logged in.
+
+    Parameters:
+    request (HttpRequest): The Django HttpRequest object.
+    conversation_id (int): The ID of the conversation between the two users.
+
+    Returns:
+    HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
     """
     if request.method == 'POST':
-        # Handle form submission for creating/joining a chat room
-        room_name = request.POST.get('room_name')
-        username = request.POST.get('username')
-        request.session['username'] = username  # Store the username in the session
-        chat_room, created = ChatRoom.objects.get_or_create(name=room_name)  # Create or get existing room
-        return redirect('chat', room_name=chat_room.name)  # Redirect to the chat room view
+        try:
+            conversation = get_object_or_404(Conversation, id=conversation_id)
+            our_profile = UserProfile.objects.get(user=request.user)
+            their_profile = get_object_or_404(UserProfile,
+                                              (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                              ~Q(user=request.user))
+
+            message = request.POST.get('message')
+            if not message:
+                messages.error(request, 'Message cannot be empty.')
+                return redirect('conversation', conversation_id=conversation_id)
+            try:
+                existing_conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                                 (Q(id_2=our_profile) & Q(id_1=their_profile)))
+                conversation = existing_conversation
+
+            except Conversation.DoesNotExist:
+                Conversation(id_1=our_profile, id_2=their_profile).save()
+                conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                        (Q(id_2=our_profile) & Q(id_1=their_profile)))
+
+            new_message = Message(
+                from_user=our_profile,
+                to_user=their_profile,
+                details=message,
+                request_type=1,
+                request_value='default',
+                created_on=now(),
+                modified_on=now(),
+                notification_status=1,
+                conversation=conversation
+            )
+
+            new_message.save()
+            conversation.latest_message = message
+            conversation.save()
+            return redirect('conversation', conversation_id=conversation.id)
+        except UserProfile.DoesNotExist:
+            messages.error(request, 'User profile not found.')
+            return redirect('conversation', conversation_id=conversation_id)
     else:
-        # Display the lobby with a list of available chat rooms for GET requests
-        rooms = ChatRoom.objects.all()
-        return render(request, 'messagesApp/lobby.html', {'rooms': rooms})
+        return HttpResponse("Invalid request method", status=405)
 
-def chat(request, room_name):
-    """
-    View function for displaying a chat room and its messages.
-    """
-    if not request.session.get('username'):
-        return redirect('lobby')  # Redirect to lobby if no username is set in session
-    chat_room, created = ChatRoom.objects.get_or_create(name=room_name)  # Get or create the specified chat room
-    messages = Message.objects.filter(chat_room=chat_room).order_by('created_at')  # Retrieve messages for the room
-    return render(request, 'messagesApp/chat.html', {'room': chat_room, 'messages': messages})
 
-def create_message(request: HttpRequest) -> HttpResponse:
+@login_required_message
+def new_conversation(request):
     """
-    Endpoint for creating a new message in a chat room.
+    View function to start a new conversation with another user, ensuring the user is logged in.
     """
-    content = request.POST.get("content")
-    username = request.session.get("username")
-    if not username:
-        return HttpResponse(status=403)  # Return 403 Forbidden if no username is found in session
+    # If the form has been submitted
+    if request.method == 'POST':
+        username = request.POST.get('recipient')
+        message = request.POST.get('message')
 
-    author, _ = models.Author.objects.get_or_create(name=username)  # Get or create the author based on username
+        # If the username is not empty
+        try:
+            user = User.objects.get(username=username)
+            their_profile = get_object_or_404(UserProfile, user=user)
+            our_profile = get_object_or_404(UserProfile, user=request.user)
+            # Ensure the user is not trying to start a conversation with themselves
+            if their_profile == our_profile:
+                messages.error(request, 'You cannot start a conversation with yourself.')
+                return redirect('new_conversation')
 
-    if content:
-        models.Message.objects.create(author=author, content=content)  # Create a new message if content is provided
-        return HttpResponse(status=201)  # Return 201 Created for successful message creation
+            # Ensure the conversation does not already exist
+            with transaction.atomic():
+                existing_conversation = Conversation.objects.filter(
+                    (Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                    (Q(id_2=our_profile) & Q(id_1=their_profile))
+                ).first()
+
+                # If the conversation already exists, add the message to the existing conversation
+                if existing_conversation:
+                    if message:
+                        new_message = Message(
+                            from_user=our_profile,
+                            to_user=their_profile,
+                            details=message,
+                            request_type=1,
+                            request_value='default',
+                            created_on=now(),
+                            modified_on=now(),
+                            notification_status=1,
+                            conversation=existing_conversation
+                        )
+                        new_message.save()
+                        existing_conversation.latest_message = message
+                        existing_conversation.save()
+                    return redirect('conversation', conversation_id=existing_conversation.id)
+
+                # If the conversation does not exist, create a new conversation
+                new_conversation_object = Conversation(id_1=our_profile, id_2=their_profile)
+                new_conversation_object.save()
+                if message:
+                    new_message = Message(
+                        from_user=our_profile,
+                        to_user=their_profile,
+                        details=message,
+                        request_type=1,
+                        request_value='default',
+                        created_on=now(),
+                        modified_on=now(),
+                        notification_status=1,
+                        conversation=new_conversation_object
+                    )
+                    new_message.save()
+                    new_conversation_object.latest_message = message
+                    new_conversation_object.save()
+                return redirect('conversation', conversation_id=new_conversation_object.id)
+        # If the user does not exist, display an error message
+        except User.DoesNotExist:
+            messages.error(request, 'User not found.')
+            return redirect('new_conversation')
+
+    # If the form has not been submitted, display the new conversation page
     else:
-        return HttpResponse(status=400)  # Return 400 Bad Request if no content is provided
+        return render(request, 'messagesApp/new_conversation.html',
+                      {'users': UserProfile.objects.exclude(user=request.user)})
 
-async def stream_chat_messages(request: HttpRequest) -> StreamingHttpResponse:
+def old_conversation(request):
+    return render(request, 'messagesApp/conversation.html')
 
-    async def event_stream():
-        """
-        Asynchronous generator to stream chat messages to the client.
-        """
-        # Stream existing messages first, regardless of last_id
-        messages = await get_existing_messages()
-        for message in messages:
-            message_json = json.dumps(message, cls=DjangoJSONEncoder)
-            yield f"data: {message_json}\n\n"
+def rate_user(request, conversation_id):
+    if request.method == 'POST':
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
 
-        last_id = await get_last_message_id()  # Get the ID of the last message
+        rating = request.POST.get('rating')
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, "Rating must be an integer between 1 and 5.")
+                return HttpResponseBadRequest("Rating must be an integer between 1 and 5.")
+        except ValueError:
+            messages.error(request, "Invalid input. Rating must be an integer.")
+            return HttpResponseBadRequest("Invalid input. Rating must be an integer.")
 
-        # Continuously check for and stream new messages
-        while True:
-            new_messages = await get_new_messages(last_id)
-            for message in new_messages:
-                message_json = json.dumps(message, cls=DjangoJSONEncoder)  # Serialize message to JSON
-                yield f"data: {message_json}\n\n"  # Yield the message data to the client
-                last_id = message['id']  # Update last_id to the latest message ID
-            await asyncio.sleep(1)  # Sleep to prevent constant database polling
-
-    @sync_to_async
-    def get_existing_messages():
-        """
-        Fetch existing messages to stream initially.
-        """
-        return list(models.Message.objects.all().order_by('created_at').values(
-            'id', 'author__name', 'content', 'created_at'
-        ))
-
-    @sync_to_async
-    def get_new_messages(last_id):
-        """
-        Fetch new messages since the given last_id.
-        """
-        return list(models.Message.objects.filter(id__gt=last_id).order_by('created_at').values(
-            'id', 'author__name', 'content', 'created_at'
-        ))
-
-    @sync_to_async
-    def get_last_message_sync():
-        """
-        Synchronously fetch the last message.
-        """
-        return models.Message.objects.all().last()
-
-    async def get_last_message_id():
-        """
-        Asynchronously get the ID of the last message.
-        """
-        last_message = await get_last_message_sync()
-        return last_message.id if last_message else None
-
-    return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
+        current_rating = their_profile.review
+        if current_rating:
+            their_profile.review = (current_rating + rating) / 2
+        else:
+            their_profile.review = rating
+        their_profile.save()
+        return redirect('conversation', conversation_id=conversation_id)

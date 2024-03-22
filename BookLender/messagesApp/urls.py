@@ -1,13 +1,12 @@
 from django.urls import path
-
-from . import views
-from .views import chat
+from .views import load_full_conversation, send_message, get_conversation_list, new_conversation, rate_user, \
+    old_conversation
 
 urlpatterns = [
-    path('lobby/', views.lobby, name='lobby'),
-    path('chat/', views.chat, name='chat'),
-    path('create-message/', views.create_message, name='create-message'),
-    path('stream-chat-messages/', views.stream_chat_messages, name='stream-chat-messages'),
-    path('chat/<str:room_name>/', chat, name='chat'),
-
+    path('conversation/<int:conversation_id>/', load_full_conversation, name='conversation'),
+    path('send/<int:conversation_id>/', send_message, name='sendMessage'),
+    path('', get_conversation_list, name='conversation_list'),
+    path('new_conversation/', new_conversation, name='new_conversation'),
+    path('old_conversation/', old_conversation, name='old_conversation'),
+    path('rate_user/<int:conversation_id>/', rate_user, name='rate_user'),
 ]
