@@ -6,28 +6,27 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% load static %}
 
 
     <title>Phoenix</title>
 
-    <link rel="manifest" href="../assets/img/favicons/manifest.json">
+    <link rel="manifest" href="mainapp/vendor/json/manifest.json">
     <meta name="theme-color" content="#ffffff">
-    <script src="{% static 'mainapp/js/simplebar.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/config.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/simplebar.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/config.js' %}"></script>
 
-    <link href="{% static 'mainapp/css/glightbox.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'mainapp/vendor/css/glightbox.min.css' %}" rel="stylesheet" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
+    <link href="https://fonts.googleapis.com/vendor/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
         rel="stylesheet">
-    <link href="{% static 'mainapp/css/simplebar.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'mainapp/css/line.css' %}" rel="stylesheet" />
-    <link href="{% static 'mainapp/css/theme-rtl.min.css' %}" rel="stylesheet" type="text/css" id="style-rtl" />
-    <link href="{% static 'mainapp/css/theme.min.css' %}" rel="stylesheet" type="text/css" id="style-default" />
-    <link href="{% static 'mainapp/css/user-rtl.min.css' %}" rel="stylesheet" type="text/css" id="user-style-rtl" />
-    <!-- <link href="{% static 'mainapp/css/user.min.css' %}" rel="stylesheet" type="text/css" id="user-style-default" /> -->
+    <link href="{% static 'mainapp/vendor/css/simplebar.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'mainapp/vendor/css/line.css' %}" rel="stylesheet" />
+    <link href="{% static 'mainapp/vendor/css/theme-rtl.min.css' %}" rel="stylesheet" type="text/vendor/css" id="style-rtl" />
+    <link href="{% static 'mainapp/vendor/css/theme.min.css' %}" rel="stylesheet" type="text/vendor/css" id="style-default" />
+    <link href="{% static 'mainapp/vendor/css/user-rtl.min.css' %}" rel="stylesheet" type="text/vendor/css" id="user-style-rtl" />
+    <!-- <link href="{% static 'mainapp/vendor/css/user.min.css' %}" rel="stylesheet" type="text/vendor/css" id="user-style-default" /> -->
     <script>
         var phoenixIsRTL = window.config.config.phoenixIsRTL;
         if (phoenixIsRTL) {
@@ -1395,21 +1394,21 @@
             </ul>
         </nav> {% block content %}{% endblock %}
     </main>
-    <script src="{% static 'mainapp/js/popper.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/anchor.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/is.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/all.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/lodash.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/list.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/feather.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/dayjs.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'mainapp/js/index.js' %}"></script>
-    <script src="{% static 'mainapp/js/umd-index.js' %}"></script>
-    <script src="{% static 'mainapp/js/lottie.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/popper.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/anchor.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/is.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/all.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/lodash.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/list.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/feather.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/dayjs.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/index.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/umd-index.js' %}"></script>
+    <script src="{% static 'mainapp/vendor/js/lottie.min.js' %}"></script>
     <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script> -->
-    <script src="../assets/js/phoenix.js"></script>
+    <script src="../assets/vendor/js/phoenix.js"></script>
 </body>
 
 </html>

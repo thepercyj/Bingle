@@ -74,9 +74,9 @@
                     <a class="nav-link lh-1" href="{% url 'sample' %}"><span
                             class="uil fs-8 me-2 uil-chart-pie"></span>Home</a>
                     <a class="nav-link lh-1" href="#!"><span class="uil fs-8 me-2 uil-cube"></span>Apps</a>
-                    <a class="nav-link lh-1" href="#!"><span
-                            class="uil fs-8 me-2 uil-files-landscapes-alt"></span>Pages</a>
-                    <a class="nav-link lh-1" href="{% url 'profile' %}"><span
+                    <a class="nav-link lh-1" href="{% url 'chat' %}""><span
+                            class=" uil fs-8 me-2 uil-files-landscapes-alt"></span>Chats</a>
+                    <a class="nav-link lh-1 active" href="{% url 'profile' %}"><span
                             class="uil fs-8 me-2 uil-puzzle-piece"></span>Profile</a>
                 </ul>
             </div>
@@ -360,56 +360,66 @@
             <div class="modal-dialog">
                 <div class="modal-content mt-15 rounded-pill">
                     <div class="modal-body p-0">
-                            <div class="modal-content position-relative">
-                                <button class="btn btn-primary-left" onclick="openBookModal('add-book-modal')">
-                                    Add
-                                </button>
-                                <br>
-                                <div class="user_books">
-                                    {% csrf_token %}
-                                    {% if user_books %}
-                                    <table class="table">
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Author</th>
-                                            <th>Genre</th>
-                                            <th>Publish Date</th>
-                                            <th>Currently With</th>
-                                        </tr>
-                                        {% for user_book in user_books %}
-                                        <tr>
-                                            <td>{{ user_book.book_id.book_title }}</td>
-                                            <td>{{ user_book.book_id.book_author }}</td>
-                                            <td>{{ user_book.book_id.genre }}</td>
-                                            <td>{{ user_book.book_id.published_date }}</td>
-                                            <td>{{ user_book.currently_with }}</td>
-                                            <td>
-                                                <form action="/remove-book/" method="post">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="book_id" value="{{ user_book.id }}" />
-                                                    <input type="submit" class="btn-close" value="" />
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </table>
-                                    <div id="add-book-modal" class="modal">
-                                        <div class="modal-content">
-                                            <form method="POST" action="/add-book/">
+                        <div class="modal-content position-relative">
+                            <a class=" nav-link" href="#" data-bs-toggle="modal" data-bs-target="#add-book-modal"> Add
+                            </a>
+                            <br>
+                            <div class="user_books">
+                                {% csrf_token %}
+                                {% if user_books %}
+                                <table class="table">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Genre</th>
+                                        <th>Publish Date</th>
+                                        <th>Currently With</th>
+                                    </tr>
+                                    {% for user_book in user_books %}
+                                    <tr>
+                                        <td>{{ user_book.book_id.book_title }}</td>
+                                        <td>{{ user_book.book_id.book_author }}</td>
+                                        <td>{{ user_book.book_id.genre }}</td>
+                                        <td>{{ user_book.book_id.published_date }}</td>
+                                        <td>{{ user_book.currently_with }}</td>
+                                        <td>
+                                            <form action="/remove-book/" method="post">
                                                 {% csrf_token %}
-                                                <input class="btn btn-primary" type="submit" value="Submit">
+                                                <input type="hidden" name="book_id" value="{{ user_book.id }}" />
+                                                <input type="submit" class="btn-close" value="" />
                                             </form>
-                                            <br>
-                                            <button class="close-btn"
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            <!-- Add Book Modal -->
+                                <div class="modal fade" id="add-book-modal" tabindex="-1" aria-hidden="true"
+                                    data-bs-backdrop="true" data-phoenix-modal="data-phoenix-modal"
+                                    style="--phoenix-backdrop-opacity: 2;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content mt-15 rounded-pill">
+                                            <div class="modal-body p-0">
+                                                <div class="modal-content position-relative">
+                                                    <form method="POST" action="/add-book/">
+                                                        {% csrf_token %}
+                                                        <input class="btn btn-primary" type="submit" value="Submit">
+                                                    </form>
+                                                    <br>
+                                                    <button class="close-btn"
                                                 onclick="closeModal('add-book-modal')">Close</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    {% else %}
-                                    <div>You don't have any books, getting adding!</div>
-                                    {% endif %}
                                 </div>
-                                <button class="close-btn" onclick="closeModal('book-modal')">Close</button>
+
+
+                                {% else %}
+                                <div>You don't have any books, getting adding!</div>
+                                {% endif %}
                             </div>
+                            <!-- <button class="close-btn" onclick="closeModal('book-modal')">Close</button> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -516,7 +526,8 @@
                     <div class="col-12 col-xxl-6">
                         <div class="mb-8">
                             <h2 class="mb-2">Ecommerce Dashboard</h2>
-                            <h5 class="text-body-tertiary fw-semibold">Here’s what’s going on at your business right now
+                            <h5 class="text-body-tertiary fw-semibold">Here’s what’s going on at your business right
+                                now
                             </h5>
                         </div>
 
@@ -635,7 +646,8 @@
                                             <h4>356</h4>
                                         </div>
                                         <div class="pb-0 pt-4">
-                                            <div class="echarts-new-customers" style="height:180px;width:100%;"></div>
+                                            <div class="echarts-new-customers" style="height:180px;width:100%;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -655,12 +667,14 @@
                                         <div>
                                             <div class="d-flex align-items-center mb-2">
                                                 <div class="bullet-item bg-primary me-2"></div>
-                                                <h6 class="text-body fw-semibold flex-1 mb-0">Percentage discount</h6>
+                                                <h6 class="text-body fw-semibold flex-1 mb-0">Percentage discount
+                                                </h6>
                                                 <h6 class="text-body fw-semibold mb-0">72%</h6>
                                             </div>
                                             <div class="d-flex align-items-center mb-2">
                                                 <div class="bullet-item bg-primary-lighter me-2"></div>
-                                                <h6 class="text-body fw-semibold flex-1 mb-0">Fixed card discount</h6>
+                                                <h6 class="text-body fw-semibold flex-1 mb-0">Fixed card discount
+                                                </h6>
                                                 <h6 class="text-body fw-semibold mb-0">18%</h6>
                                             </div>
                                             <div class="d-flex align-items-center">
@@ -694,7 +708,8 @@
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <div class="bullet-item bg-primary-subtle me-2"></div>
-                                                <h6 class="text-body fw-semibold flex-1 mb-0">Non-paying customer</h6>
+                                                <h6 class="text-body fw-semibold flex-1 mb-0">Non-paying customer
+                                                </h6>
                                                 <h6 class="text-body fw-semibold mb-0">70%</h6>
                                             </div>
                                         </div>
@@ -760,7 +775,8 @@
                                     <th class="sort align-middle" scope="col" style="max-width:350px;"
                                         data-sort="review">
                                         REVIEW</th>
-                                    <th class="sort text-start ps-5 align-middle" scope="col" data-sort="status">STATUS
+                                    <th class="sort text-start ps-5 align-middle" scope="col" data-sort="status">
+                                        STATUS
                                     </th>
                                     <th class="sort text-end align-middle" scope="col" data-sort="time">TIME</th>
                                     <th class="sort text-end pe-0 align-middle" scope="col"></th>
@@ -779,7 +795,8 @@
                                             href="apps/e-commerce/landing/product-details.html"><img
                                                 src="assets/img//products/60x60/1.png" alt="" width="53" /></a></td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">Fitbit Sense Advanced
+                                            href="apps/e-commerce/landing/product-details.html">Fitbit Sense
+                                            Advanced
                                             Smartwatch with Tools fo...</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -796,8 +813,10 @@
                                             class="fa fa-star text-warning"></span><span
                                             class="fa fa-star text-warning"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">This Fitbit is fantastic! I
-                                            was trying to be in better shape and needed some motivation, so I decided to
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">This Fitbit is
+                                            fantastic! I
+                                            was trying to be in better shape and needed some motivation, so I
+                                            decided to
                                             treat myself to a new Fitbit.</p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -924,8 +943,10 @@
                                             class="fa fa-star text-warning"></span><span
                                             class="fa fa-star-half-alt star-icon text-warning"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">It's a Mac, after all. Once
-                                            you've gone Mac, there's no going back. My first Mac lasted over nine years,
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">It's a Mac, after all.
+                                            Once
+                                            you've gone Mac, there's no going back. My first Mac lasted over nine
+                                            years,
                                             and this is my second.</p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -972,7 +993,8 @@
                                             href="apps/e-commerce/landing/product-details.html"><img
                                                 src="assets/img//products/60x60/4.png" alt="" width="53" /></a></td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">Apple iMac 24&quot; 4K
+                                            href="apps/e-commerce/landing/product-details.html">Apple iMac 24&quot;
+                                            4K
                                             Retina Display M1 8 Core CPU...</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -990,7 +1012,8 @@
                                     <td class="align-middle review" style="min-width:350px;">
                                         <p class="fs-9 fw-semibold text-body-highlight mb-0">Personally, I like the
                                             minimalist style, but I wouldn't choose it if I were searching for a
-                                            computer that I would use frequently. It's...<a href='#!'>See more</a></p>
+                                            computer that I would use frequently. It's...<a href='#!'>See more</a>
+                                        </p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
                                             class="badge badge-phoenix fs-10 badge-phoenix-warning"><span
@@ -1036,7 +1059,8 @@
                                             href="apps/e-commerce/landing/product-details.html"><img
                                                 src="assets/img//products/60x60/5.png" alt="" width="53" /></a></td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">Razer Kraken v3 x Wired
+                                            href="apps/e-commerce/landing/product-details.html">Razer Kraken v3 x
+                                            Wired
                                             7.1 Surroung Sound Gam...</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -1099,7 +1123,8 @@
                                             href="apps/e-commerce/landing/product-details.html"><img
                                                 src="assets/img//products/60x60/6.png" alt="" width="53" /></a></td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">PlayStation 5 DualSense
+                                            href="apps/e-commerce/landing/product-details.html">PlayStation 5
+                                            DualSense
                                             Wireless Controller</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -1116,7 +1141,8 @@
                                             class="fa-regular fa-star text-warning-light"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
                                         <p class="fs-9 fw-semibold text-body-highlight mb-0">The controller is quite
-                                            comfy for me. Despite its increased size, the controller still fits well in
+                                            comfy for me. Despite its increased size, the controller still fits well
+                                            in
                                             my hands.</p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1242,8 +1268,10 @@
                                             class="fa-regular fa-star text-warning-light"></span><span
                                             class="fa-regular fa-star text-warning-light"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">I have started using this
-                                            theme in the last week and it has really impressed me very much, the support
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">I have started using
+                                            this
+                                            theme in the last week and it has really impressed me very much, the
+                                            support
                                             is second to none.</p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1307,7 +1335,8 @@
                                             class="fa fa-star text-warning"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
                                         <p class="fs-9 fw-semibold text-body-highlight mb-0">The best experience we
-                                            could hope for. Customer service team is amazing and the quality of their
+                                            could hope for. Customer service team is amazing and the quality of
+                                            their
                                             products is unsurpassed. Great theme ...<a href='#!'>See more</a></p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1352,7 +1381,8 @@
                                     <td class="align-middle product white-space-nowrap py-0"><a
                                             class="d-block rounded-2 border border-translucent"
                                             href="apps/e-commerce/landing/product-details.html"><img
-                                                src="assets/img//products/60x60/10.png" alt="" width="53" /></a></td>
+                                                src="assets/img//products/60x60/10.png" alt="" width="53" /></a>
+                                    </td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
                                             href="apps/e-commerce/landing/product-details.html">Apple Magic Mouse
                                             (Wireless, Rechargable) - Si...</a></td>
@@ -1371,8 +1401,10 @@
                                             class="fa fa-star text-warning"></span><span
                                             class="fa-regular fa-star text-warning-light"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">This template has allowed
-                                            me to convert my existing web app into a great looking, easy to use UI in
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">This template has
+                                            allowed
+                                            me to convert my existing web app into a great looking, easy to use UI
+                                            in
                                             less than 2 weeks. Very easy to us...<a href='#!'>See more</a></p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1417,7 +1449,8 @@
                                     <td class="align-middle product white-space-nowrap py-0"><a
                                             class="d-block rounded-2 border border-translucent"
                                             href="apps/e-commerce/landing/product-details.html"><img
-                                                src="assets/img//products/60x60/11.png" alt="" width="53" /></a></td>
+                                                src="assets/img//products/60x60/11.png" alt="" width="53" /></a>
+                                    </td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
                                             href="apps/e-commerce/landing/product-details.html">Echo Dot (4th Gen) _
                                             Smart speaker with Alexa ...</a></td>
@@ -1436,7 +1469,8 @@
                                             class="fa fa-star-half-alt star-icon text-warning"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
                                         <p class="fs-9 fw-semibold text-body-highlight mb-0">The theme is really
-                                            beautiful and the support answer very quickly and is friendly. Buy it, you
+                                            beautiful and the support answer very quickly and is friendly. Buy it,
+                                            you
                                             will not regret it.</p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1481,9 +1515,11 @@
                                     <td class="align-middle product white-space-nowrap py-0"><a
                                             class="d-block rounded-2 border border-translucent"
                                             href="apps/e-commerce/landing/product-details.html"><img
-                                                src="assets/img//products/60x60/12.png" alt="" width="53" /></a></td>
+                                                src="assets/img//products/60x60/12.png" alt="" width="53" /></a>
+                                    </td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">HORI Racing Wheel Apex
+                                            href="apps/e-commerce/landing/product-details.html">HORI Racing Wheel
+                                            Apex
                                             for PlayStation 4_3, an...</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -1499,7 +1535,8 @@
                                             class="fa fa-star text-warning"></span><span
                                             class="fa-regular fa-star text-warning-light"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">As others mentioned, the
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">As others mentioned,
+                                            the
                                             team behind this theme is super responsive. I sent a message during the
                                             weekend, fully expecting a response a...<a href='#!'>See more</a></p>
                                     </td>
@@ -1545,7 +1582,8 @@
                                     <td class="align-middle product white-space-nowrap py-0"><a
                                             class="d-block rounded-2 border border-translucent"
                                             href="apps/e-commerce/landing/product-details.html"><img
-                                                src="assets/img//products/60x60/13.png" alt="" width="53" /></a></td>
+                                                src="assets/img//products/60x60/13.png" alt="" width="53" /></a>
+                                    </td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
                                             href="apps/e-commerce/landing/product-details.html">Nintendo Switch with
                                             Neon Blue and Neon Red Jo...</a></td>
@@ -1563,8 +1601,10 @@
                                             class="fa fa-star text-warning"></span><span
                                             class="fa fa-star text-warning"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">I had a bit of a hard time
-                                            at first but after I contacted the team they were able to help me set up the
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">I had a bit of a hard
+                                            time
+                                            at first but after I contacted the team they were able to help me set up
+                                            the
                                             theme. It's really good and I ...<a href='#!'>See more</a></p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1609,9 +1649,11 @@
                                     <td class="align-middle product white-space-nowrap py-0"><a
                                             class="d-block rounded-2 border border-translucent"
                                             href="apps/e-commerce/landing/product-details.html"><img
-                                                src="assets/img//products/60x60/14.png" alt="" width="53" /></a></td>
+                                                src="assets/img//products/60x60/14.png" alt="" width="53" /></a>
+                                    </td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">Oculus Rift S PC-Powered
+                                            href="apps/e-commerce/landing/product-details.html">Oculus Rift S
+                                            PC-Powered
                                             VR Gaming Headset</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -1627,7 +1669,8 @@
                                             class="fa fa-star text-warning"></span><span
                                             class="fa fa-star text-warning"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">Excellent. All my doubts
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">Excellent. All my
+                                            doubts
                                             were answered by the team quickly. I highly recommend it.</p>
                                     </td>
                                     <td class="align-middle text-start ps-5 status"><span
@@ -1672,9 +1715,11 @@
                                     <td class="align-middle product white-space-nowrap py-0"><a
                                             class="d-block rounded-2 border border-translucent"
                                             href="apps/e-commerce/landing/product-details.html"><img
-                                                src="assets/img//products/60x60/15.png" alt="" width="53" /></a></td>
+                                                src="assets/img//products/60x60/15.png" alt="" width="53" /></a>
+                                    </td>
                                     <td class="align-middle product white-space-nowrap"><a class="fw-semibold"
-                                            href="apps/e-commerce/landing/product-details.html">Sony X85J 75 Inch Sony
+                                            href="apps/e-commerce/landing/product-details.html">Sony X85J 75 Inch
+                                            Sony
                                             4K Ultra HD LED Smart G...</a></td>
                                     <td class="align-middle customer white-space-nowrap"><a
                                             class="d-flex align-items-center text-body"
@@ -1690,7 +1735,8 @@
                                             class="fa fa-star-half-alt star-icon text-warning"></span><span
                                             class="fa-regular fa-star text-warning-light"></span></td>
                                     <td class="align-middle review" style="min-width:350px;">
-                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">This theme is great. Clean
+                                        <p class="fs-9 fw-semibold text-body-highlight mb-0">This theme is great.
+                                            Clean
                                             and easy to understand. Perfect for those who don't have time to start
                                             everything from scratch. The support...<a href='#!'>See more</a></p>
                                     </td>
@@ -1875,7 +1921,8 @@
                                                     <div class="d-flex align-items-center"><img
                                                             src="assets/img/country/south-korea.png" alt=""
                                                             width="24" />
-                                                        <p class="mb-0 ps-3 text-primary fw-bold fs-9">South Korea</p>
+                                                        <p class="mb-0 ps-3 text-primary fw-bold fs-9">South Korea
+                                                        </p>
                                                     </div>
                                                 </a>
                                             </div>
@@ -2100,7 +2147,8 @@
                     <div class="col-12 col-xl-6">
                         <div>
                             <h3>Returning customer rate</h3>
-                            <p class="mb-1 text-body-tertiary">Rate of customers returning to your shop over time</p>
+                            <p class="mb-1 text-body-tertiary">Rate of customers returning to your shop over time
+                            </p>
                         </div>
                         <div class="echart-returning-customer" style="height:300px;"></div>
                     </div>
@@ -2132,10 +2180,11 @@
                                 data-boundary="window" aria-haspopup="true" aria-expanded="false"
                                 data-bs-reference="parent"><span class="fas fa-ellipsis-h text-body"></span></button>
                             <div class="dropdown-menu dropdown-menu-end py-2" aria-labelledby="support-chat-dropdown"><a
-                                    class="dropdown-item" href="#!">Request a callback</a><a class="dropdown-item"
-                                    href="#!">Search in chat</a><a class="dropdown-item" href="#!">Show history</a><a
-                                    class="dropdown-item" href="#!">Report to Admin</a><a
-                                    class="dropdown-item btn-support-chat" href="#!">Close Support</a></div>
+                                    class="dropdown-item" href="#!">Request a
+                                    callback</a><a class="dropdown-item" href="#!">Search in chat</a><a
+                                    class="dropdown-item" href="#!">Show history</a><a class="dropdown-item"
+                                    href="#!">Report to Admin</a><a class="dropdown-item btn-support-chat"
+                                    href="#!">Close Support</a></div>
                         </div>
                     </div>
                     <div class="card-body chat p-0">
@@ -2148,7 +2197,8 @@
                                 </a><a
                                     class="mb-2 d-inline-flex align-items-center text-decoration-none text-body-emphasis bg-body-hover rounded-pill border border-primary py-2 ps-4 pe-3"
                                     href="#!">
-                                    <p class="mb-0 fw-semibold fs-9">I can’t reorder a product I previously ordered</p>
+                                    <p class="mb-0 fw-semibold fs-9">I can’t reorder a product I previously ordered
+                                    </p>
                                     <span class="fa-solid fa-paper-plane text-primary fs-9 ms-3"></span>
                                 </a><a
                                     class="mb-2 d-inline-flex align-items-center text-decoration-none text-body-emphasis bg-body-hover rounded-pill border border-primary py-2 ps-4 pe-3"
@@ -2166,7 +2216,8 @@
                                         class="rounded-circle border border-3 border-light-subtle"
                                         src="assets/img/team/30.webp" alt="" /></div>
                                 <h5 class="mt-2 mb-3">Eric</h5>
-                                <p class="text-center text-body-emphasis mb-0">Ask us anything – we’ll get back to you
+                                <p class="text-center text-body-emphasis mb-0">Ask us anything – we’ll get back to
+                                    you
                                     here or by email within 24 hours.</p>
                             </div>
                         </div>
