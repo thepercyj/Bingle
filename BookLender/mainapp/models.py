@@ -1,7 +1,9 @@
 from django.db import models
 from datetime import date, datetime
 from django.contrib.auth.models import User
+from django.db.models import F
 from django_cryptography.fields import encrypt
+
 
 class CustomUser:
     pass
@@ -14,10 +16,16 @@ class UserProfile(models.Model):
     phone_number = models.CharField('Phone Number', max_length=255, null=False, default='default')
     birth_date = models.DateField('Birth Date', null=False, default=date(2000, 1, 1))
     review = models.IntegerField('Review Score', null=True)
+    notification_counter = models.IntegerField(default=0)
     profile_pic = encrypt(models.ImageField(upload_to='images', blank=True))
 
     def __str__(self):
         return self.user.username
+
+    def increment_notification_counter(self):
+        # Increment the notification counter
+        self.notification_counter = F('notification_counter') + 1
+        self.save()
 
 
 class Conversation(models.Model):
@@ -59,8 +67,6 @@ class Message(models.Model):
     request_type = models.IntegerField('Request Type', null=False, default=1)
     request_value = models.CharField('Request Value', max_length=255, null=False, default='default')
     created_on = models.DateTimeField('Created On', null=False, default=datetime(2024, 1, 1, 12, 0))
-    modified_on = models.DateTimeField('Modified On', null=False, default=datetime(2024, 1, 1, 12, 0))
-    notification_status = models.IntegerField('Notification Status', null=False, default=1)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages_conversation')
 
     def __str__(self):
@@ -71,6 +77,14 @@ class Message(models.Model):
 class Booking(models.Model):
     owner_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='booking_owner')
     borrower_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='booking_borrower')
+    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True, related_name='booking_user_book')
     from_date = models.DateField('From Date', null=False, default=date(2024, 1, 1))
     to_date = models.DateField('To Date', null=False, default=date(2024, 1, 1))
     returned = models.BooleanField('Returned', null=False, default=False)
+
+
+class Notification(models.Model):
+    notify_type = models.IntegerField('Notify Type', null=False, default=1)
+    notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
+    details = models.CharField('Details', max_length=255, null=False, default='default')
+

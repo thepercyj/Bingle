@@ -12,9 +12,10 @@ urlpatterns = [
     path('profile_page/', views.profile, name='profile'),
     path('add-book/', views.addBook, name='addBook'),
     path('library/', views.library, name='library'),
+    path('search/', views.search, name='search'),
+    path('borrow/<int:book_id>/', views.borrow, name='borrow'),
     path('remove-book/', views.removeBook, name='removeUserBook'),
     path('img_upload/', views.img_upload, name='img_upload'),
-    path('borrow/', views.borrow, name='borrow'),
     path('lend/', views.lend, name='lend'),
     path('register/', views.register, name='register'),
     path('forgetpass/', views.forgetpass, name='forgetpass'),
@@ -22,4 +23,7 @@ urlpatterns = [
     path('sample/', views.sample, name='sample'),
 
     path('chat/', views.chat, name='chat'),
+    path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
+    path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
+    path('test/', views.test, name='test'),
 ]

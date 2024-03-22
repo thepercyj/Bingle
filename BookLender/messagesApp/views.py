@@ -112,16 +112,16 @@ def send_message(request, conversation_id):
                 to_user=their_profile,
                 details=message,
                 request_type=1,
-                request_value='default',
+                request_value='Simple Message',
                 created_on=now(),
-                modified_on=now(),
-                notification_status=1,
                 conversation=conversation
             )
 
             new_message.save()
             conversation.latest_message = message
             conversation.save()
+            # Increment notification counters for both users
+            their_profile.increment_notification_counter()
             return redirect('conversation', conversation_id=conversation.id)
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
@@ -167,8 +167,6 @@ def new_conversation(request):
                             request_type=1,
                             request_value='default',
                             created_on=now(),
-                            modified_on=now(),
-                            notification_status=1,
                             conversation=existing_conversation
                         )
                         new_message.save()
@@ -187,13 +185,12 @@ def new_conversation(request):
                         request_type=1,
                         request_value='default',
                         created_on=now(),
-                        modified_on=now(),
-                        notification_status=1,
                         conversation=new_conversation_object
                     )
                     new_message.save()
                     new_conversation_object.latest_message = message
                     new_conversation_object.save()
+
                 return redirect('conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
         except User.DoesNotExist:
@@ -205,8 +202,10 @@ def new_conversation(request):
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
 
+
 def old_conversation(request):
     return render(request, 'messagesApp/conversation.html')
+
 
 def rate_user(request, conversation_id):
     if request.method == 'POST':

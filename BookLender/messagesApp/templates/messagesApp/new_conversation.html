@@ -18,7 +18,7 @@
     <form action="{% url 'new_conversation' %}" method="post">
         {% csrf_token %}
         <label for="recipient">Recipient:</label>
-        <input type="text" name="recipient" id="recipient">
+        <input type="text" name="recipient" id="recipient" value="{{ request.GET.recipient }}" readonly>
         <br>
         <label for="message">Message:</label>
         <textarea name="message" id="message" cols="30" rows="10"></textarea>
