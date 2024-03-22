@@ -157,7 +157,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_URL = '/main/login'
+LOGIN_URL = '/login'
 
 # Handle Media files
 MEDIA_URL = '/media/'
@@ -172,5 +172,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
-LOGIN_URL = '/main/login/'
+LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'

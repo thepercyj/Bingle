@@ -1,10 +1,14 @@
 // JavaScript function to open a specified modal by ID
 function openViewModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
-    populateTable();
+    //populateTable();
 }
 
 function openBookModal(modalId) {
+    document.getElementById(modalId).style.display = 'flex';
+}
+
+function openLibraryModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
 }
 
@@ -45,7 +49,7 @@ $(document).ready(function(){
             success: function(response){
                 if(response.success){
                     // Redirect or do something on success
-                    window.location.href = "{% url 'profile' %}";
+                    window.location.href = "";
                 } else {
                     // Show error message in modal
                     $('#error-message').text(response.error);
@@ -71,3 +75,25 @@ $(document).ready(function(){
         }
     });
 });
+
+// Function to show search results
+function showSearchResults() {
+    document.getElementById('search-results').style.display = 'block';
+}
+
+// Function to hide search results
+function hideSearchResults() {
+    document.getElementById('search-results').style.display = 'none';
+}
+
+// Event listener for form submission
+document.getElementById('search-form').addEventListener('submit', function(event) {
+    // Show search results when the form is submitted
+    showSearchResults();
+});
+
+
+function hideTable() {
+    document.getElementById('user-profile-table').style.display = 'none';
+}
+

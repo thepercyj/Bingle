@@ -7,7 +7,7 @@
 <body>
 <p> Welcome, {{ request.user.username }}</p>
 {% for conversation in conversations %}
-    <a href={% url 'conversation' conversation.id %}>
+    <a href="{% url 'conversation' conversation.id %}">
     <div>
         {% if conversation.id_1 == our_profile %}
             Username: {{ conversation.id_2.user.username }}<br>

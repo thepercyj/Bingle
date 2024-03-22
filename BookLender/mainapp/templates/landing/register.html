@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
+{% load crispy_forms_tags %}
+
 <html>
 <head>
     <title>Register | ACS Group 6</title>
@@ -17,18 +19,19 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
-<body style="height: 100vh; background-image: url({% static 'mainapp/images/register-background.webp' %}); background-repeat: no-repeat; background-position: cover; background-size: cover; backdrop-filter: blur(2.5px);">
-<div class="container h-100">
-    <div class="d-flex align-items-center justify-content-center h-100">
+<body style="background-image: url({% static 'mainapp/images/register-background.webp' %}); background-repeat: no-repeat; background-position: cover; background-size: cover; backdrop-filter: blur(2.5px);">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center-reg ">
         <div class="card" style="border-radius: 7px; opacity: 0.9;">
             <div class="card-header">
                 <h2 class="form-title mt-3" id="signup"
                     style="color:black; font-family:sans-serif; font-size: 1.85rem;">CREATE AN ACCOUNT</h2>
             </div>
             <div class="card-body">
+                {% load crispy_forms_tags %}
                 <form method="post" action="{% url 'register' %}">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    {{ form |crispy }}
                     <!--<div class="d-flex">
 
                         <div class="input-group form-group mr-1">
