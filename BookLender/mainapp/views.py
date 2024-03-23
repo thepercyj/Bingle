@@ -1,23 +1,21 @@
 from io import BytesIO
 from PIL import Image
 from django.contrib.messages import success
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification
 from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
 from django.db.models import Q, F
+from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
-from django.http import HttpResponseBadRequest
 from BookLender import settings
+import json
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -95,7 +93,9 @@ def sample(request):
 
 
 def chat(request):
-    return render(request, 'chat.html')
+    conversations, our_profile = get_conversation_list(request)
+    return render(request, 'chat.html', {'conversations': conversations,
+             'our_profile': our_profile})
 
 
 def register(request):

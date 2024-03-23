@@ -5,7 +5,7 @@
 <head>
     {%load static%}
 
-    <title>Chat | Able Pro Dashboard Template</title>
+    <title>Chat | Bingle</title>
     <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -1340,6 +1340,7 @@
                                             <div class="scroll-block">
                                                 <div class="card-body p-0">
                                                     <div class="list-group list-group-flush">
+
                                                         <a href="#" class="list-group-item list-group-item-action p-3">
                                                             <div class="media align-items-center">
                                                                 <div class="chat-avtar">
@@ -1361,6 +1362,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
+
                                                         <a href="#" class="list-group-item list-group-item-action p-3">
                                                             <div class="media align-items-center">
                                                                 <div class="chat-avtar">
@@ -1383,141 +1385,41 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="list-group-item list-group-item-action p-3">
-                                                            <div class="media align-items-center">
-                                                                <div class="chat-avtar">
-                                                                    <img class="rounded-circle img-fluid wid-40"
-                                                                        src="../assets/images/user/avatar-3.jpg"
-                                                                        alt="User image">
-                                                                    <div class="bg-secondary bg-opacity-50 chat-badge">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="media-body mx-2">
-                                                                    <h6 class="mb-0">Lazaro
-                                                                        <span
-                                                                            class="float-end text-sm text-muted f-w-400">Yesterday</span>
-                                                                    </h6>
-                                                                    <span class="text-sm text-muted">Teamworks
-                                                                        <span class="float-end">
-                                                                            <span
-                                                                                class="chat-badge-status bg-secondary text-white bg-opacity-50"><i
-                                                                                    class="ti ti-check"></i></span>
-                                                                        </span></span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="#" class="list-group-item list-group-item-action p-3">
-                                                            <div class="media align-items-center">
-                                                                <div class="chat-avtar">
-                                                                    <img class="rounded-circle img-fluid wid-40"
-                                                                        src="../assets/images/user/avatar-3.jpg"
-                                                                        alt="User image">
-                                                                    <div class="bg-secondary bg-opacity-50 chat-badge">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="media-body mx-2">
-                                                                    <h6 class="mb-0">Adeline
-                                                                        <span
-                                                                            class="float-end text-sm text-muted f-w-400">4/25/2021</span>
-                                                                    </h6>
-                                                                    <span class="text-sm text-muted">Teamworks
-                                                                        <span class="float-end">
-                                                                            <span
-                                                                                class="chat-badge-status bg-secondary text-white bg-opacity-50"><i
-                                                                                    class="ti ti-check"></i></span>
-                                                                        </span></span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="#" class="list-group-item list-group-item-action p-3">
-                                                            <div class="media align-items-center">
-                                                                <div class="chat-avtar">
-                                                                    <img class="rounded-circle img-fluid wid-40"
-                                                                        src="../assets/images/user/avatar-1.jpg"
-                                                                        alt="User image">
-                                                                    <div class="bg-success chat-badge"></div>
-                                                                </div>
-                                                                <div class="media-body mx-2">
-                                                                    <h6 class="mb-0">John Doe <span
-                                                                            class="float-end text-sm text-muted f-w-400">2h
-                                                                            ago</span></h6>
-                                                                    <span class="text-sm text-muted">Technical
-                                                                        Department
-                                                                        <span class="float-end">
-                                                                            <span
-                                                                                class="chat-badge-status bg-danger text-white">9</span>
-                                                                        </span></span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
+                                                        {% for conversation in conversations %}
                                                         <a href="#" class="list-group-item list-group-item-action p-3">
                                                             <div class="media align-items-center">
                                                                 <div class="chat-avtar">
                                                                     <img class="rounded-circle img-fluid wid-40"
                                                                         src="../assets/images/user/avatar-2.jpg"
                                                                         alt="User image">
-                                                                    <div class="bg-secondary bg-opacity-50 chat-badge">
+                                                                    <div class="bg-success bg-opacity-50 chat-badge">
                                                                     </div>
                                                                 </div>
                                                                 <div class="media-body mx-2">
-                                                                    <h6 class="mb-0">Keefs <span
+                                                                    <h6 class="mb-0">
+                                                                        {% if conversation.id_1 == our_profile %}
+                                                                            {{ conversation.id_2.user.username }}<br>
+                                                                        {% else %}
+
+                                                                            {{ conversation.id_1.user.username }}<br>
+                                                                        {% endif %}
+
+                                                                        <span
                                                                             class="float-end text-sm text-muted f-w-400">3h
                                                                             ago</span></h6>
-                                                                    <span class="text-sm text-muted">Support Executive
+                                                                    <span
+                                                                        class="text-sm text-muted">{{ conversation.latest_message }}
                                                                         <span class="float-end">
                                                                             <span
                                                                                 class="chat-badge-status bg-success text-white"><i
                                                                                     class="ti ti-check"></i></span>
                                                                         </span></span>
+
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="list-group-item list-group-item-action p-3">
-                                                            <div class="media align-items-center">
-                                                                <div class="chat-avtar">
-                                                                    <img class="rounded-circle img-fluid wid-40"
-                                                                        src="../assets/images/user/avatar-3.jpg"
-                                                                        alt="User image">
-                                                                    <div class="bg-secondary bg-opacity-50 chat-badge">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="media-body mx-2">
-                                                                    <h6 class="mb-0">Lazaro
-                                                                        <span
-                                                                            class="float-end text-sm text-muted f-w-400">Yesterday</span>
-                                                                    </h6>
-                                                                    <span class="text-sm text-muted">Teamworks
-                                                                        <span class="float-end">
-                                                                            <span
-                                                                                class="chat-badge-status bg-secondary text-white bg-opacity-50"><i
-                                                                                    class="ti ti-check"></i></span>
-                                                                        </span></span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="#" class="list-group-item list-group-item-action p-3">
-                                                            <div class="media align-items-center">
-                                                                <div class="chat-avtar">
-                                                                    <img class="rounded-circle img-fluid wid-40"
-                                                                        src="../assets/images/user/avatar-3.jpg"
-                                                                        alt="User image">
-                                                                    <div class="bg-secondary bg-opacity-50 chat-badge">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="media-body mx-2">
-                                                                    <h6 class="mb-0">Adeline
-                                                                        <span
-                                                                            class="float-end text-sm text-muted f-w-400">4/25/2021</span>
-                                                                    </h6>
-                                                                    <span class="text-sm text-muted">Teamworks
-                                                                        <span class="float-end">
-                                                                            <span
-                                                                                class="chat-badge-status bg-secondary text-white bg-opacity-50"><i
-                                                                                    class="ti ti-check"></i></span>
-                                                                        </span></span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
+                                                        {% endfor %}
+
                                                     </div>
                                                 </div>
                                             </div>
