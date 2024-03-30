@@ -85,10 +85,11 @@ def new_home(request):
 def sample(request):
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
+    library = Book.objects.all()
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count}
+               'user_book_count': books_count, 'library':library}
     return render(request, 'new_home.html', context)
 
 
