@@ -18,6 +18,7 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.http import HttpResponseBadRequest
 from BookLender import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -294,6 +295,7 @@ def view_profile(request, profile_id):
 
     if request.method == 'POST':
         our_profile = UserProfile.objects.get(user=request.user)
+
         try:
             with transaction.atomic():
                 existing_conversation = Conversation.objects.filter(
@@ -313,7 +315,7 @@ def view_profile(request, profile_id):
                         conversation=existing_conversation
                     )
                     new_message.save()
-
+                    send_notification_to_user(viewprofile.user, 1)
                     return redirect('conversation', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
@@ -329,9 +331,9 @@ def view_profile(request, profile_id):
                         conversation=new_conversation_object
                     )
                     new_message.save()
-
                     # Increment notification counters for other user
                     viewprofile.increment_notification_counter()
+                    send_notification_to_user(viewprofile.user, 1)
 
                     if pre_message:
                         notify_user(request, pre_message)
@@ -345,7 +347,7 @@ def view_profile(request, profile_id):
             return redirect('search')
 
     return render(request, 'users_profiles.html',
-                  {'viewprofile': viewprofile, 'pre_message': pre_message})
+                  {'viewprofile': viewprofile, 'pre_message': pre_message, 'notifications': notifications})
 
 
 def get_pre_message_content(request, user):
@@ -354,6 +356,24 @@ def get_pre_message_content(request, user):
         if notification.notify_value == 'Simple Message':
             return f"{user} {notification.details}"
     return None
+
+
+def get_notification_details(notify_type):
+    try:
+        # Retrieve an existing notification by type
+        notification = Notification.objects.filter(notify_type=notify_type).first()
+        if notification:
+            return notification.details
+        else:
+            return "Default notification message."
+    except ObjectDoesNotExist:
+        return "Notification type not found."
+
+
+def send_notification_to_user(recipient, notify_type):
+    # Fetch the notification details from existing entries
+    message_detail = get_notification_details(notify_type)
+    print(f"Sending notification to {recipient}: {message_detail}")
 
 
 @login_required_message
@@ -419,6 +439,7 @@ def borrow(request, book_id):
                             conversation=existing_conversation
                         )
                         new_message.save()
+
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
 
@@ -440,12 +461,9 @@ def borrow(request, book_id):
                             conversation=new_conversation_object
                         )
                         new_message.save()
-
                         selected_owner.increment_notification_counter()
+                        send_notification_to_user(selected_owner.user, 2)
 
-                        # Display a popup alert to both parties
-                        messages.success(request, pre_message_content)
-                        return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
                 return redirect('library')
@@ -453,4 +471,4 @@ def borrow(request, book_id):
             messages.error(request, 'Please select an owner.')
             return redirect('borrow', book_id=book_id)
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books})
+    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'notifications': notifications})
