@@ -292,6 +292,7 @@ def view_profile(request, profile_id):
     user = request.user
     pre_message = get_pre_message_content(request, user)
     print(pre_message)
+    notifications = Notification.object.all()
 
     if request.method == 'POST':
         our_profile = UserProfile.objects.get(user=request.user)
@@ -333,7 +334,6 @@ def view_profile(request, profile_id):
                     new_message.save()
                     # Increment notification counters for other user
                     viewprofile.increment_notification_counter()
-                    send_notification_to_user(viewprofile.user, 1)
 
                     if pre_message:
                         notify_user(request, pre_message)

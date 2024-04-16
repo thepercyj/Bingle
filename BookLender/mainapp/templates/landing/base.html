@@ -50,7 +50,7 @@
                             {% if notifications %}
                             <ul class="sub-menu">
                                 {% for notification in notifications %}
-                                <li>{{ user.username }} {{ notification.details }}</li>
+                                <li>{{ notification.details }}</li>
                                 {% endfor %}
                             </ul>
                             {% else %}
