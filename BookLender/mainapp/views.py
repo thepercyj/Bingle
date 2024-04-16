@@ -294,6 +294,7 @@ def view_profile(request, profile_id):
     print(pre_message)
     notifications = Notification.object.all()
 
+
     if request.method == 'POST':
         our_profile = UserProfile.objects.get(user=request.user)
 
