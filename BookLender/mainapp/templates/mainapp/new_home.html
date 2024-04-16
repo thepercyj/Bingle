@@ -606,7 +606,7 @@
             <!-- [ breadcrumb ] end -->
             <!-- [ Main Content ] start -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 col-xxl-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -632,45 +632,6 @@
                                 </div>
                             </div>
 
-                            <div class="modal fade bd-example-modal-lg" id="exampleModalToggle" aria-hidden="true"
-                                aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalToggleLabel"><span
-                                                    class="badge bg-danger">1</span>
-                                                First Modal </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body"> Show a second modal and hide this one with the button
-                                            below. </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-light-primary" data-bs-target="#exampleModalToggle2"
-                                                data-bs-toggle="modal" data-bs-dismiss="modal">Open second
-                                                modal</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade bd-example-modal-lg" id="exampleModalToggle2" aria-hidden="true"
-                                aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                        <form method="POST" action="/add-book/">
-                                            {% csrf_token %}
-                                            <input class="btn btn-primary" type="submit" value="Submit">
-                                        </form>
-                                        <br>
-                                        <!-- <button
-                                            class="btn btn-primary d-flex align-items-center justify-content-center"
-                                            onclick="closeModal('add-book-modal')">Close</button> -->
-                                    </div>
-                                </div>
-                            </div>
-
                             <div id="book-modal" class="modal">
                                 <div class="modal-content">
                                     <h3 class="modal-black">My Library</h3>
@@ -679,58 +640,107 @@
                                         Add
                                     </button>
                                     <br>
-                                    <div class="user_books">
-                                        {% csrf_token %}
-                                        {% if user_books %}
-                                        <table class="table">
-                                            <tr>
-                                                <th>Title</th>
-                                                <th>Author</th>
-                                                <th>Genre</th>
-                                                <th>Publish Date</th>
-                                                <th>Currently With</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            {% for user_book in user_books %}
-                                            <tr>
-                                                <td>{{ user_book.book_id.book_title }}</td>
-                                                <td>{{ user_book.book_id.book_author }}</td>
-                                                <td>{{ user_book.book_id.genre }}</td>
-                                                <td>{{ user_book.book_id.published_date }}</td>
-                                                <td>{{ user_book.currently_with }}</td>
-                                                <td>
-                                                    <form action="/remove-book/" method="post">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="book_id"
-                                                            value="{{ user_book.id }}" />
-                                                        <input type="submit" class="btn-close" value="" />
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </table>
-                                        <div id="add-book-modal" class="modal">
-                                            <div class="modal-content">
-                                                <form method="POST" action="/add-book/">
-                                                    {% csrf_token %}
-                                                    <input class="btn btn-primary" type="submit" value="Submit">
-                                                </form>
-                                                <br>
-                                                <button
-                                                    class="btn btn-primary d-flex align-items-center justify-content-center"
-                                                    onclick="closeModal('add-book-modal')">Close</button>
-                                            </div>
-                                        </div>
-                                        {% else %}
-                                        <div>You don't have any books, getting adding!</div>
-                                        {% endif %}
-                                    </div>
+{#                                    <div class="user_books">#}
+{#                                        {% csrf_token %}#}
+{#                                        {% if user_books %}#}
+{#                                        <table class="table">#}
+{#                                            <tr>#}
+{#                                                <th>Title</th>#}
+{#                                                <th>Author</th>#}
+{#                                                <th>Genre</th>#}
+{#                                                <th>Publish Date</th>#}
+{#                                                <th>Currently With</th>#}
+{#                                                <th>Action</th>#}
+{#                                            </tr>#}
+{#                                            {% for user_book in user_books %}#}
+{#                                            <tr>#}
+{#                                                <td>{{ user_book.book_id.book_title }}</td>#}
+{#                                                <td>{{ user_book.book_id.book_author }}</td>#}
+{#                                                <td>{{ user_book.book_id.genre }}</td>#}
+{#                                                <td>{{ user_book.book_id.published_date }}</td>#}
+{#                                                <td>{{ user_book.currently_with }}</td>#}
+{#                                                <td>#}
+{#                                                    <form action="/remove-book/" method="post">#}
+{#                                                        {% csrf_token %}#}
+{#                                                        <input type="hidden" name="book_id"#}
+{#                                                            value="{{ user_book.id }}" />#}
+{#                                                        <input type="submit" class="btn-close" value="" />#}
+{#                                                    </form>#}
+{#                                                </td>#}
+{#                                            </tr>#}
+{#                                            {% endfor %}#}
+{#                                        </table>#}
+{#                                        <div id="add-book-modal" class="modal">#}
+{#                                            <div class="modal-content">#}
+{#                                                <form method="POST" action="/add-book/">#}
+{#                                                    {% csrf_token %}#}
+{#                                                    <input class="btn btn-primary" type="submit" value="Submit">#}
+{#                                                </form>#}
+{#                                                <br>#}
+{#                                                <button#}
+{#                                                    class="btn btn-primary d-flex align-items-center justify-content-center"#}
+{#                                                    onclick="closeModal('add-book-modal')">Close</button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                        {% else %}#}
+{#                                        <div>You don't have any books, getting adding!</div>#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
                                     <button class="btn btn-primary d-flex align-items-center justify-content-center"
                                         onclick="closeModal('book-modal')">Close</button>
                                 </div>
                             </div>
 
-                            <a data-bs-toggle="modal" href="#exampleModalToggle" role="button">
+                            <div id="library-modal" class="modal">
+                                <div class="modal-content-lib">
+                                    <div class="library">
+                                        {% csrf_token %}
+                                        {% if library %}
+                                        <h3 class="modal-black">Bingle Store</h3>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-borderless mb-0">
+                                                <tr>
+                                                    <th>Book Title</th>
+                                                    <th>Book Author</th>
+                                                    <th>Current Owner(s)</th>
+                                                    <th>Action</th>
+                                                </tr>
+{#                                                {% for book in library %}#}
+{#                                                {% if book.user_books_book.first.owner_book_id.user != request.user %}#}
+{#                                                <tr>#}
+{#                                                    <td>{{ book.book_title }}</td>#}
+{#                                                    <td>{{ book.book_author }}</td>#}
+{#                                                    <td>#}
+{#                                                        {% for user_book in book.user_books_book.all %}#}
+{#                                                        {% if user_book.currently_with %}#}
+{#                                                        {{ user_book.currently_with.user }}#}
+{#                                                        {% if not forloop.last %}, {% endif %}#}
+{#                                                        {% else %}#}
+{#                                                        Not currently owned#}
+{#                                                        {% endif %}#}
+{#                                                        {% empty %}#}
+{#                                                        Not currently owned#}
+{#                                                        {% endfor %}#}
+{#                                                    </td>#}
+{#                                                    <td>#}
+{#                                                        <form action="{% url 'borrow' book.id %}" method="post">#}
+{#                                                            {% csrf_token %}#}
+{#                                                            <input type="submit" class="btn btn-primary"#}
+{#                                                                value="Borrow" />#}
+{#                                                        </form>#}
+{#                                                    </td>#}
+{#                                                </tr>#}
+{#                                                {% endif %}#}
+{#                                                {% endfor %}#}
+                                            </table>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <button class="close-btn" onclick="closeModal('library-modal')">Close</button>
+                                </div>
+                            </div>
+
+                            <a class=" nav-link" href="#" onclick="openViewModal('book-modal')">
                                 <div class="bg-body p-3 mt-3 rounded">
                                     <div class="mt-3 row align-items-center">
                                         <div class="col-7">
@@ -752,7 +762,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-xxl-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -772,52 +782,6 @@
                                             <path opacity="0.6" d="M8 17H16" stroke="#E58A00" stroke-width="1.5"
                                                 stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
-                                    </div>
-                                </div>
-                                <div id="library-modal" class="modal">
-                                    <div class="modal-content-lib">
-                                        <div class="library">
-                                            {% csrf_token %}
-                                            {% if library %}
-                                            <h3 class="modal-black">Bingle Store</h3>
-                                            <table class="table">
-                                                <tr>
-                                                    <th>Book Title</th>
-                                                    <th>Book Author</th>
-                                                    <th>Current Owner(s)</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                {% for book in library %}
-                                                {% if book.user_books_book.first.owner_book_id.user != request.user %}
-                                                <tr>
-                                                    <td>{{ book.book_title }}</td>
-                                                    <td>{{ book.book_author }}</td>
-                                                    <td>
-                                                        {% for user_book in book.user_books_book.all %}
-                                                        {% if user_book.currently_with %}
-                                                        {{ user_book.currently_with.user }}
-                                                        {% if not forloop.last %}, {% endif %}
-                                                        {% else %}
-                                                        Not currently owned
-                                                        {% endif %}
-                                                        {% empty %}
-                                                        Not currently owned
-                                                        {% endfor %}
-                                                    </td>
-                                                    <td>
-                                                        <form action="{% url 'borrow' book.id %}" method="post">
-                                                            {% csrf_token %}
-                                                            <input type="submit" class="btn btn-primary"
-                                                                value="Borrow" />
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                {% endif %}
-                                                {% endfor %}
-                                            </table>
-                                            {% endif %}
-                                        </div>
-                                        <button class="close-btn" onclick="closeModal('library-modal')">Close</button>
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
@@ -844,487 +808,400 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0">Total Income</h5>
-                            <div class="dropdown">
-                                <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="ti ti-dots-vertical f-18"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="#">Today</a>
-                                    <a class="dropdown-item" href="#">Weekly</a>
-                                    <a class="dropdown-item" href="#">Monthly</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="total-income-graph"></div>
-                        <div class="row g-3 mt-3">
-                            <div class="col-sm-6">
-                                <div class="bg-body p-3 rounded">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="flex-shrink-0">
-                                            <span class="p-1 d-block bg-primary rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 ms-2">
-                                            <p class="mb-0">Income</p>
-                                        </div>
-                                    </div>
-                                    <h6 class="mb-0">$23,876 <small class="text-muted"><i class="ti ti-chevrons-up"></i>
-                                            +$763,43</small></h6>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="bg-body p-3 rounded">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="flex-shrink-0">
-                                            <span class="p-1 d-block bg-warning rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 ms-2">
-                                            <p class="mb-0">Rent</p>
-                                        </div>
-                                    </div>
-                                    <h6 class="mb-0">$23,876 <small class="text-muted"><i class="ti ti-chevrons-up"></i>
-                                            +$763,43</small></h6>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="bg-body p-3 rounded">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="flex-shrink-0">
-                                            <span class="p-1 d-block bg-success rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 ms-2">
-                                            <p class="mb-0">Download</p>
-                                        </div>
-                                    </div>
-                                    <h6 class="mb-0">$23,876 <small class="text-muted"><i class="ti ti-chevrons-up"></i>
-                                            +$763,43</small></h6>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="bg-body p-3 rounded">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="flex-shrink-0">
-                                            <span class="p-1 d-block bg-light-primary rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1 ms-2">
-                                            <p class="mb-0">Views</p>
-                                        </div>
-                                    </div>
-                                    <h6 class="mb-0">$23,876 <small class="text-muted"><i class="ti ti-chevrons-up"></i>
-                                            +$763,43</small></h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body border-bottom pb-0">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0">Transactions</h5>
-                            <div class="dropdown">
-                                <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="ti ti-dots-vertical f-18"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="#">Today</a>
-                                    <a class="dropdown-item" href="#">Weekly</a>
-                                    <a class="dropdown-item" href="#">Monthly</a>
-                                </div>
-                            </div>
-                        </div>
-                        <ul class="nav nav-tabs analytics-tab" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="analytics-tab-1" data-bs-toggle="tab"
-                                    data-bs-target="#analytics-tab-1-pane" type="button" role="tab"
-                                    aria-controls="analytics-tab-1-pane" aria-selected="true">All
-                                    Transaction</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="analytics-tab-2" data-bs-toggle="tab"
-                                    data-bs-target="#analytics-tab-2-pane" type="button" role="tab"
-                                    aria-controls="analytics-tab-2-pane" aria-selected="false">Success</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="analytics-tab-3" data-bs-toggle="tab"
-                                    data-bs-target="#analytics-tab-3-pane" type="button" role="tab"
-                                    aria-controls="analytics-tab-3-pane" aria-selected="false">Pending</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="analytics-tab-1-pane" role="tabpanel"
-                            aria-labelledby="analytics-tab-1" tabindex="0">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border"> AI </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Apple Inc.</h6>
-                                                    <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">$210,000</h6>
-                                                    <p class="text-danger mb-0"><i class="ti ti-arrow-down-left"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border" data-bs-toggle="tooltip"
-                                                data-bs-title="10,000 Tracks"><span>SM</span></div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Spotify Music</h6>
-                                                    <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">- 10,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        30.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border bg-light-primary" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>MD</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Medium</h6>
-                                                    <p class="text-muted mb-0"><small>06:30 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">-26</h6>
-                                                    <p class="text-warning mb-0"><i class="ti ti-arrows-left-right"></i>
-                                                        5%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>U</span> </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Uber</h6>
-                                                    <p class="text-muted mb-0"><small>08:40 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">+210,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border bg-light-warning" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>OC</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Ola Cabs</h6>
-                                                    <p class="text-muted mb-0"><small>07:40 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">+210,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="analytics-tab-2-pane" role="tabpanel"
-                            aria-labelledby="analytics-tab-2" tabindex="0">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>U</span> </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Uber</h6>
-                                                    <p class="text-muted mb-0"><small>08:40 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">+210,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border bg-light-warning" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>OC</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Ola Cabs</h6>
-                                                    <p class="text-muted mb-0"><small>07:40 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">+210,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border">AI</div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Apple Inc.</h6>
-                                                    <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">$210,000</h6>
-                                                    <p class="text-danger mb-0"><i class="ti ti-arrow-down-left"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border" data-bs-toggle="tooltip"
-                                                data-bs-title="10,000 Tracks"><span>SM</span></div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Spotify Music</h6>
-                                                    <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">- 10,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        30.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border bg-light-primary" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>MD</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Medium</h6>
-                                                    <p class="text-muted mb-0"><small>06:30 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">-26</h6>
-                                                    <p class="text-warning mb-0"><i class="ti ti-arrows-left-right"></i>
-                                                        5%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="analytics-tab-3-pane" role="tabpanel"
-                            aria-labelledby="analytics-tab-3" tabindex="0">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border" data-bs-toggle="tooltip"
-                                                data-bs-title="10,000 Tracks"><span>SM</span></div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Spotify Music</h6>
-                                                    <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">- 10,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        30.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border bg-light-primary" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>MD</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Medium</h6>
-                                                    <p class="text-muted mb-0"><small>06:30 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">-26</h6>
-                                                    <p class="text-warning mb-0"><i class="ti ti-arrows-left-right"></i>
-                                                        5%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>U</span> </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Uber</h6>
-                                                    <p class="text-muted mb-0"><small>08:40 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">+210,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border"> AI </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Apple Inc.</h6>
-                                                    <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">$210,000</h6>
-                                                    <p class="text-danger mb-0"><i class="ti ti-arrow-down-left"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-s border bg-light-warning" data-bs-toggle="tooltip"
-                                                data-bs-title="143 Posts"><span>OC</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row g-1">
-                                                <div class="col-6">
-                                                    <h6 class="mb-0">Ola Cabs</h6>
-                                                    <p class="text-muted mb-0"><small>07:40 pm</small></p>
-                                                </div>
-                                                <div class="col-6 text-end">
-                                                    <h6 class="mb-1">+210,000</h6>
-                                                    <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i>
-                                                        10.6%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <div class="d-grid">
-                                    <button class="btn btn-outline-secondary d-grid"><span
-                                            class="text-truncate w-100">View all Transaction History</span></button>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="d-grid">
-                                    <button class="btn btn-primary d-grid"><span class="text-truncate w-100">Create
-                                            new Transaction</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body border-bottom pb-0">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="mb-0">Transactions</h5>
+                                <div class="dropdown">
+                                    <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="ti ti-dots-vertical f-18"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">Today</a>
+                                        <a class="dropdown-item" href="#">Weekly</a>
+                                        <a class="dropdown-item" href="#">Monthly</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="nav nav-tabs analytics-tab" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="analytics-tab-1" data-bs-toggle="tab"
+                                        data-bs-target="#analytics-tab-1-pane" type="button" role="tab"
+                                        aria-controls="analytics-tab-1-pane" aria-selected="true">All
+                                        Transaction</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="analytics-tab-2" data-bs-toggle="tab"
+                                        data-bs-target="#analytics-tab-2-pane" type="button" role="tab"
+                                        aria-controls="analytics-tab-2-pane" aria-selected="false">Success</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="analytics-tab-3" data-bs-toggle="tab"
+                                        data-bs-target="#analytics-tab-3-pane" type="button" role="tab"
+                                        aria-controls="analytics-tab-3-pane" aria-selected="false">Pending</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="analytics-tab-1-pane" role="tabpanel"
+                                aria-labelledby="analytics-tab-1" tabindex="0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border"> AI </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Apple Inc.</h6>
+                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">$210,000</h6>
+                                                        <p class="text-danger mb-0"><i
+                                                                class="ti ti-arrow-down-left"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"
+                                                    data-bs-title="10,000 Tracks"><span>SM</span></div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Spotify Music</h6>
+                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">- 10,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 30.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-light-primary"
+                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Medium</h6>
+                                                        <p class="text-muted mb-0"><small>06:30 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">-26</h6>
+                                                        <p class="text-warning mb-0"><i
+                                                                class="ti ti-arrows-left-right"></i> 5%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"
+                                                    data-bs-title="143 Posts"><span>U</span> </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Uber</h6>
+                                                        <p class="text-muted mb-0"><small>08:40 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">+210,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-light-warning"
+                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>OC</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Ola Cabs</h6>
+                                                        <p class="text-muted mb-0"><small>07:40 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">+210,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="analytics-tab-2-pane" role="tabpanel"
+                                aria-labelledby="analytics-tab-2" tabindex="0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"
+                                                    data-bs-title="143 Posts"><span>U</span> </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Uber</h6>
+                                                        <p class="text-muted mb-0"><small>08:40 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">+210,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-light-warning"
+                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>OC</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Ola Cabs</h6>
+                                                        <p class="text-muted mb-0"><small>07:40 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">+210,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border">AI</div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Apple Inc.</h6>
+                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">$210,000</h6>
+                                                        <p class="text-danger mb-0"><i
+                                                                class="ti ti-arrow-down-left"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"
+                                                    data-bs-title="10,000 Tracks"><span>SM</span></div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Spotify Music</h6>
+                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">- 10,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 30.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-light-primary"
+                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Medium</h6>
+                                                        <p class="text-muted mb-0"><small>06:30 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">-26</h6>
+                                                        <p class="text-warning mb-0"><i
+                                                                class="ti ti-arrows-left-right"></i> 5%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="analytics-tab-3-pane" role="tabpanel"
+                                aria-labelledby="analytics-tab-3" tabindex="0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"
+                                                    data-bs-title="10,000 Tracks"><span>SM</span></div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Spotify Music</h6>
+                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">- 10,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 30.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-light-primary"
+                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Medium</h6>
+                                                        <p class="text-muted mb-0"><small>06:30 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">-26</h6>
+                                                        <p class="text-warning mb-0"><i
+                                                                class="ti ti-arrows-left-right"></i> 5%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"
+                                                    data-bs-title="143 Posts"><span>U</span> </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Uber</h6>
+                                                        <p class="text-muted mb-0"><small>08:40 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">+210,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border"> AI </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Apple Inc.</h6>
+                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">$210,000</h6>
+                                                        <p class="text-danger mb-0"><i
+                                                                class="ti ti-arrow-down-left"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-light-warning"
+                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>OC</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0">Ola Cabs</h6>
+                                                        <p class="text-muted mb-0"><small>07:40 pm</small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <h6 class="mb-1">+210,000</h6>
+                                                        <p class="text-success mb-0"><i
+                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-secondary d-grid"><span
+                                                class="text-truncate w-100">View all Transaction History</span></button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary d-grid"><span class="text-truncate w-100">Create
+                                                new Transaction</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- [ Main Content ] end -->
         </div>
-        <!-- [ Main Content ] end -->
-    </div>
     </div>
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
