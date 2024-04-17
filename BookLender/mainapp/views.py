@@ -1,24 +1,21 @@
 from io import BytesIO
 from PIL import Image
 from django.contrib.messages import success
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification
 from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
 from django.db.models import Q, F
+from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
-from django.http import HttpResponseBadRequest
 from BookLender import settings
-from django.core.exceptions import ObjectDoesNotExist
+import json
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -76,11 +73,30 @@ def forgetpass(request):
 
 
 def new_home(request):
-    return render(request, 'newhome.html')
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    books_count = user_books.count()  # Count the number of books
+    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count}
+
+    return render(request, 'newhome.html', context)
+
+def sample(request):
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    library = Book.objects.all()
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    books_count = user_books.count()  # Count the number of books
+    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count, 'library':library}
+    return render(request, 'new_home.html', context)
 
 
 def chat(request):
-    return render(request, 'chat.html')
+    conversations, our_profile = get_conversation_list(request)
+    return render(request, 'chat.html', {'conversations': conversations,
+             'our_profile': our_profile})
 
 
 def register(request):
@@ -292,12 +308,9 @@ def view_profile(request, profile_id):
     user = request.user
     pre_message = get_pre_message_content(request, user)
     print(pre_message)
-    notifications = Notification.object.all()
-
 
     if request.method == 'POST':
         our_profile = UserProfile.objects.get(user=request.user)
-
         try:
             with transaction.atomic():
                 existing_conversation = Conversation.objects.filter(
@@ -317,7 +330,7 @@ def view_profile(request, profile_id):
                         conversation=existing_conversation
                     )
                     new_message.save()
-                    send_notification_to_user(viewprofile.user, 1)
+
                     return redirect('conversation', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
@@ -333,6 +346,7 @@ def view_profile(request, profile_id):
                         conversation=new_conversation_object
                     )
                     new_message.save()
+
                     # Increment notification counters for other user
                     viewprofile.increment_notification_counter()
 
@@ -348,7 +362,7 @@ def view_profile(request, profile_id):
             return redirect('search')
 
     return render(request, 'users_profiles.html',
-                  {'viewprofile': viewprofile, 'pre_message': pre_message, 'notifications': notifications})
+                  {'viewprofile': viewprofile, 'pre_message': pre_message})
 
 
 def get_pre_message_content(request, user):
@@ -357,24 +371,6 @@ def get_pre_message_content(request, user):
         if notification.notify_value == 'Simple Message':
             return f"{user} {notification.details}"
     return None
-
-
-def get_notification_details(notify_type):
-    try:
-        # Retrieve an existing notification by type
-        notification = Notification.objects.filter(notify_type=notify_type).first()
-        if notification:
-            return notification.details
-        else:
-            return "Default notification message."
-    except ObjectDoesNotExist:
-        return "Notification type not found."
-
-
-def send_notification_to_user(recipient, notify_type):
-    # Fetch the notification details from existing entries
-    message_detail = get_notification_details(notify_type)
-    print(f"Sending notification to {recipient}: {message_detail}")
 
 
 @login_required_message
@@ -440,7 +436,6 @@ def borrow(request, book_id):
                             conversation=existing_conversation
                         )
                         new_message.save()
-
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
 
@@ -462,9 +457,12 @@ def borrow(request, book_id):
                             conversation=new_conversation_object
                         )
                         new_message.save()
-                        selected_owner.increment_notification_counter()
-                        send_notification_to_user(selected_owner.user, 2)
 
+                        selected_owner.increment_notification_counter()
+
+                        # Display a popup alert to both parties
+                        messages.success(request, pre_message_content)
+                        return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
                 return redirect('library')
@@ -472,4 +470,4 @@ def borrow(request, book_id):
             messages.error(request, 'Please select an owner.')
             return redirect('borrow', book_id=book_id)
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'notifications': notifications})
+    return render(request, 'borrow.html', {'book': book, 'user_books': user_books})

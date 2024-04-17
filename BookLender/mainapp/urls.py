@@ -20,6 +20,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('forgetpass/', views.forgetpass, name='forgetpass'),
     path('new_home/', views.new_home, name='new_home'),
+    path('sample/', views.sample, name='sample'),
     path('chat/', views.chat, name='chat'),
     path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
     path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
