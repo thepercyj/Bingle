@@ -146,6 +146,15 @@ def profile(request):
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile)
 
+    # Search functionality
+    user_books_search_query = request.GET.get('user_books_search')
+    if user_books_search_query:
+        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
+
+    library_search_query = request.GET.get('library_search')
+    if library_search_query:
+        library = library.filter(book_title__icontains=library_search_query)
+
     # Pagination for user_books
     page_number = request.GET.get('page')
     paginator = Paginator(user_books, 10)  # Show 10 user_books per page

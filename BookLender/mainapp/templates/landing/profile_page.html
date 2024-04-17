@@ -20,6 +20,10 @@
             <div id="book-modal" class="modal">
                 <div class="modal-content">
                     <h3 class="modal-black">My Library</h3>
+                    <input type="text" id="searchUserBooks" placeholder="Search User Books">
+                    <button class="btn btn-primary" onclick="searchUserBooks()">
+                        Search
+                    </button>
                     <button class="btn btn-primary-left" onclick="openBookModal('add-book-modal')">
                         Add
                     </button>
@@ -89,6 +93,10 @@
             <div id="library-modal" class="modal">
                 <div class="modal-content-lib">
                     <h3 class="modal-black">Bingle Store</h3>
+                    <input type="text" id="searchLibrary" placeholder="Search Library">
+                    <button class="btn btn-primary" onclick="searchLibrary()">
+                        Search
+                    </button>
                     <div class="library">
                         <table class="table">
                             <tr>
