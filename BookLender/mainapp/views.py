@@ -4,7 +4,7 @@ from django.contrib.messages import success
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-
+import json
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification
 from django.contrib import messages
@@ -18,6 +18,8 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.http import HttpResponseBadRequest
 from BookLender import settings
+
+from messagesApp.views import get_conversation_list, load_full_conversation, send_message, new_conversation, old_conversation
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -77,11 +79,34 @@ def listBook(request):
     return render(request, 'list-book.html')
 
 def new_home(request):
-    return render(request, 'newhome.html')
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    books_count = user_books.count()  # Count the number of books
+    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count}
+
+    return render(request, 'newhome.html', context)
+
+def sample(request):
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    books_count = user_books.count()  # Count the number of books
+    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count}
+    return render(request, 'index1.html', context)
 
 
 def chat(request):
-    return render(request, 'chat.html')
+    conversation_list = get_conversation_list(request) 
+    conversation_list_data = json.loads(conversation_list.content.decode('utf-8'))
+    # print("This is user List", type(conversation_list))
+    conversations = conversation_list_data.get('conversations', [])
+    our_profile_id = conversation_list_data.get('our_profile_id')
+    print("Conversations:", conversations)
+    context = {'conversations': conversations, 'our_profile_id': our_profile_id}
+    return render(request, 'mainapp/chat.html', context)
 
 
 def register(request):
