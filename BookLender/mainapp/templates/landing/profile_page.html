@@ -14,8 +14,8 @@
         </div>
         <div class="category_container">
             <div class="box">
-            </div>
 
+            </div>
 
             <div id="book-modal" class="modal">
                 <div class="modal-content">
@@ -25,8 +25,6 @@
                     </button>
                     <br>
                     <div class="user_books">
-                        {% csrf_token %}
-                        {% if user_books %}
                         <table class="table">
                             <tr>
                                 <th>Title</th>
@@ -52,7 +50,26 @@
                                 </td>
                             </tr>
                             {% endfor %}
+
                         </table>
+                        <!-- Pagination links for user_books -->
+                        <div class="pagination">
+                            <span class="step-links">
+                                {% if user_books.has_previous %}
+                                    <a href="?page=1">&laquo; first</a>
+                                    <a href="?page={{ user_books.previous_page_number }}">previous</a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ user_books.number }} of {{ user_books.paginator.num_pages }}.
+                                </span>
+
+                                {% if user_books.has_next %}
+                                    <a href="?page={{ user_books.next_page_number }}">next</a>
+                                    <a href="?page={{ user_books.paginator.num_pages }}">last &raquo;</a>
+                                {% endif %}
+                            </span>
+                        </div>
                         <div id="add-book-modal" class="modal">
                             <div class="modal-content">
                                 <form method="POST" action="/add-book/">
@@ -64,9 +81,6 @@
                                 <button class="close-btn" onclick="closeModal('add-book-modal')">Close</button>
                             </div>
                         </div>
-                        {% else %}
-                        <div>You don't have any books, getting adding!</div>
-                        {% endif %}
                     </div>
                     <button class="close-btn" onclick="closeModal('book-modal')">Close</button>
                 </div>
@@ -74,10 +88,8 @@
 
             <div id="library-modal" class="modal">
                 <div class="modal-content-lib">
+                    <h3 class="modal-black">Bingle Store</h3>
                     <div class="library">
-                        {% csrf_token %}
-                        {% if library %}
-                        <h3 class="modal-black">Bingle Store</h3>
                         <table class="table">
                             <tr>
                                 <th>Book Title</th>
@@ -112,7 +124,25 @@
                             {% endif %}
                             {% endfor %}
                         </table>
-                        {% endif %}
+                        <!-- Pagination links for library -->
+                        <div class="pagination">
+                            <span class="step-links">
+                                {% if library.has_previous %}
+                                    <a href="?library_page=1">&laquo; first</a>
+                                    <a href="?library_page={{ library.previous_page_number }}">previous</a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ library.number }} of {{ library.paginator.num_pages }}.
+                                </span>
+
+                                {% if library.has_next %}
+                                    <a href="?library_page={{ library.next_page_number }}">next</a>
+                                    <a href="?library_page={{ library.paginator.num_pages }}">last &raquo;</a>
+                                {% endif %}
+                            </span>
+                        </div>
+
                     </div>
                     <button class="close-btn" onclick="closeModal('library-modal')">Close</button>
                 </div>
@@ -122,7 +152,7 @@
             <div class="box">
                 {% if user_books %}
                 <h2>My Library</h2>
-                <h2><a class=" nav-link" href="#" onclick="openViewModal('book-modal')">{{ user_book_count }}</a></h2>
+                <h2><a class=" nav-link" href="#" onclick="openViewModal('book-modal')">{{ user_books_count|length }}</a></h2>
                 {% else %}
                 <h2>My Library</h2>
                 <h2><a class=" nav-link" href="#" onclick="openViewModal('book-modal')">0</a></h2>
@@ -131,7 +161,7 @@
             <div class="box">
                 {% if library %}
                 <h2>Bingle Store</h2>
-                <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">{{ library|length }}</a></h2>
+                <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">{{ lib_count|length }}</a></h2>
                 {% else %}
                 <h2>Bingle Store</h2>
                 <h2><a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">0</a></h2>

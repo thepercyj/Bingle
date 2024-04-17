@@ -2,7 +2,10 @@ from io import BytesIO
 from PIL import Image
 from django.contrib.messages import success
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification
 from django.contrib import messages
@@ -82,6 +85,7 @@ def new_home(request):
 
     return render(request, 'newhome.html', context)
 
+
 def sample(request):
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
@@ -89,14 +93,14 @@ def sample(request):
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library':library}
+               'user_book_count': books_count, 'library': library}
     return render(request, 'new_home.html', context)
 
 
 def chat(request):
     conversations, our_profile = get_conversation_list(request)
     return render(request, 'chat.html', {'conversations': conversations,
-             'our_profile': our_profile})
+                                         'our_profile': our_profile})
 
 
 def register(request):
@@ -137,11 +141,40 @@ def profile(request):
     form = BookForm(request.POST or None)
     user = request.user
     library = Book.objects.all()
+    lib_count = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    books_count = user_books.count()  # Count the number of books
-    context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library': library}
+    user_books_count = UserBook.objects.filter(owner_book_id=user_profile)
+
+    # Pagination for user_books
+    page_number = request.GET.get('page')
+    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
+    try:
+        user_books = paginator.page(page_number)
+    except PageNotAnInteger:
+        user_books = paginator.page(1)
+    except EmptyPage:
+        user_books = paginator.page(paginator.num_pages)
+
+    # Pagination for library
+    library_page = request.GET.get('library_page')
+    library_paginator = Paginator(library, 10)  # Show 10 books per page
+    try:
+        library = library_paginator.page(library_page)
+    except PageNotAnInteger:
+        library = library_paginator.page(1)
+    except EmptyPage:
+        library = library_paginator.page(library_paginator.num_pages)
+
+    context = {
+        'bookform': form,
+        'user_books': user_books,
+        'user_profile': user_profile,
+        'user': user,
+        'user_books_count': user_books_count,  # Update the count with user_books_count
+        'library': library,
+        'lib_count': lib_count,
+    }
     return render(request, 'profile_page.html', context)
 
 
