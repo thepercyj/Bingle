@@ -22,9 +22,21 @@ def generate_rec(request):
 
 
 def getborrowed(request):
+    response1 = UserProfile.objects.get(user=request.user)
     response = 19
     print(response)
-    return HttpResponse(str(response))  # Return response as HTTP response
+    return HttpResponse(str(response1))  # Return response as HTTP response
 
+def login_required_message(function):
+    """
+    Custom decorator to ensure that the user is logged in before accessing a page.
+    """
 
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to view this page.")
+            return login_required(function)(request, *args, **kwargs)
+        return function(request, *args, **kwargs)
+
+    return wrapper
 
