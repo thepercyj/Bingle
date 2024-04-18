@@ -69,6 +69,14 @@ openViewModal('book-modal')
 
 document.addEventListener("DOMContentLoaded", function() {
 const urlParams = new URLSearchParams(window.location.search);
+const book = urlParams.get('borrow');
+if (book === 'true') {
+openViewModal('borrow-modal')
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
 const picture = urlParams.get('picture');
 if (picture === 'true') {
 openUploadModal('picture-modal')
@@ -179,3 +187,11 @@ function searchLibrary() {
     var query = document.getElementById("searchLibrary").value;
     window.location.href = '/profile_page/?library_search=' + query;
 }
+
+
+document.getElementById('reveal-form').addEventListener('click', function() {
+    var selectedOwner = document.getElementById('owner').value;
+    if (selectedOwner) {
+        document.getElementById('booking-form').style.display = 'block';
+    }
+});

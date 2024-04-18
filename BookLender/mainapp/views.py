@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -145,6 +145,7 @@ def profile(request):
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile)
+    booking = Booking.objects.filter(owner_id=user_profile)
 
     # Search functionality
     user_books_search_query = request.GET.get('user_books_search')
@@ -183,6 +184,7 @@ def profile(request):
         'user_books_count': user_books_count,  # Update the count with user_books_count
         'library': library,
         'lib_count': lib_count,
+        'booking': booking,
     }
     return render(request, 'profile_page.html', context)
 
@@ -448,7 +450,7 @@ def borrow(request, book_id):
     """
     book = get_object_or_404(Book, id=book_id)
     user_books = book.user_books_book.all()
-
+    print('view is getting triggered')
     if request.method == 'POST':
         selected_owner_username = request.POST.get('owner')
 
@@ -480,7 +482,7 @@ def borrow(request, book_id):
                         new_message.save()
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
-
+                        print('I am reaching here before redirection')
                         return redirect('conversation', conversation_id=existing_conversation.id)
                     else:
                         # If conversation doesn't exist, create a new one
@@ -501,9 +503,9 @@ def borrow(request, book_id):
                         new_message.save()
 
                         selected_owner.increment_notification_counter()
-
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
+                        print('I am reaching here before redirection')
                         return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
@@ -513,3 +515,34 @@ def borrow(request, book_id):
             return redirect('borrow', book_id=book_id)
 
     return render(request, 'borrow.html', {'book': book, 'user_books': user_books})
+
+
+def save_borrow_request(request):
+
+    if request.method == 'POST':
+        selected_owner_id = request.POST.get('owner_id')
+        owner_id = UserProfile.objects.get(user__id=selected_owner_id)
+        our_borrower_id = request.POST.get('borrower_id')
+        borrower_id = UserProfile.objects.get(user__id=our_borrower_id)
+        userbook_id = request.POST.get('user_book_id')
+        user_book_id = get_object_or_404(UserBook, book_id=userbook_id)
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+
+        # Create a new Booking instance
+        booking = Booking(
+            owner_id=owner_id,
+            borrower_id=borrower_id,
+            from_date=from_date,
+            to_date=to_date,
+            returned=False,
+            user_book_id=user_book_id,
+        )
+
+        # Save the booking to the database
+        booking.save()
+        print('booking details saved')
+        messages.success(request, 'Borrow request saved successfully!')
+        return redirect('profile')  # Redirect to the profile page
+    else:
+        return HttpResponse('Invalid request method')

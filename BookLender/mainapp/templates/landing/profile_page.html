@@ -13,10 +13,47 @@
             </h2>
         </div>
         <div class="category_container">
-            <div class="box">
 
+            <div id="borrow-modal" class="modal">
+                <div class="modal-content">
+                    <h3 class="modal-black">Borrow Requests</h3>
+                    <div class="borrow">
+                        <table class="table">
+                            <tr>
+                                <th>Title</th>
+                                <th>Owner</th>
+                                <th>Borrower</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Actions</th>
+                            </tr>
+                            {% for booked in booking %}
+                            <tr>
+                                <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                                <td>{{ booked.owner_id }}</td>
+                                <td>{{ booked.borrower_id }}</td>
+                                <td>{{ booked.from_date }}</td>
+                                <td>{{ booked.to_date }}</td>
+                                <td>
+                                    <form action="/remove-book/" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="book_id" value="" />
+                                        <input type="submit" class="btn btn-success" value="Approve" />
+                                    </form>
+                                    <br>
+                                    <form action="/remove-book/" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="book_id" value="" />
+                                        <input type="submit" class="btn btn-danger " value="Deny" />
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+
+                    </div>
+                </div>
             </div>
-
             <div id="book-modal" class="modal">
                 <div class="modal-content">
                     <h3 class="modal-black">My Library</h3>
@@ -156,6 +193,15 @@
                 </div>
             </div>
 
+            <div class="box">
+                {% if user_books %}
+                <h2>Borrow Requests</h2>
+                <h2><a class=" nav-link" href="#" onclick="openViewModal('borrow-modal')">{{booking|length}}</a></h2>
+                {% else %}
+                <h2>Borrow Requests</h2>
+                <h2><a class=" nav-link" href="#" onclick="openViewModal('borrow-modal')">0</a></h2>
+                {% endif %}
+            </div>
 
             <div class="box">
                 {% if user_books %}
