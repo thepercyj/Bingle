@@ -22,10 +22,17 @@ def generate_rec(request):
 
 
 def getborrowed(request):
-    response1 = UserProfile.objects.get(user=request.user)
-    response = 19
-    print(response)
-    return HttpResponse(str(response1))  # Return response as HTTP response
+      
+    our_profile = UserProfile.objects.get(user=request.user)
+    borrow_messages = Message.objects.filter(Q(request_value ="Borrow Request") &
+        Q(id_1=our_profile) | Q(id_2=our_profile)
+    ).exclude(
+        Q(id_1=our_profile) & Q(id_2=our_profile)
+    ).select_related('id_1__user', 'id_2__user')
+    return JsonResponse({'message': list(borrow_messages.values()), 'our_profile_id': our_profile.id})
+    #response = 19
+    #print(response)
+    #return HttpResponse(str(response1))  # Return response as HTTP response
 
 def login_required_message(function):
     """
