@@ -22,8 +22,11 @@
         {% csrf_token %}
         {% for user_book in user_books %}
         {% if user_book.owner_book_id.user != request.user %}
+        <label for="user_book_id">User Book ID:</label>
         <input name="user_book_id" value="{{ user_book.id }}">
+        <label for="owner_id">Owner ID:</label>
         <input name="owner_id" value="{{ user_book.owner_book_id.user.id }}">
+        <label for="borrower_id">Borrower ID:</label>
         <input name="borrower_id" value="{{ request.user.id }}">
 
         <label for="from_date">From Date:</label>
