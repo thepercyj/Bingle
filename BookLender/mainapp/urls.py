@@ -20,6 +20,10 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('forgetpass/', views.forgetpass, name='forgetpass'),
     path('new_home/', views.new_home, name='new_home'),
+    path('sample/', views.sample, name='sample'),
     path('chat/', views.chat, name='chat'),
-    #path('users_profiles/', views.profiles, name='profiles'),
+    path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
+    path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
+    path('save_borrow_request/', views.save_borrow_request, name='save_borrow_request'),
+    path('test/', views.test, name='test'),
 ]

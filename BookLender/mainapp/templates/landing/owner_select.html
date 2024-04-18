@@ -1,0 +1,19 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+{% block title %} Borrow | Bingle {% endblock %}
+
+{% block content %}
+<h1>Select Owner to Borrow From</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="owner">Select Owner:</label>
+    <select name="owner" id="owner">
+        {% for user_book in user_books %}
+        {% if user_book.owner_book_id.user != request.user %}
+        <option value="{{ user_book.owner_book_id.user.username }}">{{ user_book.owner_book_id.user.username }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    <button type="submit">Initiate Borrow Request</button>
+</form>
+{% endblock %}

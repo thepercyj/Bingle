@@ -3,11 +3,11 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
-from mainapp.models import User, UserProfile, Message
+from mainapp.models import User, UserProfile, Message, Conversation
 from django.contrib import messages
-from mainapp.models import Conversation
+from django.core.serializers import serialize
 
 
 def login_required_message(function):
@@ -35,9 +35,8 @@ def get_conversation_list(request):
     ).exclude(
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
-
-    return render(request, "messagesApp/conversation_list.html", {'conversations': conversationList,
-                                                                  'our_profile': our_profile})
+    print("This is messagesApp", conversationList, our_profile)
+    return conversationList, our_profile
 
 
 @login_required_message
@@ -60,7 +59,8 @@ def load_full_conversation(request, conversation_id):
                                           ~Q(user=request.user))
 
         messages_list = Message.objects.filter(
-            Q(from_user=our_profile, to_user=their_profile) | Q(from_user=their_profile, to_user=our_profile)
+            Q(from_user=our_profile, to_user=their_profile) | Q(
+                from_user=their_profile, to_user=our_profile)
         ).select_related('from_user__user', 'to_user__user').order_by('created_on')
 
         for message in messages_list:
@@ -112,16 +112,16 @@ def send_message(request, conversation_id):
                 to_user=their_profile,
                 details=message,
                 request_type=1,
-                request_value='default',
+                request_value='Simple Message',
                 created_on=now(),
-                modified_on=now(),
-                notification_status=1,
                 conversation=conversation
             )
 
             new_message.save()
             conversation.latest_message = message
             conversation.save()
+            # Increment notification counters for both users
+            their_profile.increment_notification_counter()
             return redirect('conversation', conversation_id=conversation.id)
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
@@ -147,7 +147,8 @@ def new_conversation(request):
             our_profile = get_object_or_404(UserProfile, user=request.user)
             # Ensure the user is not trying to start a conversation with themselves
             if their_profile == our_profile:
-                messages.error(request, 'You cannot start a conversation with yourself.')
+                messages.error(
+                    request, 'You cannot start a conversation with yourself.')
                 return redirect('new_conversation')
 
             # Ensure the conversation does not already exist
@@ -167,8 +168,6 @@ def new_conversation(request):
                             request_type=1,
                             request_value='default',
                             created_on=now(),
-                            modified_on=now(),
-                            notification_status=1,
                             conversation=existing_conversation
                         )
                         new_message.save()
@@ -177,7 +176,8 @@ def new_conversation(request):
                     return redirect('conversation', conversation_id=existing_conversation.id)
 
                 # If the conversation does not exist, create a new conversation
-                new_conversation_object = Conversation(id_1=our_profile, id_2=their_profile)
+                new_conversation_object = Conversation(
+                    id_1=our_profile, id_2=their_profile)
                 new_conversation_object.save()
                 if message:
                     new_message = Message(
@@ -187,13 +187,12 @@ def new_conversation(request):
                         request_type=1,
                         request_value='default',
                         created_on=now(),
-                        modified_on=now(),
-                        notification_status=1,
                         conversation=new_conversation_object
                     )
                     new_message.save()
                     new_conversation_object.latest_message = message
                     new_conversation_object.save()
+
                 return redirect('conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
         except User.DoesNotExist:
@@ -205,8 +204,10 @@ def new_conversation(request):
         return render(request, 'messagesApp/new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
 
+
 def old_conversation(request):
     return render(request, 'messagesApp/conversation.html')
+
 
 def rate_user(request, conversation_id):
     if request.method == 'POST':
@@ -219,10 +220,12 @@ def rate_user(request, conversation_id):
         try:
             rating = int(rating)
             if rating < 1 or rating > 5:
-                messages.error(request, "Rating must be an integer between 1 and 5.")
+                messages.error(
+                    request, "Rating must be an integer between 1 and 5.")
                 return HttpResponseBadRequest("Rating must be an integer between 1 and 5.")
         except ValueError:
-            messages.error(request, "Invalid input. Rating must be an integer.")
+            messages.error(
+                request, "Invalid input. Rating must be an integer.")
             return HttpResponseBadRequest("Invalid input. Rating must be an integer.")
 
         current_rating = their_profile.review

@@ -7870,6 +7870,10 @@ button.bg-dark:focus {
   width: auto !important;
 }
 
+.hidden {
+    display: none;
+}
+
 .h-25 {
   height: 25% !important;
 }
