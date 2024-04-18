@@ -1,25 +1,24 @@
 from io import BytesIO
 from PIL import Image
 from django.contrib.messages import success
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-import json
+from django.template.loader import render_to_string
+
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking
 from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
 from django.db.models import Q, F
+from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
-from django.http import HttpResponseBadRequest
 from BookLender import settings
-
-from messagesApp.views import get_conversation_list, load_full_conversation, send_message, new_conversation, old_conversation
+import json
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -86,25 +85,22 @@ def new_home(request):
 
     return render(request, 'newhome.html', context)
 
+
 def sample(request):
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
+    library = Book.objects.all()
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
     books_count = user_books.count()  # Count the number of books
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count}
-    return render(request, 'index1.html', context)
+               'user_book_count': books_count, 'library': library}
+    return render(request, 'new_home.html', context)
 
 
 def chat(request):
-    conversation_list = get_conversation_list(request) 
-    conversation_list_data = json.loads(conversation_list.content.decode('utf-8'))
-    # print("This is user List", type(conversation_list))
-    conversations = conversation_list_data.get('conversations', [])
-    our_profile_id = conversation_list_data.get('our_profile_id')
-    print("Conversations:", conversations)
-    context = {'conversations': conversations, 'our_profile_id': our_profile_id}
-    return render(request, 'mainapp/chat.html', context)
+    conversations, our_profile = get_conversation_list(request)
+    return render(request, 'chat.html', {'conversations': conversations,
+                                         'our_profile': our_profile})
 
 
 def register(request):
@@ -145,11 +141,51 @@ def profile(request):
     form = BookForm(request.POST or None)
     user = request.user
     library = Book.objects.all()
+    lib_count = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    books_count = user_books.count()  # Count the number of books
-    context = {'bookform': form, 'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library': library}
+    user_books_count = UserBook.objects.filter(owner_book_id=user_profile)
+    booking = Booking.objects.filter(owner_id=user_profile)
+
+    # Search functionality
+    user_books_search_query = request.GET.get('user_books_search')
+    if user_books_search_query:
+        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
+
+    library_search_query = request.GET.get('library_search')
+    if library_search_query:
+        library = library.filter(book_title__icontains=library_search_query)
+
+    # Pagination for user_books
+    page_number = request.GET.get('page')
+    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
+    try:
+        user_books = paginator.page(page_number)
+    except PageNotAnInteger:
+        user_books = paginator.page(1)
+    except EmptyPage:
+        user_books = paginator.page(paginator.num_pages)
+
+    # Pagination for library
+    library_page = request.GET.get('library_page')
+    library_paginator = Paginator(library, 10)  # Show 10 books per page
+    try:
+        library = library_paginator.page(library_page)
+    except PageNotAnInteger:
+        library = library_paginator.page(1)
+    except EmptyPage:
+        library = library_paginator.page(library_paginator.num_pages)
+
+    context = {
+        'bookform': form,
+        'user_books': user_books,
+        'user_profile': user_profile,
+        'user': user,
+        'user_books_count': user_books_count,  # Update the count with user_books_count
+        'library': library,
+        'lib_count': lib_count,
+        'booking': booking,
+    }
     return render(request, 'profile_page.html', context)
 
 
@@ -414,7 +450,7 @@ def borrow(request, book_id):
     """
     book = get_object_or_404(Book, id=book_id)
     user_books = book.user_books_book.all()
-
+    print('view is getting triggered')
     if request.method == 'POST':
         selected_owner_username = request.POST.get('owner')
 
@@ -446,7 +482,7 @@ def borrow(request, book_id):
                         new_message.save()
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
-
+                        print('I am reaching here before redirection')
                         return redirect('conversation', conversation_id=existing_conversation.id)
                     else:
                         # If conversation doesn't exist, create a new one
@@ -467,9 +503,9 @@ def borrow(request, book_id):
                         new_message.save()
 
                         selected_owner.increment_notification_counter()
-
                         # Display a popup alert to both parties
                         messages.success(request, pre_message_content)
+                        print('I am reaching here before redirection')
                         return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
             except Exception as e:
                 messages.error(request, 'An error occurred.')
@@ -479,3 +515,34 @@ def borrow(request, book_id):
             return redirect('borrow', book_id=book_id)
 
     return render(request, 'borrow.html', {'book': book, 'user_books': user_books})
+
+
+def save_borrow_request(request):
+
+    if request.method == 'POST':
+        selected_owner_id = request.POST.get('owner_id')
+        owner_id = UserProfile.objects.get(user__id=selected_owner_id)
+        our_borrower_id = request.POST.get('borrower_id')
+        borrower_id = UserProfile.objects.get(user__id=our_borrower_id)
+        userbook_id = request.POST.get('user_book_id')
+        user_book_id = get_object_or_404(UserBook, book_id=userbook_id)
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+
+        # Create a new Booking instance
+        booking = Booking(
+            owner_id=owner_id,
+            borrower_id=borrower_id,
+            from_date=from_date,
+            to_date=to_date,
+            returned=False,
+            user_book_id=user_book_id,
+        )
+
+        # Save the booking to the database
+        booking.save()
+        print('booking details saved')
+        messages.success(request, 'Borrow request saved successfully!')
+        return redirect('profile')  # Redirect to the profile page
+    else:
+        return HttpResponse('Invalid request method')
