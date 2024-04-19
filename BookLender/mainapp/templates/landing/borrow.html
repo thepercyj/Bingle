@@ -4,9 +4,9 @@
 
 {% block content %}
 <h1>Select Owner to Borrow From</h1>
-<form method="post">
+<form method="post" id="borrow-form">
     {% csrf_token %}
-    <label for="owner">Select Owner:</label>
+    <label for="owner">Book Owner(s):</label>
     <select name="owner" id="owner">
         {% for user_book in user_books %}
         {% if user_book.owner_book_id.user != request.user %}
@@ -14,6 +14,26 @@
         {% endif %}
         {% endfor %}
     </select>
-    <button type="submit">Initiate Borrow Request</button>
+    <button type="button" id="reveal-form">Select</button>
 </form>
+
+<div id="booking-form" style="display: none;">
+    <form method="post" action="{% url 'save_borrow_request' %}">
+        {% csrf_token %}
+        {% for user_book in user_books %}
+        {% if user_book.owner_book_id.user != request.user %}
+        <input name="user_book_id" value="{{ user_book.id }}">
+        <input name="owner_id" value="{{ user_book.owner_book_id.user.id }}">
+        <input name="borrower_id" value="{{ request.user.id }}">
+
+        <label for="from_date">From Date:</label>
+        <input type="date" id="from_date" name="from_date" required>
+
+        <label for="to_date">To Date:</label>
+        <input type="date" id="to_date" name="to_date" required>
+        {% endif %}
+        {% endfor %}
+        <button type="submit">Submit Borrow Request</button>
+    </form>
+</div>
 {% endblock %}

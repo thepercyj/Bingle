@@ -3,12 +3,11 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
-from mainapp.models import User, UserProfile, Message
+from mainapp.models import User, UserProfile, Message, Conversation
 from django.contrib import messages
-from mainapp.models import Conversation
-from django.http import JsonResponse
+from django.core.serializers import serialize
 
 
 def login_required_message(function):
@@ -36,8 +35,8 @@ def get_conversation_list(request):
     ).exclude(
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
-
-    return JsonResponse({'conversations': list(conversationList.values()), 'our_profile_id': our_profile.id})
+    print("This is messagesApp", conversationList, our_profile)
+    return conversationList, our_profile
 
 
 @login_required_message
@@ -50,7 +49,7 @@ def load_full_conversation(request, conversation_id):
     conversation_id (int): The ID of the conversation between the two users.
 
     Returns:
-    JsonResponse: Returns the messages list and conversation details as JSON.
+    HttpResponse: Renders the conversation page with the messages between the two users.
     """
     try:
         our_profile = UserProfile.objects.get(user=request.user)
@@ -64,12 +63,13 @@ def load_full_conversation(request, conversation_id):
                 from_user=their_profile, to_user=our_profile)
         ).select_related('from_user__user', 'to_user__user').order_by('created_on')
 
-        messages_data = [{'details': message.details, 'created_on': message.created_on,
-                          'is_from_our_user': message.from_user == our_profile} for message in messages_list]
+        for message in messages_list:
+            message.is_from_our_user = (message.from_user == our_profile)
 
-        return JsonResponse({'messages': messages_data, 'conversation_id': conversation_id})
+        return render(request, 'messagesApp/conversation.html',
+                      {'messages': messages_list, 'conversation': conversation})
     except UserProfile.DoesNotExist:
-        return JsonResponse({'error': 'User profile not found'}, status=404)
+        return HttpResponse("User profile not found", status=404)
 
 
 @login_required_message
@@ -83,7 +83,7 @@ def send_message(request, conversation_id):
     conversation_id (int): The ID of the conversation between the two users.
 
     Returns:
-    JsonResponse: Returns the status of message sending.
+    HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
     """
     if request.method == 'POST':
         try:
@@ -95,7 +95,8 @@ def send_message(request, conversation_id):
 
             message = request.POST.get('message')
             if not message:
-                return JsonResponse({'error': 'Message cannot be empty'}, status=400)
+                messages.error(request, 'Message cannot be empty.')
+                return redirect('conversation', conversation_id=conversation_id)
             try:
                 existing_conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
                                                                  (Q(id_2=our_profile) & Q(id_1=their_profile)))
@@ -121,11 +122,12 @@ def send_message(request, conversation_id):
             conversation.save()
             # Increment notification counters for both users
             their_profile.increment_notification_counter()
-            return JsonResponse({'status': 'Message sent successfully'})
+            return redirect('conversation', conversation_id=conversation.id)
         except UserProfile.DoesNotExist:
-            return JsonResponse({'error': 'User profile not found'}, status=404)
+            messages.error(request, 'User profile not found.')
+            return redirect('conversation', conversation_id=conversation_id)
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
+        return HttpResponse("Invalid request method", status=405)
 
 
 @login_required_message
@@ -147,7 +149,7 @@ def new_conversation(request):
             if their_profile == our_profile:
                 messages.error(
                     request, 'You cannot start a conversation with yourself.')
-                return {'error': 'You cannot start a conversation with yourself.'}
+                return redirect('new_conversation')
 
             # Ensure the conversation does not already exist
             with transaction.atomic():
@@ -171,7 +173,7 @@ def new_conversation(request):
                         new_message.save()
                         existing_conversation.latest_message = message
                         existing_conversation.save()
-                    return {'conversation_id': existing_conversation.id}
+                    return redirect('conversation', conversation_id=existing_conversation.id)
 
                 # If the conversation does not exist, create a new conversation
                 new_conversation_object = Conversation(
@@ -191,16 +193,16 @@ def new_conversation(request):
                     new_conversation_object.latest_message = message
                     new_conversation_object.save()
 
-                return {'conversation_id': new_conversation_object.id}
+                return redirect('conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
         except User.DoesNotExist:
             messages.error(request, 'User not found.')
-            return {'error': 'User not found.'}
+            return redirect('new_conversation')
 
     # If the form has not been submitted, display the new conversation page
     else:
-        users = UserProfile.objects.exclude(user=request.user)
-        return {'users': users}
+        return render(request, 'messagesApp/new_conversation.html',
+                      {'users': UserProfile.objects.exclude(user=request.user)})
 
 
 def old_conversation(request):
