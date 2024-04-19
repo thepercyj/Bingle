@@ -38,7 +38,7 @@
                                 <td>
                                     <form action="{% url 'approve_borrow_request' booked.user_book_id.id %}" method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="book_id" value="book_id" />
+                                        <input type="hidden" name="book_id" value="{{ booked.user_book_id.id }}" />
                                         <input type="submit" class="btn btn-success" value="Approve" />
                                     </form>
                                     <br>
