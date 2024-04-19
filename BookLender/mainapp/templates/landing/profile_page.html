@@ -35,15 +35,15 @@
                                 <td>{{ booked.from_date }}</td>
                                 <td>{{ booked.to_date }}</td>
                                 <td>
-                                    <form action="/remove-book/" method="post">
+                                    <form action="{% url 'approve_borrow_request' book_id %}" method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="book_id" value="" />
+                                        <input type="hidden" name="book_id" value="book_id" />
                                         <input type="submit" class="btn btn-success" value="Approve" />
                                     </form>
                                     <br>
-                                    <form action="/remove-book/" method="post">
+                                    <form action="{% url 'deny_borrow_request' book_id %}" method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="book_id" value="" />
+                                        <input type="hidden" name="book_id" value="book_id" />
                                         <input type="submit" class="btn btn-danger " value="Deny" />
                                     </form>
                                 </td>
