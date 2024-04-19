@@ -3,9 +3,8 @@ from PIL import Image
 from django.contrib.messages import success
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
-
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import HttpResponseRedirect
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
 from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking
 from django.contrib import messages
@@ -17,7 +16,7 @@ from django.db.models import Q, F
 from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
-from BookLender import settings
+from django.conf import settings
 import json
 
 
@@ -78,7 +77,7 @@ def forgetpass(request):
 def new_home(request):
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile).select_related('book_id')
     books_count = user_books.count()  # Count the number of books
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count}
@@ -444,108 +443,77 @@ def decrement_counter(request):
 
 
 @login_required_message
-def borrow(request, book_id):
+def borrow(request, user_book_id):
     """
-    View function to initiate a borrow request for a book.
+    Combined function to handle both initiating a borrow request and saving booking details.
     """
-    book = get_object_or_404(Book, id=book_id)
+    user_book = get_object_or_404(UserBook, id=user_book_id)
+    book = get_object_or_404(Book, id=user_book.book_id.id)
     user_books = book.user_books_book.all()
-    print('view is getting triggered')
+
     if request.method == 'POST':
-        selected_owner_username = request.POST.get('owner')
-
-        if selected_owner_username:
-            selected_owner = get_object_or_404(UserProfile, user__username=selected_owner_username)
-            our_profile = UserProfile.objects.get(user=request.user)
-            userbookid = get_object_or_404(UserBook, book_id=book_id, owner_book_id=selected_owner)
-
-            try:
-                with transaction.atomic():
-                    existing_conversation = Conversation.objects.filter(
-                        (Q(id_1=our_profile) & Q(id_2=selected_owner)) |
-                        (Q(id_2=our_profile) & Q(id_1=selected_owner))
-                    ).first()
-
-                    if existing_conversation:
-                        # If conversation already exists, redirect to conversation
-                        pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
-                        new_message = Message(
-                            from_user=our_profile,
-                            to_user=selected_owner,
-                            details=pre_message_content,
-                            request_type=2,
-                            request_value='Borrow Request',
-                            created_on=now(),
-                            user_book_id=userbookid,
-                            conversation=existing_conversation
-                        )
-                        new_message.save()
-                        # Display a popup alert to both parties
-                        messages.success(request, pre_message_content)
-                        print('I am reaching here before redirection')
-                        return redirect('conversation', conversation_id=existing_conversation.id)
-                    else:
-                        # If conversation doesn't exist, create a new one
-                        new_conversation_object = Conversation(id_1=our_profile, id_2=selected_owner)
-                        new_conversation_object.save()
-                        # Create a pre-message to notify both parties
-                        pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
-                        new_message = Message(
-                            from_user=our_profile,
-                            to_user=selected_owner,
-                            details=pre_message_content,
-                            request_type=2,
-                            request_value='Borrow Request',
-                            created_on=now(),
-                            user_book_id=userbookid,
-                            conversation=new_conversation_object
-                        )
-                        new_message.save()
-
-                        selected_owner.increment_notification_counter()
-                        # Display a popup alert to both parties
-                        messages.success(request, pre_message_content)
-                        print('I am reaching here before redirection')
-                        return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
-            except Exception as e:
-                messages.error(request, 'An error occurred.')
-                return redirect('library')
-        else:
+        selected_owner = request.POST.get('owner_id')
+        selected_owner_username = UserProfile.objects.get(id=selected_owner).user.username
+        if not selected_owner_username:
             messages.error(request, 'Please select an owner.')
-            return redirect('borrow', book_id=book_id)
+            return redirect('borrow', user_book_id=user_book_id)
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books})
+        selected_owner = get_object_or_404(UserProfile, user__username=selected_owner_username)
+        our_profile = UserProfile.objects.get(user=request.user)
 
 
-def save_borrow_request(request):
+        try:
+            with transaction.atomic():
+                existing_conversation = Conversation.objects.filter(
+                    (Q(id_1=our_profile) & Q(id_2=selected_owner)) |
+                    (Q(id_2=our_profile) & Q(id_1=selected_owner))
+                ).first()
 
-    if request.method == 'POST':
-        selected_owner_id = request.POST.get('owner_id')
-        owner_id = UserProfile.objects.get(user__id=selected_owner_id)
-        our_borrower_id = request.POST.get('borrower_id')
-        borrower_id = UserProfile.objects.get(user__id=our_borrower_id)
-        userbook_id = request.POST.get('user_book_id')
-        user_book_id = get_object_or_404(UserBook, book_id=userbook_id)
-        from_date = request.POST.get('from_date')
-        to_date = request.POST.get('to_date')
+                if existing_conversation:
+                    conversation = existing_conversation
+                else:
+                    conversation = Conversation(id_1=our_profile, id_2=selected_owner)
+                    conversation.save()
 
-        # Create a new Booking instance
-        booking = Booking(
-            owner_id=owner_id,
-            borrower_id=borrower_id,
-            from_date=from_date,
-            to_date=to_date,
-            returned=False,
-            user_book_id=user_book_id,
-        )
+                pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
+                new_message = Message(
+                    from_user=our_profile,
+                    to_user=selected_owner,
+                    details=pre_message_content,
+                    request_type=2,
+                    request_value='Borrow Request',
+                    created_on=now(),
+                    user_book_id=user_book,
+                    conversation=conversation
+                )
+                new_message.save()
+                messages.success(request, pre_message_content)
 
-        # Save the booking to the database
-        booking.save()
-        print('booking details saved')
-        messages.success(request, 'Borrow request saved successfully!')
-        return redirect('profile')  # Redirect to the profile page
-    else:
-        return HttpResponse('Invalid request method')
+                # Booking details
+                from_date = request.POST.get('from_date')
+                to_date = request.POST.get('to_date')
+                booking = Booking(
+                    owner_id=selected_owner,
+                    borrower_id=our_profile,
+                    from_date=from_date,
+                    to_date=to_date,
+                    returned=False,
+                    user_book_id=user_book
+                )
+                booking.save()
+                print('booking details saved')
+                messages.success(request, 'Borrow request saved successfully!')
+
+                # Redirect to appropriate page
+                return redirect('conversation', conversation_id=conversation.id)
+
+        except Exception as e:
+            print(e)
+            messages.error(request, 'An error occurred.')
+            return redirect('library')
+
+    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book})
+
 
 
 @login_required_message

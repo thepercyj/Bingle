@@ -160,7 +160,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>
-                                    <form action="{% url 'borrow' book.id %}" method="post">
+                                    <form action="{% url 'borrow' user_book.id %}" method="post">
                                         {% csrf_token %}
                                         <input type="submit" class="btn btn-primary" value="Borrow" />
                                     </form>

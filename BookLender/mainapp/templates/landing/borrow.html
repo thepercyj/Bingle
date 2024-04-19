@@ -18,9 +18,8 @@
 </form>
 
 <div id="booking-form" style="display: none;">
-    <form method="post" action="{% url 'save_borrow_request' %}">
+    <form method="post" action="{% url 'borrow' user_book.id  %}">
         {% csrf_token %}
-        {% for user_book in user_books %}
         {% if user_book.owner_book_id.user != request.user %}
         <label for="user_book_id">User Book ID:</label>
         <input name="user_book_id" value="{{ user_book.id }}">
@@ -35,7 +34,6 @@
         <label for="to_date">To Date:</label>
         <input type="date" id="to_date" name="to_date" required>
         {% endif %}
-        {% endfor %}
         <button type="submit">Submit Borrow Request</button>
     </form>
 </div>
