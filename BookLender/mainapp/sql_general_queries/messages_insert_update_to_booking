@@ -1,0 +1,20 @@
+
+	DECLARE booking_row_exist INT(3);       #Declaring a variable for counting booking row. The number of row could be 1 or 0
+	SELECT COUNT(*) INTO booking_row_exist FROM mainapp_booking WHERE borrower_id_id=new.from_user_id AND owner_id_id=new.from_user_id AND returned=0;
+
+
+
+	IF new.request_type=3 THEN              #Check if the request type of the message is 3 then do the following if else
+	    # Now check if the row does not exist then make a new booking row given the information else do update the information according to the message information
+		IF booking_row_exist=0 THEN
+			INSERT INTO mainapp_booking SET from_date=DATE(new.created_on), borrower_id_id=new.from_user_id, owner_id_id=new.user_book_id_id;
+		ELSE
+			UPDATE mainapp_booking SET from_date=DATE(new.created_on), borrower_id_id=new.from_user_id, owner_id_id=new.user_book_id_id;
+		END IF;
+
+	ELSEIF new.request_type=5 THEN          #If the request type is 5 then it means the return has been accepted and the book should be made avaialabe again
+		UPDATE mainapp_booking SET returned=1, returned_on=DATE(new.created_on) WHERE borrower_id_id=new.to_user_id AND owner_id_id=new.user_book_id_id;
+	ELSEIF new.request_type=6 THEN          #Review section done by Tom but if not this is the best query to complete it
+
+		UPDATE mainapp_userprofile SET review=(review+new.request_value)/2 WHERE user_id=new.to_user_id;
+	END IF;

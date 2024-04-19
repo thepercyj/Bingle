@@ -1,0 +1,7 @@
+#If the book is not returned then its avaialability is not possible so availability is 0
+#Else it is 1 when request_type=5 in the messages so it changes here the returned to 1 which means we need to make the book avaialabe
+	IF new.returned=0 THEN
+		UPDATE mainapp_userbook SET availability=0 WHERE owner_book_id_id=new.owner_id_id;
+	ELSE
+		UPDATE mainapp_userbook SET availability=1 WHERE owner_book_id_id=new.owner_id_id;
+	END IF;
