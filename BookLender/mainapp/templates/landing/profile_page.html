@@ -163,7 +163,7 @@
             <td>
                 <!-- Only display the form if there are user_books -->
                 {% if book.user_books_book.first %}
-                    <form action="{% url 'borrow' book.user_books_book.first.id %}" method="post">
+                    <form action="{% url 'borrow' book.user_books_book.first.id %}" method="get">
                         {% csrf_token %}
                         <input type="submit" class="btn btn-primary" value="Borrow" />
                     </form>
