@@ -50,6 +50,13 @@
                             <ul>
                                 <li>{{message_detail}}</li>
                             </ul>
+                            <ul>
+                                {% if notification_message %}
+                                    <div>
+                                        <p>{{ notification_message }}</p>
+                                    </div>
+                                {% endif %}
+                            </ul>
 <!--                            {% if notifications %}-->
 <!--                            <ul class="sub-menu">-->
 <!--                                {% for notification in notifications %}-->

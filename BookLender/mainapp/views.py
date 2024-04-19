@@ -294,7 +294,7 @@ def view_profile(request, profile_id):
     user = request.user
     pre_message = get_pre_message_content(request, user)
     print(pre_message)
-    # print(notifications)
+    context = {'viewprofile': viewprofile, 'pre_message': pre_message}
 
     if request.method == 'POST':
         our_profile = UserProfile.objects.get(user=request.user)
@@ -318,7 +318,10 @@ def view_profile(request, profile_id):
                         conversation=existing_conversation
                     )
                     new_message.save()
-                    send_notification_to_user(viewprofile.user, 1)
+                    sendnotify = send_notification_to_user(our_profile.user, 1)
+                    print(sendnotify)
+                    context['notification_message'] = sendnotify  # Add to context
+
                     return redirect('conversation', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
@@ -374,7 +377,7 @@ def get_notification_details(notify_type):
 
 def send_notification_to_user(recipient, notify_type):
     message_detail = get_notification_details(notify_type)
-    return f"Sending notification to {recipient}: {message_detail}"
+    return f" {recipient}: {message_detail}"
 
 
 def user_notifications(request, recipient_id, notify_type):
@@ -383,11 +386,11 @@ def user_notifications(request, recipient_id, notify_type):
     return render(request, 'test.html', {'notification_message': notification_message})
 
 
-def notification_sender(request):
-    notifications = Notification.objects.all()
-    for notification in notifications:
-        notification.type_description = get_notification_details(notification.notify_type)
-    return {'global_notifications': notifications}
+# def notification_sender(request):
+#     notifications = Notification.objects.all()
+#     for notification in notifications:
+#         notification.type_description = get_notification_details(notification.notify_type)
+#     return {'global_notifications': notifications}
 
 
 @login_required_message
