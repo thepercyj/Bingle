@@ -1,4 +1,6 @@
 from io import BytesIO
+from urllib import request
+
 from PIL import Image
 from django.contrib.messages import success
 from django.http import HttpResponse
@@ -47,15 +49,15 @@ def login_required_message(function):
 
 
 # test page
-def test(request):
-    if request.method == "POST":
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
-
-        return render(request, 'test.html', {'searchquery': searchquery,
-                                             'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
-    else:
-        return render(request, 'about.html')
+# def test(request):
+#     if request.method == "POST":
+#         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
+#         user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
+#
+#         return render(request, 'test.html', {'searchquery': searchquery,
+#                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
+#     else:
+#         return render(request, 'about.html')
 
 
 # Index Page
@@ -292,8 +294,7 @@ def view_profile(request, profile_id):
     user = request.user
     pre_message = get_pre_message_content(request, user)
     print(pre_message)
-    notifications = Notification.object.all()
-
+    # print(notifications)
 
     if request.method == 'POST':
         our_profile = UserProfile.objects.get(user=request.user)
@@ -348,7 +349,7 @@ def view_profile(request, profile_id):
             return redirect('search')
 
     return render(request, 'users_profiles.html',
-                  {'viewprofile': viewprofile, 'pre_message': pre_message, 'notifications': notifications})
+                  {'viewprofile': viewprofile, 'pre_message': pre_message, })
 
 
 def get_pre_message_content(request, user):
@@ -372,9 +373,21 @@ def get_notification_details(notify_type):
 
 
 def send_notification_to_user(recipient, notify_type):
-    # Fetch the notification details from existing entries
     message_detail = get_notification_details(notify_type)
-    print(f"Sending notification to {recipient}: {message_detail}")
+    return f"Sending notification to {recipient}: {message_detail}"
+
+
+def user_notifications(request, recipient_id, notify_type):
+    recipient = User.objects.get(pk=recipient_id)
+    notification_message = send_notification_to_user(recipient.username, notify_type)
+    return render(request, 'test.html', {'notification_message': notification_message})
+
+
+def notification_sender(request):
+    notifications = Notification.objects.all()
+    for notification in notifications:
+        notification.type_description = get_notification_details(notification.notify_type)
+    return {'global_notifications': notifications}
 
 
 @login_required_message
@@ -410,6 +423,8 @@ def borrow(request, book_id):
     """
     book = get_object_or_404(Book, id=book_id)
     user_books = book.user_books_book.all()
+    # notifications = Notification.objects.all()
+    # print(notifications)
 
     if request.method == 'POST':
         selected_owner_username = request.POST.get('owner')
@@ -472,4 +487,4 @@ def borrow(request, book_id):
             messages.error(request, 'Please select an owner.')
             return redirect('borrow', book_id=book_id)
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'notifications': notifications})
+    return render(request, 'borrow.html', {'book': book, 'user_books': user_books})

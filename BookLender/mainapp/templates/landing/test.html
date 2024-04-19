@@ -4,15 +4,7 @@
 
 {% block content %}
 
-{% if user_profiles %}
-    <h2>Users with username '{{ searchquery }}':</h2>
-    <ul>
-        {% for user_profile in user_profiles %}
-            <li>{{ user_profile.user.get_full_name }}</li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No users found with the username '{{ searchquery }}'.</p>
-{% endif %}
+<h1>Notification Details</h1>
+    <p>{{ notification_message }}</p>
 
 {% endblock %}

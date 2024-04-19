@@ -87,7 +87,10 @@ class Notification(models.Model):
     notify_type = models.IntegerField('Notify Type', null=False, default=1)
     notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
     details = models.CharField('Details', max_length=255, null=False, default='default')
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    # request_type = models.IntegerField('Request Type', null=False, default=1)  # Added for comparison
+
+    def __str__(self):
+        return f"{self.notify_value}: {self.details}"
 
 
 

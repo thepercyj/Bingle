@@ -1,6 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import user_notifications
+
 
 urlpatterns = [
 
@@ -23,5 +25,5 @@ urlpatterns = [
     path('chat/', views.chat, name='chat'),
     path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
     path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
-    path('test/', views.test, name='test'),
+    path('notify/<int:recipient_id>/<int:notify_type>/', user_notifications, name='user_notifications'),
 ]

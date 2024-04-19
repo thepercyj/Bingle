@@ -47,17 +47,20 @@
                         <li class="">
                             <i class="fa fa-bell-o bell-color" aria-hidden="true"></i>
                             <span class="btn__badge">{{ notification_count }}</span>
-                            {% if notifications %}
-                            <ul class="sub-menu">
-                                {% for notification in notifications %}
-                                <li>{{ notification.details }}</li>
-                                {% endfor %}
+                            <ul>
+                                <li>{{message_detail}}</li>
                             </ul>
-                            {% else %}
-                            <ul class="sub-menu">
-                                <li>No notifications found.</li>
-                            </ul>
-                            {% endif %}
+<!--                            {% if notifications %}-->
+<!--                            <ul class="sub-menu">-->
+<!--                                {% for notification in notifications %}-->
+<!--                                <li>{{ notification.notify_type  }}</li>-->
+<!--                                {% endfor %}-->
+<!--                            </ul>-->
+<!--                            {% else %}-->
+<!--                            <ul class="sub-menu">-->
+<!--                                <li>No notifications found.</li>-->
+<!--                            </ul>-->
+<!--                            {% endif %}-->
                         </li>
                     </ul>
                     {% endwith %}
