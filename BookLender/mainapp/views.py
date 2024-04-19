@@ -546,3 +546,81 @@ def save_borrow_request(request):
         return redirect('profile')  # Redirect to the profile page
     else:
         return HttpResponse('Invalid request method')
+
+
+@login_required_message
+def approve_borrow_request(request, book_id):
+    """
+    View function to approve a borrow request for a book.
+    """
+    if request.method == 'POST':
+        # Get the message object based on the book ID and request type
+        message = get_object_or_404(Message, user_book_id__book_id=book_id, request_type=2)
+
+        # Update the message details
+        message.request_type = 3
+        message.request_value = 'Request Accepted'
+        message.save()
+
+        # Create a pre-message to notify the recipient
+        pre_message_content = f"Your borrow request for {message.user_book_id.book.book_title} has been approved."
+        new_message = Message(
+            from_user=message.to_user,
+            to_user=message.from_user,
+            details=pre_message_content,
+            request_type=3,
+            request_value='Request Accepted',
+            user_book_id=message.user_book_id,
+            conversation=message.conversation
+        )
+        new_message.save()
+
+        # Display a success message
+        messages.success(request, 'Borrow request approved successfully.')
+
+        # Redirect to the conversations page
+        return redirect('conversations')
+
+    else:
+        # If the request method is not POST, display an error message and redirect
+        messages.error(request, 'Invalid request method.')
+        return redirect('library')
+    
+
+@login_required_message
+def deny_borrow_request(request, book_id):
+    """
+    View function to deny a borrow request for a book.
+    """
+    if request.method == 'POST':
+        # Get the message object based on the book ID and request type
+        message = get_object_or_404(Message, user_book_id__book_id=book_id, request_type=2)
+
+        # Update the message details
+        message.request_type = 4
+        message.request_value = 'Request Denied'
+        message.save()
+
+        # Create a pre-message to notify the recipient
+        pre_message_content = f"Your borrow request for {message.user_book_id.book.book_title} has been denied."
+        new_message = Message(
+            from_user=message.to_user,
+            to_user=message.from_user,
+            details=pre_message_content,
+            request_type=4,
+            request_value='Request Denied',
+            user_book_id=message.user_book_id,
+            conversation=message.conversation
+        )
+        new_message.save()
+
+        # Display a success message
+        messages.success(request, 'Borrow request denied successfully.')
+
+        # Redirect to the profile page
+        return redirect('profile')
+
+    else:
+        # If the request method is not POST, display an error message and redirect
+        messages.error(request, 'Invalid request method.')
+        return redirect('library')
