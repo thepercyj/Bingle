@@ -36,7 +36,7 @@ def get_conversation_list(request):
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
     print("This is messagesApp", conversationList, our_profile)
-    return conversationList, our_profile
+    return render(request, 'messagesApp/conversation_list.html', {'conversations': conversationList})
 
 
 @login_required_message
