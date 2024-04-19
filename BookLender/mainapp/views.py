@@ -535,8 +535,9 @@ def approve_borrow_request(request, book_id):
     View function to approve a borrow request for a book.
     """
     if request.method == 'POST':
+        print("Book ID: ", book_id)
         # Get the message object based on the book ID and request type
-        message = get_object_or_404(Message, user_book_id__book_id=book_id, request_type=2)
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=2)
 
         # Update the message details
         message.request_type = 3
@@ -544,7 +545,7 @@ def approve_borrow_request(request, book_id):
         message.save()
 
         # Create a pre-message to notify the recipient
-        pre_message_content = f"Your borrow request for {message.user_book_id.book.book_title} has been approved."
+        pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been approved."
         new_message = Message(
             from_user=message.to_user,
             to_user=message.from_user,
@@ -560,7 +561,7 @@ def approve_borrow_request(request, book_id):
         messages.success(request, 'Borrow request approved successfully.')
 
         # Redirect to the conversations page
-        return redirect('conversations')
+        return redirect('conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -574,8 +575,9 @@ def deny_borrow_request(request, book_id):
     View function to deny a borrow request for a book.
     """
     if request.method == 'POST':
+        print("Book ID: ", book_id)
         # Get the message object based on the book ID and request type
-        message = get_object_or_404(Message, user_book_id__book_id=book_id, request_type=2)
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=2)
 
         # Update the message details
         message.request_type = 4
@@ -583,7 +585,7 @@ def deny_borrow_request(request, book_id):
         message.save()
 
         # Create a pre-message to notify the recipient
-        pre_message_content = f"Your borrow request for {message.user_book_id.book.book_title} has been denied."
+        pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been approved."
         new_message = Message(
             from_user=message.to_user,
             to_user=message.from_user,
@@ -598,8 +600,8 @@ def deny_borrow_request(request, book_id):
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
 
-        # Redirect to the profile page
-        return redirect('profile')
+        # Redirect to the conversations page
+        return redirect('conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
