@@ -66,7 +66,7 @@ class Message(models.Model):
     details = encrypt(models.CharField('Details', max_length=255, null=False, default='default'))
     request_type = models.IntegerField('Request Type', null=False, default=1)
     request_value = models.CharField('Request Value', max_length=255, null=False, default='default')
-    created_on = models.DateTimeField('Created On', null=False, default=datetime(2024, 1, 1, 12, 0))
+    created_on = models.DateTimeField('Created On', null=False, default=datetime.now)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages_conversation')
 
     def __str__(self):
@@ -87,7 +87,7 @@ class Notification(models.Model):
     notify_type = models.IntegerField('Notify Type', null=False, default=1)
     notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
     details = models.CharField('Details', max_length=255, null=False, default='default')
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', default="default")
 
 
 
