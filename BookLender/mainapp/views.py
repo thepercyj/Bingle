@@ -539,11 +539,6 @@ def approve_borrow_request(request, book_id):
         # Get the message object based on the book ID and request type
         message = get_object_or_404(Message, user_book_id__id=book_id, request_type=2)
 
-        # Update the message details
-        message.request_type = 3
-        message.request_value = 'Request Accepted'
-        message.save()
-
         # Create a pre-message to notify the recipient
         pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been approved."
         new_message = Message(
@@ -579,13 +574,8 @@ def deny_borrow_request(request, book_id):
         # Get the message object based on the book ID and request type
         message = get_object_or_404(Message, user_book_id__id=book_id, request_type=2)
 
-        # Update the message details
-        message.request_type = 4
-        message.request_value = 'Request Denied'
-        message.save()
-
         # Create a pre-message to notify the recipient
-        pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been approved."
+        pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been denied."
         new_message = Message(
             from_user=message.to_user,
             to_user=message.from_user,
