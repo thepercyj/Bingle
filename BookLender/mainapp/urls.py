@@ -25,5 +25,7 @@ urlpatterns = [
     path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
     path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
     path('save_borrow_request/', views.save_borrow_request, name='save_borrow_request'),
+    path('approve_borrow_request/<int:book_id>/', views.approve_borrow_request, name='approve_borrow_request'),
+    path('deny_borrow_request/<int:book_id>/', views.deny_borrow_request, name='deny_borrow_request'),
     path('test/', views.test, name='test'),
 ]
