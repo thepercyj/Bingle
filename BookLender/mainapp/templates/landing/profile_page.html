@@ -44,7 +44,7 @@
                                     <br>
                                     <form action="{% url 'deny_borrow_request' booked.user_book_id.id %}" method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="book_id" value="book_id" />
+                                        <input type="hidden" name="book_id" value="{{ booked.user_book_id.id }}" />
                                         <input type="submit" class="btn btn-danger " value="Deny" />
                                     </form>
                                 </td>
