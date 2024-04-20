@@ -69,9 +69,17 @@ openViewModal('book-modal')
 
 document.addEventListener("DOMContentLoaded", function() {
 const urlParams = new URLSearchParams(window.location.search);
-const book = urlParams.get('borrow');
-if (book === 'true') {
+const borrow = urlParams.get('borrow');
+if (borrow === 'true') {
 openViewModal('borrow-modal')
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const booking = urlParams.get('booking');
+if (booking === 'true') {
+openViewModal('booking-modal')
 }
 });
 
@@ -195,3 +203,39 @@ document.getElementById('reveal-form').addEventListener('click', function() {
         document.getElementById('booking-form').style.display = 'block';
     }
 });
+
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("openModalBtn");
+
+// When the user clicks the button, open the modal
+btn.onclick = function () {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function () {
+    modal.style.display = "none";
+}
+
+// Function to populate the modal with session data
+function populateModalWithData(sessionData) {
+    var table = document.getElementById('bookingDetailsTable');
+    var html = '';
+    for (var key in sessionData) {
+        if (sessionData.hasOwnProperty(key)) {
+            html += '<tr>';
+            html += '<td>' + key + '</td>';
+            html += '<td>' + sessionData[key] + '</td>';
+            html += '</tr>';
+        }
+    }
+    table.innerHTML = html;
+}
+
+// Call the populateModalWithData function with session data
+var sessionData = JSON.parse('{{ booking_details | escapejs }}');
+populateModalWithData(sessionData);

@@ -1,3 +1,4 @@
+from datetime import datetime
 from io import BytesIO
 from PIL import Image
 from django.contrib.messages import success
@@ -6,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseRedirect
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -144,7 +145,9 @@ def profile(request):
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
+    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
     booking = Booking.objects.filter(owner_id=user_profile.id)
+
 
     # Search functionality
     user_books_search_query = request.GET.get('user_books_search')
@@ -183,6 +186,7 @@ def profile(request):
         'user_books_count': user_books_count,  # Update the count with user_books_count
         'library': library,
         'lib_count': lib_count,
+        'pre_booking': pre_booking,
         'booking': booking,
     }
     return render(request, 'profile_page.html', context)
@@ -505,16 +509,16 @@ def borrow(request, user_book_id):
                 # Create a new booking object and save the booking details
                 from_date = request.POST.get('from_date')
                 to_date = request.POST.get('to_date')
-                booking = Booking(
-                    owner_id=selected_owner,
+
+                pre_booking = Transactions(
+                    user_book_id=user_book,
                     borrower_id=our_profile,
                     from_date=from_date,
                     to_date=to_date,
-                    returned=False,
-                    user_book_id=user_book
+                    status='pending',
                 )
-                booking.save()
-                print('booking details saved')
+                pre_booking.save()
+                print('pre booking details saved')
                 messages.success(request, 'Borrow request saved successfully!')
 
                 # Redirect to appropriate conversation page
@@ -526,7 +530,6 @@ def borrow(request, user_book_id):
             return redirect('library')
 
     return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book})
-
 
 
 @login_required_message
@@ -548,9 +551,37 @@ def approve_borrow_request(request, book_id):
             request_type=3,
             request_value='Request Accepted',
             user_book_id=message.user_book_id,
-            conversation=message.conversation
+            conversation=message.conversation,
         )
         new_message.save()
+
+        # Update booking status to approved
+        pre_booking = Transactions.objects.get(user_book_id=message.user_book_id)
+        pre_booking.status = 'approved'
+        pre_booking.save()
+
+        print('transactions updated')
+
+        # Update UserBook values
+        with transaction.atomic():
+            user_book = message.user_book_id
+            user_book.currently_with = message.from_user
+            user_book.availability = False
+            user_book.booked = True
+            user_book.save()
+
+            # Create a booking object
+            booking = Booking.objects.create(
+                owner_id=message.to_user,
+                borrower_id=message.from_user,
+                user_book_id=message.user_book_id,
+                from_date=datetime.strptime(str(pre_booking.from_date), '%Y-%m-%d').date(),
+                to_date=datetime.strptime(str(pre_booking.to_date), '%Y-%m-%d').date(),
+                returned=False
+            )
+
+            booking.save()
+            print('booking saved successfully')
 
         # Display a success message
         messages.success(request, 'Borrow request approved successfully.')
@@ -562,7 +593,6 @@ def approve_borrow_request(request, book_id):
         # If the request method is not POST, display an error message and redirect
         messages.error(request, 'Invalid request method.')
         return redirect('library')
-    
 
 @login_required_message
 def deny_borrow_request(request, book_id):
@@ -583,9 +613,14 @@ def deny_borrow_request(request, book_id):
             request_type=4,
             request_value='Request Denied',
             user_book_id=message.user_book_id,
-            conversation=message.conversation
+            conversation=message.conversation,
         )
         new_message.save()
+
+        # Update booking status to denied
+        transaction = Transactions.objects.get(user_book_id=message.user_book_id)
+        transaction.status = 'denied'
+        transaction.save()
 
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
