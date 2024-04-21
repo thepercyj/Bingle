@@ -537,7 +537,6 @@ def save_borrow_request(request):
             to_date=to_date,
             returned=False,
             user_book_id=user_book_id,
-        )
 
         # Save the booking to the database
         booking.save()
