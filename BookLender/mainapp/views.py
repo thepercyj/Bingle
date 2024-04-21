@@ -1,13 +1,13 @@
+from datetime import datetime
 from io import BytesIO
 from PIL import Image
 from django.contrib.messages import success
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
-
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import HttpResponseRedirect
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -17,7 +17,7 @@ from django.db.models import Q, F
 from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
-from BookLender import settings
+from django.conf import settings
 import json
 
 
@@ -78,7 +78,7 @@ def forgetpass(request):
 def new_home(request):
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile).select_related('book_id')
     books_count = user_books.count()  # Count the number of books
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count}
@@ -143,10 +143,13 @@ def profile(request):
     library = Book.objects.all()
     lib_count = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
-
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
-    booking = Booking.objects.filter(owner_id=user_profile.id)
+    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
+    owner_bookings = Booking.objects.filter(owner_id=user_profile)
+    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
+    total_bookings = owner_bookings.count() + borrower_bookings.count()
+
 
     # Search functionality
     user_books_search_query = request.GET.get('user_books_search')
@@ -185,7 +188,10 @@ def profile(request):
         'user_books_count': user_books_count,  # Update the count with user_books_count
         'library': library,
         'lib_count': lib_count,
-        'booking': booking,
+        'pre_booking': pre_booking,
+        'owner_bookings': owner_bookings,
+        'borrower_bookings': borrower_bookings,
+        'total_bookings': total_bookings,
     }
     return render(request, 'profile_page.html', context)
 
@@ -445,106 +451,87 @@ def decrement_counter(request):
 
 
 @login_required_message
-def borrow(request, book_id):
+def borrow(request, user_book_id):
     """
-    View function to initiate a borrow request for a book.
+    Combined function to handle both initiating a borrow request and saving booking details.
     """
-    book = get_object_or_404(Book, id=book_id)
+    # Get the user_book object based on the user_book_id
+    user_book = get_object_or_404(UserBook, id=user_book_id)
+    # Get the book object based on the user_book object
+    book = get_object_or_404(Book, id=user_book.book_id.id)
+    # Get all user_books associated with the book
     user_books = book.user_books_book.all()
-    print('view is getting triggered')
+
+    # Check if the request method is POST
     if request.method == 'POST':
-        selected_owner_username = request.POST.get('owner')
-
-        if selected_owner_username:
-            selected_owner = get_object_or_404(UserProfile, user__username=selected_owner_username)
-            our_profile = UserProfile.objects.get(user=request.user)
-            userbookid = get_object_or_404(UserBook, book_id=book_id, owner_book_id=selected_owner)
-
-            try:
-                with transaction.atomic():
-                    existing_conversation = Conversation.objects.filter(
-                        (Q(id_1=our_profile) & Q(id_2=selected_owner)) |
-                        (Q(id_2=our_profile) & Q(id_1=selected_owner))
-                    ).first()
-
-                    if existing_conversation:
-                        # If conversation already exists, redirect to conversation
-                        pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
-                        new_message = Message(
-                            from_user=our_profile,
-                            to_user=selected_owner,
-                            details=pre_message_content,
-                            request_type=2,
-                            request_value='Borrow Request',
-                            created_on=now(),
-                            user_book_id=userbookid,
-                            conversation=existing_conversation
-                        )
-                        new_message.save()
-                        # Display a popup alert to both parties
-                        messages.success(request, pre_message_content)
-                        print('I am reaching here before redirection')
-                        return redirect('conversation', conversation_id=existing_conversation.id)
-                    else:
-                        # If conversation doesn't exist, create a new one
-                        new_conversation_object = Conversation(id_1=our_profile, id_2=selected_owner)
-                        new_conversation_object.save()
-                        # Create a pre-message to notify both parties
-                        pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
-                        new_message = Message(
-                            from_user=our_profile,
-                            to_user=selected_owner,
-                            details=pre_message_content,
-                            request_type=2,
-                            request_value='Borrow Request',
-                            created_on=now(),
-                            user_book_id=userbookid,
-                            conversation=new_conversation_object
-                        )
-                        new_message.save()
-
-                        selected_owner.increment_notification_counter()
-                        # Display a popup alert to both parties
-                        messages.success(request, pre_message_content)
-                        print('I am reaching here before redirection')
-                        return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={selected_owner}')
-            except Exception as e:
-                messages.error(request, 'An error occurred.')
-                return redirect('library')
-        else:
+        # Get the selected owner from the POST data and retrieve the username
+        selected_owner = request.POST.get('owner_id')
+        selected_owner_username = UserProfile.objects.get(id=selected_owner).user.username
+        # Check if the selected owner is not empty
+        if not selected_owner_username:
+            # Display an error message and redirect to the borrow page
             messages.error(request, 'Please select an owner.')
-            return redirect('borrow', book_id=book_id)
+            return redirect('borrow', user_book_id=user_book_id)
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books})
+        # Get the selected owner's UserProfile object
+        selected_owner = get_object_or_404(UserProfile, user__username=selected_owner_username)
+        # Get the current user's UserProfile object
+        our_profile = UserProfile.objects.get(user=request.user)
 
 
-def save_borrow_request(request):
+        try:
+            # Create a new conversation object or retrieve an existing one
+            with transaction.atomic():
+                existing_conversation = Conversation.objects.filter(
+                    (Q(id_1=our_profile) & Q(id_2=selected_owner)) |
+                    (Q(id_2=our_profile) & Q(id_1=selected_owner))
+                ).first()
 
-    if request.method == 'POST':
-        selected_owner_id = request.POST.get('owner_id')
-        owner_id = UserProfile.objects.get(user__id=selected_owner_id)
-        our_borrower_id = request.POST.get('borrower_id')
-        borrower_id = UserProfile.objects.get(user__id=our_borrower_id)
-        userbook_id = request.POST.get('user_book_id')
-        user_book_id = get_object_or_404(UserBook, book_id=userbook_id)
-        from_date = request.POST.get('from_date')
-        to_date = request.POST.get('to_date')
+                # Check if the conversation already exists
+                if existing_conversation:
+                    conversation = existing_conversation
+                # If the conversation does not exist, create a new one
+                else:
+                    conversation = Conversation(id_1=our_profile, id_2=selected_owner)
+                    conversation.save()
 
-        # Create a new Booking instance
-        booking = Booking(
-            owner_id=owner_id,
-            borrower_id=borrower_id,
-            from_date=from_date,
-            to_date=to_date,
-            returned=False,
-            user_book_id=user_book_id,
-        )
-        booking.save()
-        print('booking details saved')
-        messages.success(request, 'Borrow request saved successfully!')
+                # Create a pre-message to notify the recipient
+                pre_message_content = f"{request.user.username} wants to borrow {book.book_title} from you."
+                new_message = Message(
+                    from_user=our_profile,
+                    to_user=selected_owner,
+                    details=pre_message_content,
+                    request_type=2,
+                    request_value='Borrow Request',
+                    created_on=now(),
+                    user_book_id=user_book,
+                    conversation=conversation
+                )
+                new_message.save()
+                messages.success(request, pre_message_content)
 
-        # Redirect to appropriate conversation page
-        return redirect('conversation', conversation_id=conversation.id)
+                # Create a new booking object and save the booking details
+                from_date = request.POST.get('from_date')
+                to_date = request.POST.get('to_date')
+
+                pre_booking = Transactions(
+                    user_book_id=user_book,
+                    borrower_id=our_profile,
+                    from_date=from_date,
+                    to_date=to_date,
+                    status='pending',
+                )
+                pre_booking.save()
+                print('pre booking details saved')
+                messages.success(request, 'Borrow request saved successfully!')
+
+                # Redirect to appropriate conversation page
+                return redirect('conversation', conversation_id=conversation.id)
+
+        except Exception as e:
+            print(e)
+            messages.error(request, 'An error occurred.')
+            return redirect('library')
 
     return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book})
 
@@ -555,16 +542,12 @@ def approve_borrow_request(request, book_id):
     View function to approve a borrow request for a book.
     """
     if request.method == 'POST':
+        print("Book ID: ", book_id)
         # Get the message object based on the book ID and request type
-        message = get_object_or_404(Message, user_book_id__book_id=book_id, request_type=2)
-
-        # Update the message details
-        message.request_type = 3
-        message.request_value = 'Request Accepted'
-        message.save()
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=2)
 
         # Create a pre-message to notify the recipient
-        pre_message_content = f"Your borrow request for {message.user_book_id.book.book_title} has been approved."
+        pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been approved."
         new_message = Message(
             from_user=message.to_user,
             to_user=message.from_user,
@@ -572,21 +555,48 @@ def approve_borrow_request(request, book_id):
             request_type=3,
             request_value='Request Accepted',
             user_book_id=message.user_book_id,
-            conversation=message.conversation
+            conversation=message.conversation,
         )
         new_message.save()
+
+        # Update booking status to approved
+        pre_booking = Transactions.objects.get(user_book_id=message.user_book_id)
+        pre_booking.status = 'approved'
+        pre_booking.save()
+
+        print('transactions updated')
+
+        # Update UserBook values
+        with transaction.atomic():
+            user_book = message.user_book_id
+            user_book.currently_with = message.from_user
+            user_book.availability = False
+            user_book.booked = True
+            user_book.save()
+
+            # Create a booking object
+            booking = Booking.objects.create(
+                owner_id=message.to_user,
+                borrower_id=message.from_user,
+                user_book_id=message.user_book_id,
+                from_date=datetime.strptime(str(pre_booking.from_date), '%Y-%m-%d').date(),
+                to_date=datetime.strptime(str(pre_booking.to_date), '%Y-%m-%d').date(),
+                returned=False
+            )
+
+            booking.save()
+            print('booking saved successfully')
 
         # Display a success message
         messages.success(request, 'Borrow request approved successfully.')
 
         # Redirect to the conversations page
-        return redirect('conversations')
+        return redirect('conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
         messages.error(request, 'Invalid request method.')
         return redirect('library')
-    
 
 @login_required_message
 def deny_borrow_request(request, book_id):
@@ -594,16 +604,12 @@ def deny_borrow_request(request, book_id):
     View function to deny a borrow request for a book.
     """
     if request.method == 'POST':
+        print("Book ID: ", book_id)
         # Get the message object based on the book ID and request type
-        message = get_object_or_404(Message, user_book_id__book_id=book_id, request_type=2)
-
-        # Update the message details
-        message.request_type = 4
-        message.request_value = 'Request Denied'
-        message.save()
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=2)
 
         # Create a pre-message to notify the recipient
-        pre_message_content = f"Your borrow request for {message.user_book_id.book.book_title} has been denied."
+        pre_message_content = f"Your borrow request for {message.user_book_id.book_id.book_title} has been denied."
         new_message = Message(
             from_user=message.to_user,
             to_user=message.from_user,
@@ -611,17 +617,73 @@ def deny_borrow_request(request, book_id):
             request_type=4,
             request_value='Request Denied',
             user_book_id=message.user_book_id,
-            conversation=message.conversation
+            conversation=message.conversation,
         )
         new_message.save()
+
+        # Update booking status to denied
+        transaction = Transactions.objects.get(user_book_id=message.user_book_id)
+        transaction.status = 'denied'
+        transaction.save()
 
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
 
-        # Redirect to the profile page
-        return redirect('profile')
+        # Redirect to the conversations page
+        return redirect('conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
         messages.error(request, 'Invalid request method.')
         return redirect('library')
+
+
+@login_required_message
+def return_book(request, book_id):
+    """
+    View function to return a book.
+    """
+    if request.method == 'POST':
+        print("Book ID: ", book_id)
+        # Get the message object based on the book ID and request type
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=3)
+
+        # Create a pre-message to notify the recipient
+        pre_message_content = f"Your book {message.user_book_id.book_id.book_title} has been returned."
+        new_message = Message(
+            from_user=message.to_user,
+            to_user=message.from_user,
+            details=pre_message_content,
+            request_type=5,
+            request_value='Book Returned',
+            user_book_id=message.user_book_id,
+            conversation=message.conversation,
+        )
+        new_message.save()
+
+        # Update UserBook values
+        with transaction.atomic():
+            user_book = message.user_book_id
+            user_book.currently_with = message.from_user
+            user_book.availability = True
+            user_book.booked = "No"
+            user_book.save()
+            print('user_book updated successfully')
+
+            # Update Booking values
+            booking = Booking.objects.get(user_book_id=user_book)
+            booking.returned = True
+            booking.save()
+            print('booking updated successfully')
+
+        # Display a success message
+        messages.success(request, 'Book returned successfully.')
+
+        # Redirect to the conversations page
+        return redirect('conversation', conversation_id=message.conversation.id)
+
+    else:
+        # If the request method is not POST, display an error message and redirect
+        messages.error(request, 'Invalid request method.')
+        return redirect('library')
+
