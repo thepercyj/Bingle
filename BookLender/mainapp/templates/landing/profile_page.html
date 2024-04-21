@@ -55,6 +55,7 @@
                             {% endif %}
                         </table>
                     </div>
+                    <button class="close-btn" onclick="closeModal('borrow-modal')">Close</button>
                 </div>
             </div>
             <div id="book-modal" class="modal">
@@ -206,7 +207,7 @@
 
             <div id="booking-modal" class="modal">
                 <div class="modal-content">
-                    <h3 class="modal-black">Borrow Requests</h3>
+                    <h3 class="modal-black">Booking History</h3>
                     <div class="booking">
                         <table class="table">
                             <tr>
@@ -216,9 +217,10 @@
                                 <th>From Date</th>
                                 <th>To Date</th>
                                 <th>Returned</th>
+                                <th>Action</th> <!-- Add a column for action -->
                             </tr>
-                            {% if booking %}
-                            {% for booked in booking %}
+                            {% if owner_bookings %}
+                            {% for booked in owner_bookings %}
                             <tr>
                                 <td>{{ booked.user_book_id.book_id.book_title }}</td>
                                 <td>{{ booked.owner_id }}</td>
@@ -226,12 +228,34 @@
                                 <td>{{ booked.from_date }}</td>
                                 <td>{{ booked.to_date }}</td>
                                 <td>{{ booked.returned }}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                            {% if borrower_bookings %}
+                            {% for booked in borrower_bookings %}
+                            <tr>
+                                <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                                <td>{{ booked.owner_id }}</td>
+                                <td>{{ booked.borrower_id }}</td>
+                                <td>{{ booked.from_date }}</td>
+                                <td>{{ booked.to_date }}</td>
+                                <td>{{ booked.returned }}</td>
+                                <td>
+                                    {% if not booked.returned %}
+                                    <form action="{% url 'return_book' booked.user_book_id.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="book_id" value="{{ booked.user_book_id.id }}" />
+                                        <input type="submit" class="btn btn-success" value="Return Book" />
+                                    </form>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                             {% endif %}
                         </table>
-
                     </div>
+                    <button class="close-btn" onclick="closeModal('booking-modal')">Close</button>
                 </div>
             </div>
 
@@ -265,9 +289,9 @@
             </div>
 
             <div class="box">
-                {% if booking %}
+                {% if owner_bookings or borrower_bookings %}
                 <h2>Booking History</h2>
-                <h2><a class="nav-link" href="#" onclick="openBookingModal('booking-modal')">{{ booking|length }}</a></h2>
+                <h2><a class="nav-link" href="#" onclick="openBookingModal('booking-modal')">{{ total_bookings }}</a></h2>
                 {% else %}
                 <h2>Booking History</h2>
                 <h2><a class="nav-link" href="#" onclick="openBookingModal('booking-modal')">0</a></h2>

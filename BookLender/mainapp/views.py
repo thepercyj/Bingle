@@ -146,7 +146,9 @@ def profile(request):
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
     pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
-    booking = Booking.objects.filter(owner_id=user_profile.id)
+    owner_bookings = Booking.objects.filter(owner_id=user_profile)
+    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
+    total_bookings = owner_bookings.count() + borrower_bookings.count()
 
 
     # Search functionality
@@ -187,7 +189,9 @@ def profile(request):
         'library': library,
         'lib_count': lib_count,
         'pre_booking': pre_booking,
-        'booking': booking,
+        'owner_bookings': owner_bookings,
+        'borrower_bookings': borrower_bookings,
+        'total_bookings': total_bookings,
     }
     return render(request, 'profile_page.html', context)
 
@@ -632,3 +636,54 @@ def deny_borrow_request(request, book_id):
         # If the request method is not POST, display an error message and redirect
         messages.error(request, 'Invalid request method.')
         return redirect('library')
+
+
+@login_required_message
+def return_book(request, book_id):
+    """
+    View function to return a book.
+    """
+    if request.method == 'POST':
+        print("Book ID: ", book_id)
+        # Get the message object based on the book ID and request type
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=3)
+
+        # Create a pre-message to notify the recipient
+        pre_message_content = f"Your book {message.user_book_id.book_id.book_title} has been returned."
+        new_message = Message(
+            from_user=message.to_user,
+            to_user=message.from_user,
+            details=pre_message_content,
+            request_type=5,
+            request_value='Book Returned',
+            user_book_id=message.user_book_id,
+            conversation=message.conversation,
+        )
+        new_message.save()
+
+        # Update UserBook values
+        with transaction.atomic():
+            user_book = message.user_book_id
+            user_book.currently_with = message.from_user
+            user_book.availability = True
+            user_book.booked = "No"
+            user_book.save()
+            print('user_book updated successfully')
+
+            # Update Booking values
+            booking = Booking.objects.get(user_book_id=user_book)
+            booking.returned = True
+            booking.save()
+            print('booking updated successfully')
+
+        # Display a success message
+        messages.success(request, 'Book returned successfully.')
+
+        # Redirect to the conversations page
+        return redirect('conversation', conversation_id=message.conversation.id)
+
+    else:
+        # If the request method is not POST, display an error message and redirect
+        messages.error(request, 'Invalid request method.')
+        return redirect('library')
+
