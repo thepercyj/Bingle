@@ -143,15 +143,10 @@ def profile(request):
     library = Book.objects.all()
     lib_count = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
-<<<<<<< HEAD
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    user_books_count = UserBook.objects.filter(owner_book_id=user_profile)
-    booking = Booking.objects.filter(owner_id=user_profile)
-=======
+
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
     booking = Booking.objects.filter(owner_id=user_profile.id)
->>>>>>> parent of 1d7d5d8 (Fullproof Borrow and Deny Logic)
 
     # Search functionality
     user_books_search_query = request.GET.get('user_books_search')
@@ -543,42 +538,15 @@ def save_borrow_request(request):
             to_date=to_date,
             returned=False,
             user_book_id=user_book_id,
-
-<<<<<<< HEAD
-        # Save the booking to the database
+        )
         booking.save()
         print('booking details saved')
         messages.success(request, 'Borrow request saved successfully!')
-        return redirect('profile')  # Redirect to the profile page
-    else:
-        return HttpResponse('Invalid request method')
-=======
-                # Create a new booking object and save the booking details
-                from_date = request.POST.get('from_date')
-                to_date = request.POST.get('to_date')
-                booking = Booking(
-                    owner_id=selected_owner,
-                    borrower_id=our_profile,
-                    from_date=from_date,
-                    to_date=to_date,
-                    returned=False,
-                    user_book_id=user_book
-                )
-                booking.save()
-                print('booking details saved')
-                messages.success(request, 'Borrow request saved successfully!')
 
-                # Redirect to appropriate conversation page
-                return redirect('conversation', conversation_id=conversation.id)
-
-        except Exception as e:
-            print(e)
-            messages.error(request, 'An error occurred.')
-            return redirect('library')
+        # Redirect to appropriate conversation page
+        return redirect('conversation', conversation_id=conversation.id)
 
     return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book})
->>>>>>> parent of 1d7d5d8 (Fullproof Borrow and Deny Logic)
-
 
 
 @login_required_message
