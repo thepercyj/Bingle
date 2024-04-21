@@ -16,10 +16,6 @@ function openBorrowModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
 }
 
-function openBookingModal(modalId) {
-    document.getElementById(modalId).style.display = 'flex';
-}
-
 function openUploadModal(modalId) {
     document.getElementById(modalId).style.display = 'flex';
 }
