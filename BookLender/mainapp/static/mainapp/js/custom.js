@@ -69,9 +69,17 @@ openViewModal('book-modal')
 
 document.addEventListener("DOMContentLoaded", function() {
 const urlParams = new URLSearchParams(window.location.search);
-const book = urlParams.get('borrow');
-if (book === 'true') {
+const borrow = urlParams.get('borrow');
+if (borrow === 'true') {
 openViewModal('borrow-modal')
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+const urlParams = new URLSearchParams(window.location.search);
+const booking = urlParams.get('booking');
+if (booking === 'true') {
+openViewModal('booking-modal')
 }
 });
 

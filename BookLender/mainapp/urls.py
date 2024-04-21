@@ -27,5 +27,6 @@ urlpatterns = [
     # path('save_borrow_request/', views.save_borrow_request, name='save_borrow_request'),
     path('approve_borrow_request/<int:book_id>/', views.approve_borrow_request, name='approve_borrow_request'),
     path('deny_borrow_request/<int:book_id>/', views.deny_borrow_request, name='deny_borrow_request'),
+    path('return_book/<int:book_id>/', views.return_book, name='return_book'),
     path('test/', views.test, name='test'),
 ]
