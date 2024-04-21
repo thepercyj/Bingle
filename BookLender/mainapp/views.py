@@ -262,7 +262,7 @@ def removeBook(request):
 def updateProfile(request):
     if request.method == 'POST':
         user = request.user
-        user_profile = UserProfile.objects.get(user=user)  # Adjust based on your UserProfile model relation
+        user_profile = UserProfile.objects.get(user=user)
 
         user.username = request.POST.get('inputUserName')
         user.first_name = request.POST.get('inputFirstName')
@@ -275,7 +275,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile_page')
+        return redirect('profile')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
