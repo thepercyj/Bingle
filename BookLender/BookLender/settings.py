@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'messagesApp',
     'crispy_forms',
     'crispy_bootstrap5',
+    'recommendations',
 ]
 
 MIDDLEWARE = [
