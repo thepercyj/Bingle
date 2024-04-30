@@ -29,11 +29,17 @@ def getborrowed(request):
     ).exclude(
         Q(from_user_id=our_profile) & Q(to_user_id=our_profile)
     ).select_related('id_1__user', 'id_2__user')
-    return JsonResponse({'message': list(borrow_messages.values()), 'our_profile_id': our_profile.id})
+
+    borrowed_books = list(borrow_messages.values_list('user_book_id', flat=True))
+
+    print(borrowed_books)
+    return JsonResponse({'borrowed_books': borrowed_books, 'our_profile_id': our_profile.id})
+    #return JsonResponse({'message': list(borrow_messages.values()), 'our_profile_id': our_profile.id})
     #response = 19
     #print(response)
     #return HttpResponse(str(response1))  # Return response as HTTP response
 
+    
 def login_required_message(function):
     """
     Custom decorator to ensure that the user is logged in before accessing a page.
