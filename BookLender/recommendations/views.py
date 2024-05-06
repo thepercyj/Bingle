@@ -31,6 +31,8 @@ def getborrowed(request):
     ).select_related('id_1__user', 'id_2__user')
 
     borrowed_books = list(borrow_messages.values_list('user_book_id', flat=True))
+    borrowed_books = list(filter(None, borrowed_books))
+
 
     print(borrowed_books)
     return JsonResponse({'borrowed_books': borrowed_books, 'our_profile_id': our_profile.id})
