@@ -112,7 +112,7 @@ class UserNotification(models.Model):
     recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications', default=1)
     read = models.BooleanField('Read', default=False)
     created_on = models.DateTimeField('Created On', default=datetime.now)
-    book = models.ForeignKey(UserBook, on_delete=models.CASCADE, related_name='notifications', default=1)
+    book = models.ForeignKey(UserBook, on_delete=models.CASCADE, related_name='notifications', null=True)
 
     def __str__(self):
         """Return the notification message."""

@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseRedirect
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions, UserNotification
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -525,6 +525,13 @@ def borrow(request, user_book_id):
                 print('pre booking details saved')
 
                 # Creates a notification for the owner
+                notification = UserNotification(
+                    sender=our_profile,
+                    message=Notification.objects.get(notify_type=2),
+                    recipient=selected_owner,
+                    book=user_book.book_id
+                )
+                notification.save()
 
                 messages.success(request, 'Borrow request saved successfully!')
 
@@ -590,6 +597,15 @@ def approve_borrow_request(request, book_id):
             booking.save()
             print('booking saved successfully')
 
+            # Add a notification for the owner
+            notification = UserNotification(
+                sender=message.from_user,
+                message=Notification.objects.get(notify_type=3),
+                recipient=message.to_user,
+                book=message.user_book_id.book_id
+            )
+            notification.save()
+
         # Display a success message
         messages.success(request, 'Borrow request approved successfully.')
 
@@ -628,6 +644,15 @@ def deny_borrow_request(request, book_id):
         transaction = Transactions.objects.get(user_book_id=message.user_book_id)
         transaction.status = 'denied'
         transaction.save()
+
+        # Add a notification for the owner
+        notification = UserNotification(
+            sender=message.from_user,
+            message=Notification.objects.get(notify_type=4),
+            recipient=message.to_user,
+            book=message.user_book_id.book_id
+        )
+        notification.save()
 
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
@@ -678,6 +703,15 @@ def return_book(request, book_id):
             booking.returned = True
             booking.save()
             print('booking updated successfully')
+
+            # Adds a notification for the owner
+            notification = UserNotification(
+                sender=message.from_user,
+                message=Notification.objects.get(notify_type=5),
+                recipient=message.to_user,
+                book=message.user_book_id.book_id
+            )
+            notification.save()
 
         # Display a success message
         messages.success(request, 'Book returned successfully.')
