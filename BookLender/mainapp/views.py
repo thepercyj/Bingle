@@ -523,6 +523,9 @@ def borrow(request, user_book_id):
                 )
                 pre_booking.save()
                 print('pre booking details saved')
+
+                # Creates a notification for the owner
+
                 messages.success(request, 'Borrow request saved successfully!')
 
                 # Redirect to appropriate conversation page

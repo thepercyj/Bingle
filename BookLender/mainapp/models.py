@@ -84,8 +84,10 @@ class Booking(models.Model):
 
 
 class Transactions(models.Model):
-    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True, related_name='transaction_user_book')
-    borrower_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='transaction_borrower')
+    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True,
+                                     related_name='transaction_user_book')
+    borrower_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True,
+                                    related_name='transaction_borrower')
     from_date = models.DateField('From Date', null=False, default=date(2024, 1, 1))
     to_date = models.DateField('To Date', null=False, default=date(2024, 1, 1))
     STATUS_CHOICES = [
@@ -102,9 +104,14 @@ class Notification(models.Model):
     notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
     details = models.CharField('Details', max_length=255, null=False, default='default')
 
+
 class UserNotification(models.Model):
     """Notifications for users."""
-    message = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='notifications')
-    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications_sent', default=1)
+    message = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='notifications', default=1)
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications', default=1)
     read = models.BooleanField('Read', default=False)
     created_on = models.DateTimeField('Created On', default=datetime.now)
+
+    def __str__(self):
+        return f"{self.sender} {self.message.details}"

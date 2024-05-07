@@ -121,33 +121,33 @@ if (document.cookie && document.cookie !== '') {
 return cookieValue;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-// Get all sub-menu items
-var subMenuItems = document.querySelectorAll(".notification-drop .sub-menu li");
-
-// Add event listener to each sub-menu item
-subMenuItems.forEach(function(item) {
-    item.addEventListener("click", function() {
-        callDecrementNotificationCounterFunction();
-    });
-});
-
-function callDecrementNotificationCounterFunction() {
-    // Send an AJAX request to call the decrement_notification_counter function
-    var xhr = new XMLHttpRequest();
-    var csrftoken = getCookie('csrftoken');
-    xhr.open("POST", "/decrement_counter/", true);
-    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Handle response if needed
-            // For example, you can update the UI here if necessary
-        }
-    };
-    xhr.send();
-}
-});
+// document.addEventListener("DOMContentLoaded", function() {
+// // Get all sub-menu items
+// var subMenuItems = document.querySelectorAll(".notification-drop .sub-menu li");
+//
+// // Add event listener to each sub-menu item
+// subMenuItems.forEach(function(item) {
+//     item.addEventListener("click", function() {
+//         callDecrementNotificationCounterFunction();
+//     });
+// });
+//
+// function callDecrementNotificationCounterFunction() {
+//     // Send an AJAX request to call the decrement_notification_counter function
+//     var xhr = new XMLHttpRequest();
+//     var csrftoken = getCookie('csrftoken');
+//     xhr.open("POST", "/decrement_counter/", true);
+//     xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//     xhr.setRequestHeader("Content-Type", "application/json");
+//     xhr.onreadystatechange = function() {
+//         if (xhr.readyState === 4 && xhr.status === 200) {
+//             // Handle response if needed
+//             // For example, you can update the UI here if necessary
+//         }
+//     };
+//     xhr.send();
+// }
+// });
 
 function loadUserBooks(url) {
     fetch(url)
