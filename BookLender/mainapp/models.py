@@ -97,7 +97,14 @@ class Transactions(models.Model):
 
 
 class Notification(models.Model):
+    """Template messages for notification types."""
     notify_type = models.IntegerField('Notify Type', null=False, default=1)
     notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
     details = models.CharField('Details', max_length=255, null=False, default='default')
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', default=1)
+
+class UserNotification(models.Model):
+    """Notifications for users."""
+    message = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='notifications')
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications')
+    read = models.BooleanField('Read', default=False)
+    created_on = models.DateTimeField('Created On', default=datetime.now)
