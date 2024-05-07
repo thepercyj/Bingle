@@ -49,7 +49,7 @@
                                 <span class="btn__badge">{{ notification_count }}</span>
                             <ul class="sub-menu">
                                 {% for notification in notifications %}
-                                <li>{{ notification }}</li>
+                                <li><a href="{% url 'redirect_notification' notification.id %}">{{ notification }}</a></li>
                                 {% endfor %}
                             </ul>
                             {% else %}

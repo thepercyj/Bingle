@@ -7,7 +7,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseRedirect
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions, UserNotification
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions, \
+    UserNotification
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -149,7 +150,6 @@ def profile(request):
     owner_bookings = Booking.objects.filter(owner_id=user_profile)
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
-
 
     # Search functionality
     user_books_search_query = request.GET.get('user_books_search')
@@ -478,7 +478,6 @@ def borrow(request, user_book_id):
         # Get the current user's UserProfile object
         our_profile = UserProfile.objects.get(user=request.user)
 
-
         try:
             # Create a new conversation object or retrieve an existing one
             with transaction.atomic():
@@ -617,6 +616,7 @@ def approve_borrow_request(request, book_id):
         messages.error(request, 'Invalid request method.')
         return redirect('library')
 
+
 @login_required_message
 def deny_borrow_request(request, book_id):
     """
@@ -724,3 +724,25 @@ def return_book(request, book_id):
         messages.error(request, 'Invalid request method.')
         return redirect('library')
 
+
+def redirect_notification(request, notification_id):
+    """Marks notification as read and redirects the user to the appropriate page for the notification type.
+    """
+    notification = get_object_or_404(UserNotification, id=notification_id)
+    notify_type = notification.message.notify_type
+    # Mark the notification as read
+    notification.read = True
+    notification.save()
+
+    # If message or review, find the conversation
+    if notify_type in [1, 7]:
+        # Find the matching conversation
+        conversation = Conversation.objects.filter(
+            (Q(id_1=notification.sender) & Q(id_2=notification.recipient)) |
+            (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
+        ).first()
+        # Redirect to the conversation page
+        return redirect('conversation', conversation_id=conversation.id)
+    # If borrow request, accept, deny or return book, redirect to profile page
+    elif notify_type in [2, 3, 4, 5]:
+        return redirect('profile')
