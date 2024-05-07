@@ -6,11 +6,13 @@ from django.utils.timezone import now
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, redirect
-from mainapp.models import User, UserProfile, Message
+from mainapp.models import User, UserProfile, Message, Book
 from django.contrib import messages
 from mainapp.models import Conversation
 from django.http import JsonResponse
 from django.shortcuts import render
+
+
 
 def recommendations_view(request):
     # Any necessary logic can be added here
@@ -34,7 +36,18 @@ def getborrowed(request):
     borrowed_books = list(filter(None, borrowed_books))
 
 
+    
+    genres = []
+
+    # Iterate over the borrowed_books list
+    for book_id in borrowed_books:
+        # Retrieve the book object from the Book table
+        book = Book.objects.get(pk=book_id)
+        # Append the genre of the book to the genres list
+        genres.append(book.genre)
+
     print(borrowed_books)
+    print(genres)
     return JsonResponse({'borrowed_books': borrowed_books, 'our_profile_id': our_profile.id})
     #return JsonResponse({'message': list(borrow_messages.values()), 'our_profile_id': our_profile.id})
     #response = 19
