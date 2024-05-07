@@ -528,7 +528,7 @@ def borrow(request, user_book_id):
                     sender=our_profile,
                     message=Notification.objects.get(notify_type=2),
                     recipient=selected_owner,
-                    book=user_book.book_id
+                    book=user_book
                 )
                 notification.save()
 
@@ -598,10 +598,10 @@ def approve_borrow_request(request, book_id):
 
             # Add a notification for the owner
             notification = UserNotification(
-                sender=message.from_user,
+                sender=message.to_user,
                 message=Notification.objects.get(notify_type=3),
-                recipient=message.to_user,
-                book=message.user_book_id.book_id
+                recipient=message.from_user,
+                book=message.user_book_id
             )
             notification.save()
 
@@ -618,6 +618,7 @@ def approve_borrow_request(request, book_id):
 
 
 @login_required_message
+@transaction.atomic
 def deny_borrow_request(request, book_id):
     """
     View function to deny a borrow request for a book.
@@ -647,10 +648,10 @@ def deny_borrow_request(request, book_id):
 
         # Add a notification for the owner
         notification = UserNotification(
-            sender=message.from_user,
+            sender=message.to_user,
             message=Notification.objects.get(notify_type=4),
-            recipient=message.to_user,
-            book=message.user_book_id.book_id
+            recipient=message.from_user,
+            book=message.user_book_id
         )
         notification.save()
 
@@ -706,10 +707,10 @@ def return_book(request, book_id):
 
             # Adds a notification for the owner
             notification = UserNotification(
-                sender=message.from_user,
+                sender=message.to_user,
                 message=Notification.objects.get(notify_type=5),
-                recipient=message.to_user,
-                book=message.user_book_id.book_id
+                recipient=message.from_user,
+                book=message.user_book_id
             )
             notification.save()
 
