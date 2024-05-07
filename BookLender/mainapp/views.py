@@ -50,8 +50,10 @@ def login_required_message(function):
 # test page
 def test(request):
     if request.method == "POST":
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_primary = user_profile.primary_location
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
+        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
 
         return render(request, 'test.html', {'searchquery': searchquery,
                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
@@ -339,10 +341,12 @@ def display_pic(request):
 
 @login_required_message
 def search(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    current_location = user_profile.current_location
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         users_profiles = UserProfile.objects.filter(
-            user__username=searchquery)  # Filter user profiles based on username
+            user__username=searchquery )  # Filter user profiles based on username and primary location
 
         return render(request, 'search.html', {'searchquery': searchquery,
                                                'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
@@ -350,6 +354,7 @@ def search(request):
         # Handle GET request
         # return render(request, 'search.html')
         users_profiles = UserProfile.objects.all()
+        users_profiles = users_profiles.filter(current_location=current_location)
         return render(request, 'search.html', {'users_profiles': users_profiles})
 
 
