@@ -84,8 +84,10 @@ class Booking(models.Model):
 
 
 class Transactions(models.Model):
-    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True, related_name='transaction_user_book')
-    borrower_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='transaction_borrower')
+    user_book_id = models.ForeignKey(UserBook, on_delete=models.CASCADE, null=True,
+                                     related_name='transaction_user_book')
+    borrower_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True,
+                                    related_name='transaction_borrower')
     from_date = models.DateField('From Date', null=False, default=date(2024, 1, 1))
     to_date = models.DateField('To Date', null=False, default=date(2024, 1, 1))
     STATUS_CHOICES = [
@@ -97,7 +99,32 @@ class Transactions(models.Model):
 
 
 class Notification(models.Model):
+    """Template messages for notification types."""
     notify_type = models.IntegerField('Notify Type', null=False, default=1)
     notify_value = models.CharField('Notify Value', max_length=255, null=False, default='default')
     details = models.CharField('Details', max_length=255, null=False, default='default')
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', default=1)
+
+
+class UserNotification(models.Model):
+    """Notifications for users."""
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications_sent', default=1)
+    message = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='notifications', default=1)
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications', default=1)
+    read = models.BooleanField('Read', default=False)
+    created_on = models.DateTimeField('Created On', default=datetime.now)
+    book = models.ForeignKey(UserBook, on_delete=models.CASCADE, related_name='notifications', null=True)
+
+    def __str__(self):
+        """Return the notification message."""
+        if self.message.notify_type in [1, 7]:
+            # 1: Message, 7: Review
+            return f"{self.sender} {self.message.details}"
+        elif self.message.notify_type in [2]:
+            # 2: Borrow Request
+            return f"{self.sender} {self.message.details} {self.book.book_id.book_title} from you."
+        elif self.message.notify_type in [3, 4, 6]:
+            # 3: Borrow Accept, 4: Borrow Deny, 6: Return Accepted
+            return f"{self.sender} {self.message.details} for {self.book.book_id.book_title}."
+        else:
+            # 5: Return
+            return f"{self.sender} {self.message.details} {self.book.book_id.book_title} to you."

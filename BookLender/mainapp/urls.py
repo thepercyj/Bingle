@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login_view'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout_view'),
     path('profile_page/', views.profile, name='profile'),
+    path('update-profile/', views.updateProfile, name='update_profile'),
     path('add-book/', views.addBook, name='addBook'),
     path('library/', views.library, name='library'),
     path('search/', views.search, name='search'),
@@ -29,4 +30,5 @@ urlpatterns = [
     path('deny_borrow_request/<int:book_id>/', views.deny_borrow_request, name='deny_borrow_request'),
     path('return_book/<int:book_id>/', views.return_book, name='return_book'),
     path('test/', views.test, name='test'),
+    path('redirect_notification/<int:notification_id>', views.redirect_notification, name='redirect_notification'),
 ]
