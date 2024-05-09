@@ -15,6 +15,17 @@
     {% for message in messages %}
     <p>{{ message }}</p>
     {% endfor %}
+    <h3>Recommended Books:</h3>
+    {% if recommended_books %}
+        <ul>
+        {% for book in recommended_books %}
+            <li>Title: {{ book.title }}, Author: {{ book.author }}, Genre: {{ book.genre }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommended books available.</p>
+    {% endif %}
+
     
     <h3>Profile ID:</h3>
     <p>{{ our_profile_id }}</p>

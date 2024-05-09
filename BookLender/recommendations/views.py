@@ -76,7 +76,7 @@ def getborrowed(request):
 
     print(borrowed_books)
     print(genres)
-    return JsonResponse({'borrowed_books': borrowed_books, 'our_profile_id': our_profile.id})
+    return JsonResponse({'borrowed_books': borrowed_books, 'our_profile_id': our_profile.id, 'recommended_books': recommended_books})
     #return JsonResponse({'message': list(borrow_messages.values()), 'our_profile_id': our_profile.id})
     #response = 19
     #print(response)
