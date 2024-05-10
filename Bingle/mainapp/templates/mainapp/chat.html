@@ -33,9 +33,11 @@
                                             <a href="#" class="list-group-item list-group-item-action p-3">
                                                 <div class="media align-items-center">
                                                     <div class="chat-avtar">
-                                                        <img class="rounded-circle img-fluid wid-40"
-                                                             src="../assets/images/user/avatar-1.jpg"
-                                                             alt="User image">
+                                                        {% if our_profile.profile_pic %}
+                                                            <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                        {% else %}
+                                                            <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                                        {% endif %}
                                                         <div class="bg-success chat-badge"></div>
                                                     </div>
                                                     <div class="media-body mx-2">
@@ -56,9 +58,19 @@
                                             <a href="{% url 'conversation' conversation.id %}" class="list-group-item list-group-item-action p-3">
                                                 <div class="media align-items-center">
                                                     <div class="chat-avtar">
-                                                        <img class="rounded-circle img-fluid wid-40"
-                                                             src="../assets/images/user/avatar-2.jpg"
-                                                             alt="User image">
+                                                    {% if conversation.id_1 == our_profile %}
+                                                        {% if conversation.id_2.profile_pic %}
+                                                            <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                        {% else %}
+                                                            <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                                        {% endif %}
+                                                    {% else %}
+                                                    {% if conversation.id_1.profile_pic %}
+                                                        <img class="user-avtar wid-45 rounded-circle" src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                    {% else %}
+                                                        <img class="user-avtar wid-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                                    {% endif %}
+                                                {% endif %}
                                                         <div class="bg-success bg-opacity-50 chat-badge">
                                                         </div>
                                                     </div>
@@ -67,7 +79,6 @@
                                                             {% if conversation.id_1 == our_profile %}
                                                             {{ conversation.id_2.user.username }}<br>
                                                             {% else %}
-
                                                             {{ conversation.id_1.user.username }}<br>
                                                             {% endif %}
 
@@ -103,10 +114,19 @@
                                         <div class="list-group-item">
                                             <div class="media align-items-center">
                                                 <div class="chat-avtar">
-                                                    <img class="rounded-circle img-fluid wid-40"
-                                                         src="../assets/images/user/avatar-5.jpg"
-                                                         alt="User image">
-                                                    <i class="chat-badge bg-success"></i>
+                                                    {% if conversation.id_1 == our_profile %}
+                                                        {% if conversation.id_2.profile_pic %}
+                                                            <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                        {% else %}
+                                                            <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                                        {% endif %}
+                                                    {% else %}
+                                                    {% if conversation.id_1.profile_pic %}
+                                                        <img class="user-avtar wid-45 rounded-circle" src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                    {% else %}
+                                                        <img class="user-avtar wid-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                                    {% endif %}
+                                                {% endif %}
                                                 </div>
                                                 <div class="media-body mx-3">
                                                     <h6 class="mb-0">John Doe</h6>
