@@ -29,4 +29,7 @@ urlpatterns = [
     path('deny_borrow_request/<int:book_id>/', views.deny_borrow_request, name='deny_borrow_request'),
     path('return_book/<int:book_id>/', views.return_book, name='return_book'),
     path('test/', views.test, name='test'),
+#     Paths for Conversation are here
+    path('conversation/<int:conversation_id>/', views.load_full_conversation, name='conversation'),
+
 ]
