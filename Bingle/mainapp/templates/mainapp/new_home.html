@@ -74,7 +74,9 @@
                                             {% csrf_token %}
                                             <input type="hidden" name="book_id"
                                                    value="{{ user_book.id }}"/>
-                                            <input type="submit" class="btn-close" value=""/>
+                                            <input type="submit"
+                                                   class="btn btn-primary d-flex align-items-center justify-content-center"
+                                                   value=""/>
                                         </form>
                                     </td>
                                 </tr>
@@ -113,6 +115,10 @@
                     {% csrf_token %}
                     {% if library %}
                         <h3 class="modal-black">Bingle Store</h3>
+                        <input type="text" id="searchLibrary" placeholder="Search Library">
+                        <button class="btn btn-primary" onclick="searchLibrary()">
+                            Search
+                        </button>
                         <div class="table-responsive">
                         <table class="table table-hover table-borderless mb-0">
                             <tr>
@@ -121,38 +127,91 @@
                                 <th>Current Owner(s)</th>
                                 <th>Action</th>
                             </tr>
-                            {#                                                {% for book in library %}#}
-                            {#                                                {% if book.user_books_book.first.owner_book_id.user != request.user %}#}
-                            {#                                                <tr>#}
-                            {#                                                    <td>{{ book.book_title }}</td>#}
-                            {#                                                    <td>{{ book.book_author }}</td>#}
-                            {#                                                    <td>#}
-                            {#                                                        {% for user_book in book.user_books_book.all %}#}
-                            {#                                                        {% if user_book.currently_with %}#}
-                            {#                                                        {{ user_book.currently_with.user }}#}
-                            {#                                                        {% if not forloop.last %}, {% endif %}#}
-                            {#                                                        {% else %}#}
-                            {#                                                        Not currently owned#}
-                            {#                                                        {% endif %}#}
-                            {#                                                        {% empty %}#}
-                            {#                                                        Not currently owned#}
-                            {#                                                        {% endfor %}#}
-                            {#                                                    </td>#}
-                            {#                                                    <td>#}
-                            {#                                                        <form action="{% url 'borrow' book.id %}" method="post">#}
-                            {#                                                            {% csrf_token %}#}
-                            {#                                                            <input type="submit" class="btn btn-primary"#}
-                            {#                                                                value="Borrow" />#}
-                            {#                                                        </form>#}
-                            {#                                                    </td>#}
-                            {#                                                </tr>#}
-                            {#                                                {% endif %}#}
-                            {#                                                {% endfor %}#}
+                            {% for book in library %}
+                                {% if book.user_books_book.first.owner_book_id.user != request.user %}
+                                    <tr>
+                                        <td>{{ book.book_title }}</td>
+                                        <td>{{ book.book_author }}</td>
+                                        <td>
+                                            {% for user_book in book.user_books_book.all %}
+                                                {% if user_book.currently_with %}
+                                                    {{ user_book.currently_with.user }}
+                                                    {% if not forloop.last %}, {% endif %}
+                                                {% else %}
+                                                    Not currently owned
+                                                {% endif %}
+                                                {% empty %}
+                                                Not currently owned
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <form action="{% url 'borrow' book.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="submit" class="btn btn-primary"
+                                                       value="Borrow"/>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                         </table>
                     {% endif %}
                     </div>
                 </div>
-                <button class="close-btn" onclick="closeModal('library-modal')">Close</button>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('library-modal')">Close
+                </button>
+            </div>
+        </div>
+
+        <div id="borrow-modal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-black">Borrow Requests</h3>
+                <div class="borrow">
+                    <table class="table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Borrower</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Status</th>
+                        </tr>
+                        {% if pre_booking %}
+                            {% for prebook in pre_booking %}
+                                <tr>
+                                    <td>{{ prebook.user_book_id.book_id.book_title }}</td>
+                                    <td>{{ prebook.borrower_id }}</td>
+                                    <td>{{ prebook.from_date }}</td>
+                                    <td>{{ prebook.to_date }}</td>
+                                    {% if prebook.status == "pending" %}
+                                        <td>
+                                            <form action="{% url 'approve_borrow_request' prebook.user_book_id.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="book_id"
+                                                       value="{{ prebook.user_book_id.id }}"/>
+                                                <input type="submit" class="btn btn-success" value="Approve"/>
+                                            </form>
+                                            <br>
+                                            <form action="{% url 'deny_borrow_request' prebook.user_book_id.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="book_id"
+                                                       value="{{ prebook.user_book_id.id }}"/>
+                                                <input type="submit" class="btn btn-danger " value="Deny"/>
+                                            </form>
+                                        </td>
+                                    {% elif prebook.status == "approved" %}
+                                        <td>Approved</td>
+                                    {% elif prebook.status == "denied" %}
+                                        <td>Denied</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center" onclick="closeModal('borrow-modal')">Close</button>
             </div>
         </div>
 
@@ -190,7 +249,13 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 me-3">
                             <p class="mb-1 fw-medium text-muted">Borrow requests</p>
-                            <h4 class="mb-1">Add borrow requests counter here</h4>
+                            {% if pre_booking %}
+                                <h4 class="mb-1">Pending - </h4>
+                                <h2><a class=" nav-link" href="#" onclick="openViewModal('borrow-modal')">{{pre_booking.count}}</a></h2>
+                            {% else %}
+                                <h4 class="mb-1">Pending - </h4>
+                                <h2><a class=" nav-link" href="#" onclick="openViewModal('borrow-modal')">0</a></h2>
+                            {% endif %}
                             <p class="mb-0 text-sm"></p>
                         </div>
                         <div class="flex-shrink-0">
