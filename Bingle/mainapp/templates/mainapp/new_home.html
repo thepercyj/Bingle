@@ -211,7 +211,66 @@
                         {% endif %}
                     </table>
                 </div>
-                <button class="btn btn-primary d-flex align-items-center justify-content-center" onclick="closeModal('borrow-modal')">Close</button>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('borrow-modal')">Close
+                </button>
+            </div>
+        </div>
+
+        <div id="booking-modal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-black">Booking History</h3>
+                <div class="booking">
+                    <table class="table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Owner</th>
+                            <th>Borrower</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Returned</th>
+                            <th>Action</th> <!-- Add a column for action -->
+                        </tr>
+                        {% if owner_bookings %}
+                            {% for booked in owner_bookings %}
+                                <tr>
+                                    <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                                    <td>{{ booked.owner_id }}</td>
+                                    <td>{{ booked.borrower_id }}</td>
+                                    <td>{{ booked.from_date }}</td>
+                                    <td>{{ booked.to_date }}</td>
+                                    <td>{{ booked.returned }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if borrower_bookings %}
+                            {% for booked in borrower_bookings %}
+                                <tr>
+                                    <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                                    <td>{{ booked.owner_id }}</td>
+                                    <td>{{ booked.borrower_id }}</td>
+                                    <td>{{ booked.from_date }}</td>
+                                    <td>{{ booked.to_date }}</td>
+                                    <td>{{ booked.returned }}</td>
+                                    <td>
+                                        {% if not booked.returned %}
+                                            <form action="{% url 'return_book' booked.user_book_id.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="book_id"
+                                                       value="{{ booked.user_book_id.id }}"/>
+                                                <input type="submit" class="btn btn-success" value="Return Book"/>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('booking-modal')">Close
+                </button>
             </div>
         </div>
 
@@ -251,7 +310,8 @@
                             <p class="mb-1 fw-medium text-muted">Borrow requests</p>
                             {% if pre_booking %}
                                 <h4 class="mb-1">Pending - </h4>
-                                <h2><a class=" nav-link" href="#" onclick="openViewModal('borrow-modal')">{{pre_booking.count}}</a></h2>
+                                <h2><a class=" nav-link" href="#"
+                                       onclick="openViewModal('borrow-modal')">{{ pre_booking.count }}</a></h2>
                             {% else %}
                                 <h4 class="mb-1">Pending - </h4>
                                 <h2><a class=" nav-link" href="#" onclick="openViewModal('borrow-modal')">0</a></h2>
@@ -274,7 +334,14 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 me-3">
                             <p class="mb-1 fw-medium text-muted">Booking History</p>
-                            <h4 class="mb-1">Add Booking history counter here</h4>
+                            {% if owner_bookings or borrower_bookings %}
+                                <h4 class="mb-1">Booking History</h4>
+                                <h2><a class="nav-link" href="#"
+                                       onclick="openBookingModal('booking-modal')">{{ total_bookings }}</a></h2>
+                            {% else %}
+                                <h4 class="mb-1">Booking History</h4>
+                                <h2><a class="nav-link" href="#" onclick="openBookingModal('booking-modal')">0</a></h2>
+                            {% endif %}
                             <p class="mb-0 text-sm"></p>
                         </div>
                         <div class="flex-shrink-0">
@@ -676,6 +743,102 @@
         {#                    </div>#}
         {#                </div>#}
 
+    </div>
+    <div class="row">
+        <form method="post" action="/update-profile/">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 text-center mb-3">
+                                <div class="user-upload wid-75">
+                                    <img src="../assets/images/user/avatar-4.jpg" alt="img" class="img-fluid">
+                                    <label for="uplfile" class="img-avtar-upload">
+                                        <i class="ti ti-camera f-24 mb-1"></i>
+                                        <span>Upload</span>
+                                    </label>
+                                    <input type="file" id="uplfile" class="d-none">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="inputFirstName" id="inputFirstName"
+                                           type="text" placeholder="Enter your first name"
+                                           value={{ user.first_name }}>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="inputLastName" id="inputLastName"
+                                           type="text" placeholder="Enter your last name"
+                                           value={{ user.last_name }}>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="inputUserName" id="inputUsername"
+                                           type="text" placeholder="Enter your username"
+                                           value={{ user.username }}>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Birthday</label>
+                                    <div>{{ user_profile.birth_date }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Contact Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Contact Phone</label>
+                                    <input type="text" class="form-control" name="inputPhone" id="inputPhone" type="tel"
+                                           placeholder="Enter your phone number"
+                                           value={{ user_profile.phone_number }}>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Email <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" name="inputEmailAddress"
+                                           id="inputEmailAddress"
+                                           type="email"
+                                           placeholder="Enter your email address" value={{ user.email }}>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" class="form-control" name="inputLocation" id="inputLocation"
+                                           type="text" placeholder="Enter your location"
+                                           value={{ user_profile.primary_location }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-end btn-page">
+                <div class="btn btn-primary" type="submit">Save Changes</div>
+            </div>
+        </form>
     </div>
     <!-- [ Main Content ] end -->
 {% endblock %}
