@@ -215,6 +215,7 @@ def old_conversation(request):
 
 
 def rate_user(request, conversation_id):
+    user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
         conversation = get_object_or_404(Conversation, id=conversation_id)
         their_profile = get_object_or_404(UserProfile,
@@ -239,4 +240,12 @@ def rate_user(request, conversation_id):
         else:
             their_profile.review = rating
         their_profile.save()
+
+        # Creates a notification for the recipient
+        notification = UserNotification(
+            sender=user_profile,
+            message=Notification.objects.get(notify_type=7),
+            recipient=their_profile,
+        )
+        notification.save()
         return redirect('conversation', conversation_id=conversation_id)
