@@ -2,15 +2,15 @@
  * Tabler Icons 1.41.1 by tabler - https://tabler.io
  * License - https://github.com/tabler/tabler-icons/blob/master/LICENSE
  */
- /* @font-face {
+@font-face {
     font-family: tabler-icons;
     font-style: normal;
     font-weight: 400;
-    src: url(tabler/tabler-icons.eot);
-    src: url(tabler/tabler-icons.eot?#iefix) format('embedded-opentype'), url(tabler/tabler-icons.woff2) format('woff2'),
-      url(tabler/tabler-icons.woff) format('woff'), url(tabler/tabler-icons.ttf) format('truetype'),
-      url(tabler/tabler-icons.svg#tabler-icons) format('svg');
-  } */
+    src: url(tabler-icons.eot);
+    src: url(tabler-icons.eot?#iefix) format('embedded-opentype'), url(tabler-icons.woff2) format('woff2'),
+      url(tabler-icons.woff) format('woff'), url(tabler-icons.ttf) format('truetype'),
+      url(tabler-icons.svg#tabler-icons) format('svg');
+  }
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     @font-face {
       font-family: tabler-icons;

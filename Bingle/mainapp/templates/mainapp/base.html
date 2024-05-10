@@ -429,7 +429,10 @@
 </script>
 
 </body>
-
+<script type="module">
+    import { DataTable } from '{% static 'mainapp/vendor/js/module.js' %}';
+    window.dt = new DataTable('#pc-dt-simple');
+</script>
 <script src="{% static 'mainapp/js/modal.js' %}"></script>
 
 </html>

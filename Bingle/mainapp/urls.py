@@ -14,6 +14,7 @@ urlpatterns = [
     path('add-book/', views.addBook, name='addBook'),
     path('library/', views.library, name='library'),
     path('search/', views.search, name='search'),
+    path('sample_search/', views.sample_search, name='sample_search'),
     path('borrow/<int:user_book_id>/', views.borrow, name='borrow'),
     path('remove-book/', views.removeBook, name='removeUserBook'),
     path('img_upload/', views.img_upload, name='img_upload'),
