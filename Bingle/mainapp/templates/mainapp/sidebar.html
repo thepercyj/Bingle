@@ -16,8 +16,7 @@
                                  class="user-avtar wid-45 rounded-circle" />
                         </div>
                         <div class="flex-grow-1 ms-3 me-2">
-                            <h6 class="mb-0">Jonh Smith</h6>
-                            <small>Administrator</small>
+                            <h6 class="mb-0">{{user.username}}</h6>
                         </div>
                         <a class="btn btn-icon btn-link-secondary avtar" data-bs-toggle="collapse"
                            href="#pc_sidebar_userlink">
@@ -58,13 +57,7 @@
                                 </svg>
                             </span>
                         <span class="pc-mtext">Home</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                        <span class="pc-badge">2</span>
                     </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="../dashboard/index.html">Default</a></li>
-                        <li class="pc-item"><a class="pc-link" href="../dashboard/analytics.html">Analytics</a></li>
-                    </ul>
                 </li>
 
                 <li class="pc-item pc-hasmenu">
@@ -75,16 +68,7 @@
                                 </svg>
                             </span>
                         <span class="pc-mtext">About Us</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="../demo/layout-vertical.html">Vertical</a></li>
-                        <li class="pc-item"><a class="pc-link" href="../demo/layout-horizontal.html">Horizontal</a>
-                        </li>
-                        <li class="pc-item"><a class="pc-link" href="../demo/layout-2.html">Layouts 2</a></li>
-                        <li class="pc-item"><a class="pc-link" href="../demo/layout-compact.html">Compact</a></li>
-                        <li class="pc-item"><a class="pc-link" href="../demo/layout-tab.html">Tab</a></li>
-                    </ul>
                 </li>
 
                 <li class="pc-item">
@@ -99,13 +83,22 @@
                 </li>
 
                 <li class="pc-item">
-                    <a href="{%url 'chat'%}" class="pc-link">
+                    <a href="{% url 'chat' %}" class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
                                     <use xlink:href="#custom-message-2"></use>
                                 </svg>
                             </span>
                         <span class="pc-mtext">Chat</span></a>
+                </li>
+                <li class="pc-item">
+                    <a href="{% url 'sample_search' %}" class="pc-link">
+                            <span class="pc-micon">
+                                <svg class="pc-icon">
+                                    <use xlink:href="#custom-message-2"></use>
+                                </svg>
+                            </span>
+                        <span class="pc-mtext">Search</span></a>
                 </li>
             </ul>
         </div>
