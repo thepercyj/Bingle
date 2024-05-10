@@ -16,6 +16,9 @@ def login_required_message(function):
     """
 
     def wrapper(request, *args, **kwargs):
+        """
+        Wrapper function to check if the user is logged in before accessing a page.
+        """
         if not request.user.is_authenticated:
             messages.error(request, "You must be logged in to view this page.")
             return login_required(function)(request, *args, **kwargs)
@@ -78,12 +81,10 @@ def send_message(request, conversation_id):
     This function handles the POST request to send a message from one user to another,
     ensuring the user is logged in.
 
-    Parameters:
-    request (HttpRequest): The Django HttpRequest object.
-    conversation_id (int): The ID of the conversation between the two users.
+    @param request: The Django HttpRequest object.
+    @param conversation_id: The ID of the conversation between the two users.
 
-    Returns:
-    HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
+    @return: HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
     """
     if request.method == 'POST':
         try:
@@ -139,6 +140,9 @@ def send_message(request, conversation_id):
 def new_conversation(request):
     """
     View function to start a new conversation with another user, ensuring the user is logged in.
+
+    Parameters:
+    @param request: The Django HttpRequest object.
     """
     # If the form has been submitted
     if request.method == 'POST':
@@ -225,6 +229,17 @@ def old_conversation(request):
 
 
 def rate_user(request, conversation_id):
+    """
+    This function allows a user to rate another user after a conversation has ended.
+
+    Parameters:
+    @param request: The Django HttpRequest object.
+    @param conversation_id: The ID of the conversation between the two users.
+
+    Returns:
+    @return: Redirects to the conversation page after the rating is submitted.
+
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
         conversation = get_object_or_404(Conversation, id=conversation_id)

@@ -32,6 +32,16 @@ def login_required_message(function):
     """
 
     def wrap(request, *args, **kwargs):
+        """
+        Wrapper function to check if the user is logged in
+
+        Parameters:
+        request: HttpRequest
+            The request object
+        *args: tuple
+            Additional positional arguments
+        **kwargs: dict
+        """
         # If the user is logged in, call the function
         if request.user.is_authenticated:
             return function(request, *args, **kwargs)
@@ -48,37 +58,52 @@ def login_required_message(function):
 
 
 # test page
-def test(request):
-    if request.method == "POST":
-        user_profile = UserProfile.objects.get(user=request.user)
-        user_primary = user_profile.primary_location
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
-
-        return render(request, 'test.html', {'searchquery': searchquery,
-                                             'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
-    else:
-        return render(request, 'about.html')
+# def test(request):
+#     if request.method == "POST":
+#         user_profile = UserProfile.objects.get(user=request.user)
+#         user_primary = user_profile.primary_location
+#         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
+#         user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
+#
+#         return render(request, 'test.html', {'searchquery': searchquery,
+#                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
+#     else:
+#         return render(request, 'about.html')
 
 
 # Index Page
 def index(request):
+    """
+    Renders the index page
+    """
     return render(request, 'index.html')
 
 
 def about(request):
+    """
+    Renders the about page
+    """
     return render(request, 'about.html')
 
 
 def lend(request):
+    """
+    Renders the lend page
+    """
     return render(request, 'lend.html')
 
 
 def forgetpass(request):
+    """
+    Renders the forgetpass page
+    """
     return render(request, 'forgetpass.html')
 
 
 def new_home(request):
+    """
+    Renders the home page
+    """
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile).select_related('book_id')
@@ -90,6 +115,9 @@ def new_home(request):
 
 
 def sample(request):
+    """
+    Renders the main dashboard page
+    """
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
     library = Book.objects.all()
@@ -101,12 +129,18 @@ def sample(request):
 
 
 def chat(request):
+    """
+    Renders the chat page
+    """
     conversations, our_profile = get_conversation_list(request)
     return render(request, 'chat.html', {'conversations': conversations,
                                          'our_profile': our_profile})
 
 
 def register(request):
+    """
+    Processes the request to register a new user
+    """
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -119,6 +153,9 @@ def register(request):
 
 
 def login_view(request):
+    """
+    Processes the request to log in a user
+    """
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -141,6 +178,9 @@ def login_view(request):
 
 @login_required_message
 def profile(request):
+    """
+    Renders the profile page
+    """
     form = BookForm(request.POST or None)
     user = request.user
     library = Book.objects.all()
@@ -224,6 +264,9 @@ def addBook(request):
 
 @login_required_message
 def addUserBook(request, book):
+    """
+    Adds a new book to the user's library
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBook(
@@ -240,6 +283,9 @@ def addUserBook(request, book):
 
 @login_required_message
 def library(request):
+    """
+    Renders the library page
+    """
     # Fetch all Book records without prefetch_related
     library = Book.objects.all()
 
@@ -249,6 +295,9 @@ def library(request):
 
 @login_required_message
 def removeBook(request):
+    """
+    Removes a book from the user's library
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     book_id = request.POST.get('book_id')
     try:
@@ -262,6 +311,9 @@ def removeBook(request):
 
 @login_required_message
 def updateProfile(request):
+    """
+    Updates the user's profile
+    """
     if request.method == 'POST':
         user = request.user
         user_profile = UserProfile.objects.get(user=user)
@@ -285,6 +337,9 @@ def updateProfile(request):
 
 @login_required_message
 def img_upload(request):
+    """
+    Handles the image upload functionality
+    """
     if request.method == 'POST':
         form = ProfilePicForm(request.POST, request.FILES)
         if form.is_valid():
@@ -333,7 +388,10 @@ def img_upload(request):
 
 @login_required_message
 def display_pic(request):
-    # Assuming you have a UserProfile instance associated with the currently logged-in user
+    """
+    Displays the user's profile picture
+    """
+    # Get the user's profile
     display = request.user.profile
 
     return render(request, 'profile_page.html', {'display': display})
@@ -341,6 +399,9 @@ def display_pic(request):
 
 @login_required_message
 def search(request):
+    """
+    Renders the search page and handles search functionality
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     current_location = user_profile.current_location
     if request.method == "POST":
@@ -360,6 +421,9 @@ def search(request):
 
 @login_required_message
 def view_profile(request, profile_id):
+    """
+    Renders the user profile page for a specific user
+    """
     viewprofile = get_object_or_404(UserProfile, pk=profile_id)
     user = request.user
     pre_message = get_pre_message_content(request, user)
@@ -422,6 +486,9 @@ def view_profile(request, profile_id):
 
 
 def get_pre_message_content(request, user):
+    """
+    Retrieves the pre-message content for the user
+    """
     notification = Notification.objects.filter(notify_type=1).first()
     if notification:
         if notification.notify_value == 'Simple Message':
@@ -431,11 +498,17 @@ def get_pre_message_content(request, user):
 
 @login_required_message
 def notify_user(request, message):
+    """
+    Notifies the user with a message
+    """
     success(request, message)
 
 
 @login_required_message
 def decrement_counter(request):
+    """
+    Decrements the notification counter for the user
+    """
     if request.method == 'POST':
         # Assuming you have some way to identify the user
         user = request.user
