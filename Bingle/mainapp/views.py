@@ -908,7 +908,7 @@ def redirect_notification(request, notification_id):
             (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
         ).first()
         # Redirect to the conversation page
-        return redirect('conversation', conversation_id=conversation.id)
+        return redirect('full_conversation', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
         return redirect('profile')
@@ -955,3 +955,63 @@ def load_full_conversation(request, conversation_id):
         # If no conversation is selected, return a blank variable in the context
         return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
 
+@login_required_message
+def send_message(request, conversation_id):
+    """
+    This function handles the POST request to send a message from one user to another,
+    ensuring the user is logged in.
+
+    :param request: The Django HttpRequest object.
+    :param conversation_id: The ID of the conversation between the two users.
+
+    :return: HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
+    """
+    if request.method == 'POST':
+        try:
+            conversation = get_object_or_404(Conversation, id=conversation_id)
+            our_profile = UserProfile.objects.get(user=request.user)
+            their_profile = get_object_or_404(UserProfile,
+                                              (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                              ~Q(user=request.user))
+
+            message = request.POST.get('message')
+            if not message:
+                messages.error(request, 'Message cannot be empty.')
+                return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+            try:
+                existing_conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                                 (Q(id_2=our_profile) & Q(id_1=their_profile)))
+                conversation = existing_conversation
+
+            except Conversation.DoesNotExist:
+                Conversation(id_1=our_profile, id_2=their_profile).save()
+                conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                        (Q(id_2=our_profile) & Q(id_1=their_profile)))
+
+            new_message = Message(
+                from_user=our_profile,
+                to_user=their_profile,
+                details=message,
+                request_type=1,
+                request_value='Simple Message',
+                created_on=now(),
+                conversation=conversation
+            )
+
+            new_message.save()
+            conversation.latest_message = message
+            conversation.save()
+            # Creates a notification for the recipient
+            notification = UserNotification(
+                recipient=their_profile,
+                message=Notification.objects.get(notify_type=1),
+                sender=our_profile,
+            )
+            notification.save()
+            print(reverse('send_chat_message', args=[conversation_id]))
+            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+        except UserProfile.DoesNotExist:
+            messages.error(request, 'User profile not found.')
+            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+    else:
+        return HttpResponse("Invalid request method", status=405)
