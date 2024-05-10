@@ -60,17 +60,17 @@ def login_required_message(function):
 
 
 # test page
-# def test(request):
-#     if request.method == "POST":
-#         user_profile = UserProfile.objects.get(user=request.user)
-#         user_primary = user_profile.primary_location
-#         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-#         user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
-#
-#         return render(request, 'test.html', {'searchquery': searchquery,
-#                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
-#     else:
-#         return render(request, 'about.html')
+def test(request):
+    if request.method == "POST":
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_primary = user_profile.primary_location
+        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
+        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
+
+        return render(request, 'test.html', {'searchquery': searchquery,
+                                             'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
+    else:
+        return render(request, 'about.html')
 
 
 # Index Page
@@ -144,13 +144,15 @@ def sample(request):
 
 def chat(request):
     """
-    Renders the chat page
-
-    :param request: HttpRequest - The request object
+    View function to get the list of conversations for the logged-in user.
     """
-    conversations, our_profile = get_conversation_list(request)
-    return render(request, 'chat.html', {'conversations': conversations,
-                                         'our_profile': our_profile})
+    our_profile = UserProfile.objects.get(user=request.user)
+    conversation_list = Conversation.objects.filter(
+        Q(id_1=our_profile) | Q(id_2=our_profile)
+    ).exclude(
+        Q(id_1=our_profile) & Q(id_2=our_profile)
+    ).select_related('id_1__user', 'id_2__user')
+    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile})
 
 
 def register(request):
