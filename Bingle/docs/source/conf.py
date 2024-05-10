@@ -9,8 +9,8 @@ import os
 import sys
 import django
 django_version = django.get_version()
-sys.path.insert(0, os.path.abspath('../../../BookLender/'))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'BookLender.settings'
+sys.path.insert(0, os.path.abspath('../..'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'Bingle.settings'
 django.setup()
 
 
