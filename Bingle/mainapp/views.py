@@ -287,6 +287,24 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
+@login_required_message
+def sample_search(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    current_location = user_profile.current_location
+    if request.method == "POST":
+        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
+        users_profiles = UserProfile.objects.filter(
+            user__username=searchquery )  # Filter user profiles based on username and primary location
+
+        return render(request, 'samplesearch.html', {'searchquery': searchquery,
+                                               'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
+    else:
+        # Handle GET request
+        # return render(request, 'search.html')
+        users_profiles = UserProfile.objects.all()
+        users_profiles = users_profiles.filter(current_location=current_location)
+        return render(request, 'samplesearch.html', {'users_profiles': users_profiles})
+
 
 @login_required_message
 def addUserBook(request, book):
