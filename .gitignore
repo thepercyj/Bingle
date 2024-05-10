@@ -68,9 +68,6 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
-
 # PyBuilder
 .pybuilder/
 target/
@@ -165,4 +162,3 @@ esrs.sql
 .DS_Store
 .DS_Store
 .DS_Store
-/BookLender/startup.ps1
