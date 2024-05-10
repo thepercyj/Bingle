@@ -195,8 +195,18 @@ def new_conversation(request):
                         conversation=new_conversation_object
                     )
                     new_message.save()
+
+                    # Creates a notification for the recipient
+                    notification = UserNotification(
+                        recipient=their_profile,
+                        message=Notification.objects.get(notify_type=1),
+                        sender=our_profile,
+                    )
+                    notification.save()
+
                     new_conversation_object.latest_message = message
                     new_conversation_object.save()
+
 
                 return redirect('conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
@@ -240,6 +250,17 @@ def rate_user(request, conversation_id):
         else:
             their_profile.review = rating
         their_profile.save()
+        pre_message_content = f"User {user_profile.user.username} rated you {rating} stars."
+
+        new_message = Message(
+            from_user=user_profile,
+            to_user=their_profile,
+            details=pre_message_content,
+            request_type=7,
+            request_value='Review Given',
+            conversation=conversation,
+        )
+        new_message.save()
 
         # Creates a notification for the recipient
         notification = UserNotification(
