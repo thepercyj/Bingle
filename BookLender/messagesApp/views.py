@@ -13,11 +13,17 @@ from django.core.serializers import serialize
 def login_required_message(function):
     """
     Custom decorator to ensure that the user is logged in before accessing a page.
+
+    Parameters:
+    :param function: The view function to be wrapped.
     """
 
     def wrapper(request, *args, **kwargs):
         """
         Wrapper function to check if the user is logged in before accessing a page.
+
+        Parameters:
+        :param request: The Django HttpRequest object.
         """
         if not request.user.is_authenticated:
             messages.error(request, "You must be logged in to view this page.")
@@ -31,6 +37,9 @@ def login_required_message(function):
 def get_conversation_list(request):
     """
     View function to get the list of conversations for the logged-in user.
+
+    Parameters:
+    :param request: The Django HttpRequest object.
     """
     our_profile = UserProfile.objects.get(user=request.user)
     conversationList = Conversation.objects.filter(
@@ -81,10 +90,10 @@ def send_message(request, conversation_id):
     This function handles the POST request to send a message from one user to another,
     ensuring the user is logged in.
 
-    @param request: The Django HttpRequest object.
-    @param conversation_id: The ID of the conversation between the two users.
+    :param request: The Django HttpRequest object.
+    :param conversation_id: The ID of the conversation between the two users.
 
-    @return: HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
+    :return: HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
     """
     if request.method == 'POST':
         try:
@@ -142,7 +151,7 @@ def new_conversation(request):
     View function to start a new conversation with another user, ensuring the user is logged in.
 
     Parameters:
-    @param request: The Django HttpRequest object.
+    :param request: The Django HttpRequest object.
     """
     # If the form has been submitted
     if request.method == 'POST':
@@ -225,6 +234,9 @@ def new_conversation(request):
 
 
 def old_conversation(request):
+    """
+    View function to display an old conversation between two users.
+    """
     return render(request, 'messagesApp/conversation.html')
 
 
@@ -233,11 +245,11 @@ def rate_user(request, conversation_id):
     This function allows a user to rate another user after a conversation has ended.
 
     Parameters:
-    @param request: The Django HttpRequest object.
-    @param conversation_id: The ID of the conversation between the two users.
+    :param request: The Django HttpRequest object.
+    :param conversation_id: The ID of the conversation between the two users.
 
     Returns:
-    @return: Redirects to the conversation page after the rating is submitted.
+    :return Redirects to the conversation page after the rating is submitted.
 
     """
     user_profile = UserProfile.objects.get(user=request.user)

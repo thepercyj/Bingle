@@ -15,6 +15,8 @@ from django.shortcuts import render
 def recommendations_view(request):
     """
     View for the recommendations page.
+
+    :param request: HttpRequest
     """
     # Any necessary logic can be added here
     return render(request, 'recommendations/recommendations.html')
@@ -22,6 +24,8 @@ def recommendations_view(request):
 def generate_rec(request):
     """
     View for generating recommendations.
+
+    :param request: HttpRequest
     """
     getborrowed_response = getborrowed(request)
     return getborrowed_response
@@ -30,6 +34,8 @@ def generate_rec(request):
 def getborrowed(request):
     """
     View for getting borrowed books.
+
+    :param request: HttpRequest
     """
       
     our_profile = UserProfile.objects.get(user=request.user)
@@ -52,6 +58,8 @@ def getborrowed(request):
 def login_required_message(function):
     """
     Custom decorator to ensure that the user is logged in before accessing a page.
+
+    :param function: Function
     """
 
     def wrapper(request, *args, **kwargs):
@@ -62,11 +70,11 @@ def login_required_message(function):
 
         Parameters:
         -----------
-        request: HttpRequest
+        :param request: HttpRequest
             The request object.
-        *args
+        :param *args
             Variable length argument list.
-        **kwargs
+        :param **kwargs
             Arbitrary keyword arguments.
         """
         if not request.user.is_authenticated:
