@@ -47,6 +47,8 @@
 </div>
 <!-- [ Pre-loader ] End -->
 <!-- [ Sidebar Menu ] start -->
+{% load crispy_forms_tags %}
+
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header">
@@ -634,13 +636,25 @@
                     </div>
                 </a>
             </div>
-
+            <div id="add-book-modal" class="modal">
+                <div class="modal-content">
+                    <form method="POST" action="/add-book/">
+                        {% csrf_token %}
+                        {{ bookform |crispy }}
+                        <input class="btn btn-primary" type="submit" value="Submit">
+                    </form>
+                    <br>
+                    <button
+                            class="btn btn-primary d-flex align-items-center justify-content-center"
+                            onclick="closeModal('add-book-modal')">Close
+                    </button>
+                </div>
+            </div>
             <div id="book-modal" class="modal">
                 <div class="modal-content">
                     <h3 class="modal-black">My Library</h3>
                     <button class="btn btn-primary d-flex align-items-center justify-content-center"
-                            onclick="openBookModal('add-book-modal')">
-                        Add
+                            onclick="openBookModal('add-book-modal'); closeModal('book-modal')"> Add
                     </button>
                     <br>
                     <div class="user_books">
@@ -673,18 +687,22 @@
                                     </tr>
                                 {% endfor %}
                             </table>
-                            <div id="add-book-modal" class="modal">
-                                <div class="modal-content">
-                                    <form method="POST" action="/add-book/">
-                                        {% csrf_token %}
-                                        <input class="btn btn-primary" type="submit" value="Submit">
-                                    </form>
-                                    <br>
-                                    <button
-                                            class="btn btn-primary d-flex align-items-center justify-content-center"
-                                            onclick="closeModal('add-book-modal')">Close
-                                    </button>
-                                </div>
+                            <div class="pagination">
+                                <span class="step-links">
+                                    {% if user_books.has_previous %}
+                                        <a href="?page=1">&laquo; first</a>
+                                        <a href="?page={{ user_books.previous_page_number }}">previous</a>
+                                    {% endif %}
+
+                                    <span class="current">
+                                        Page {{ user_books.number }} of {{ user_books.paginator.num_pages }}.
+                                    </span>
+
+                                    {% if user_books.has_next %}
+                                        <a href="?page={{ user_books.next_page_number }}">next</a>
+                                        <a href="?page={{ user_books.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </span>
                             </div>
                         {% else %}
                             <div>You don't have any books, getting adding!</div>
