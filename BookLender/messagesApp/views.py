@@ -171,7 +171,7 @@ def new_conversation(request):
                             to_user=their_profile,
                             details=message,
                             request_type=1,
-                            request_value='default',
+                            request_value='Simple Message',
                             created_on=now(),
                             conversation=existing_conversation
                         )
