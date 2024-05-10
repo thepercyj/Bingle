@@ -15,7 +15,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
 from django.db.models import Q, F
-from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
 from django.conf import settings
@@ -914,6 +913,7 @@ def redirect_notification(request, notification_id):
     elif notify_type in [2, 3, 4, 5]:
         return redirect('profile')
 
+
 @login_required_message
 def load_full_conversation(request, conversation_id):
     """
@@ -941,7 +941,13 @@ def load_full_conversation(request, conversation_id):
         for message in messages_list:
             message.is_from_our_user = (message.from_user == our_profile)
 
-        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile}
+        conversations = Conversation.objects.filter(
+            Q(id_1=our_profile) | Q(id_2=our_profile)
+        ).exclude(
+            Q(id_1=our_profile) & Q(id_2=our_profile)
+        ).select_related('id_1__user', 'id_2__user')
+
+        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile, 'conversation_list': conversations}
         return render(request, 'chat.html', context)
     except UserProfile.DoesNotExist:
         return HttpResponse("User profile not found", status=404)

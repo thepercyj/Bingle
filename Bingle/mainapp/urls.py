@@ -24,6 +24,7 @@ urlpatterns = [
     path('new_home/', views.new_home, name='new_home'),
     path('sample/', views.sample, name='sample'),
     path('chat/', views.chat, name='chat'),
+    path('chat/<int:conversation_id>/', views.load_full_conversation, name='full_conversation'),
     path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
     path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
     # path('save_borrow_request/', views.save_borrow_request, name='save_borrow_request'),
