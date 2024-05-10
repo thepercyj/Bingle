@@ -16,7 +16,8 @@ from django.shortcuts import render
 
 def recommendations_view(request):
     # Any necessary logic can be added here
-    return render(request, 'recommendations/recommendations.html')
+    recs = getborrowed(request)
+    return render(request, 'recommendations/recommendations.html', {'recs': recs})
 
 def generate_rec(request):
     getborrowed_response = getborrowed(request)
@@ -73,14 +74,14 @@ def getborrowed(request):
             recommended_books.append(book)
     
     print(recommended_books)
-
-    print(borrowed_books)
-    print(genres)
-    return JsonResponse({'borrowed_books': borrowed_books, 'our_profile_id': our_profile.id, 'recommended_books': recommended_books})
-    #return JsonResponse({'message': list(borrow_messages.values()), 'our_profile_id': our_profile.id})
-    #response = 19
-    #print(response)
-    #return HttpResponse(str(response1))  # Return response as HTTP response
+    #create a dictionary of recommended_books
+    recommended_books_dict = {}
+    for book in recommended_books:
+        recommended_books_dict[book.book_title] = book.book_author
+    print(recommended_books_dict)
+    return recommended_books
+ 
+    
 
     
 def login_required_message(function):
