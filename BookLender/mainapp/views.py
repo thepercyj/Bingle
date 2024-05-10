@@ -7,7 +7,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseRedirect
 from .forms import BookForm, UserRegisterForm, ProfilePicForm
-from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions
+from .models import UserBook, User, UserProfile, Book, Conversation, Message, Notification, Booking, Transactions, \
+    UserNotification
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -49,8 +50,10 @@ def login_required_message(function):
 # test page
 def test(request):
     if request.method == "POST":
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_primary = user_profile.primary_location
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery)  # Filter user profiles based on username
+        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
 
         return render(request, 'test.html', {'searchquery': searchquery,
                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
@@ -195,7 +198,6 @@ def profile(request):
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
 
-
     # Search functionality
     user_books_search_query = request.GET.get('user_books_search')
     if user_books_search_query:
@@ -307,7 +309,7 @@ def removeBook(request):
 def updateProfile(request):
     if request.method == 'POST':
         user = request.user
-        user_profile = UserProfile.objects.get(user=user)  # Adjust based on your UserProfile model relation
+        user_profile = UserProfile.objects.get(user=user)
 
         user.username = request.POST.get('inputUserName')
         user.first_name = request.POST.get('inputFirstName')
@@ -320,7 +322,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile_page')
+        return redirect('profile')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
@@ -384,10 +386,12 @@ def display_pic(request):
 
 @login_required_message
 def search(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    current_location = user_profile.current_location
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         users_profiles = UserProfile.objects.filter(
-            user__username=searchquery)  # Filter user profiles based on username
+            user__username=searchquery )  # Filter user profiles based on username and primary location
 
         return render(request, 'search.html', {'searchquery': searchquery,
                                                'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
@@ -395,6 +399,7 @@ def search(request):
         # Handle GET request
         # return render(request, 'search.html')
         users_profiles = UserProfile.objects.all()
+        users_profiles = users_profiles.filter(current_location=current_location)
         return render(request, 'search.html', {'users_profiles': users_profiles})
 
 
@@ -523,7 +528,6 @@ def borrow(request, user_book_id):
         # Get the current user's UserProfile object
         our_profile = UserProfile.objects.get(user=request.user)
 
-
         try:
             # Create a new conversation object or retrieve an existing one
             with transaction.atomic():
@@ -568,6 +572,16 @@ def borrow(request, user_book_id):
                 )
                 pre_booking.save()
                 print('pre booking details saved')
+
+                # Creates a notification for the owner
+                notification = UserNotification(
+                    sender=our_profile,
+                    message=Notification.objects.get(notify_type=2),
+                    recipient=selected_owner,
+                    book=user_book
+                )
+                notification.save()
+
                 messages.success(request, 'Borrow request saved successfully!')
 
                 # Redirect to appropriate conversation page
@@ -632,6 +646,15 @@ def approve_borrow_request(request, book_id):
             booking.save()
             print('booking saved successfully')
 
+            # Add a notification for the owner
+            notification = UserNotification(
+                sender=message.to_user,
+                message=Notification.objects.get(notify_type=3),
+                recipient=message.from_user,
+                book=message.user_book_id
+            )
+            notification.save()
+
         # Display a success message
         messages.success(request, 'Borrow request approved successfully.')
 
@@ -643,7 +666,9 @@ def approve_borrow_request(request, book_id):
         messages.error(request, 'Invalid request method.')
         return redirect('library')
 
+
 @login_required_message
+@transaction.atomic
 def deny_borrow_request(request, book_id):
     """
     View function to deny a borrow request for a book.
@@ -670,6 +695,15 @@ def deny_borrow_request(request, book_id):
         transaction = Transactions.objects.get(user_book_id=message.user_book_id)
         transaction.status = 'denied'
         transaction.save()
+
+        # Add a notification for the owner
+        notification = UserNotification(
+            sender=message.to_user,
+            message=Notification.objects.get(notify_type=4),
+            recipient=message.from_user,
+            book=message.user_book_id
+        )
+        notification.save()
 
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
@@ -721,6 +755,15 @@ def return_book(request, book_id):
             booking.save()
             print('booking updated successfully')
 
+            # Adds a notification for the owner
+            notification = UserNotification(
+                sender=message.to_user,
+                message=Notification.objects.get(notify_type=5),
+                recipient=message.from_user,
+                book=message.user_book_id
+            )
+            notification.save()
+
         # Display a success message
         messages.success(request, 'Book returned successfully.')
 
@@ -732,3 +775,25 @@ def return_book(request, book_id):
         messages.error(request, 'Invalid request method.')
         return redirect('library')
 
+
+def redirect_notification(request, notification_id):
+    """Marks notification as read and redirects the user to the appropriate page for the notification type.
+    """
+    notification = get_object_or_404(UserNotification, id=notification_id)
+    notify_type = notification.message.notify_type
+    # Mark the notification as read
+    notification.read = True
+    notification.save()
+
+    # If message or review, find the conversation
+    if notify_type in [1, 7]:
+        # Find the matching conversation
+        conversation = Conversation.objects.filter(
+            (Q(id_1=notification.sender) & Q(id_2=notification.recipient)) |
+            (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
+        ).first()
+        # Redirect to the conversation page
+        return redirect('conversation', conversation_id=conversation.id)
+    # If borrow request, accept, deny or return book, redirect to profile page
+    elif notify_type in [2, 3, 4, 5]:
+        return redirect('profile')

@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
-from mainapp.models import User, UserProfile, Message, Conversation
+from mainapp.models import User, UserProfile, Message, Conversation, UserNotification, Notification
 from django.contrib import messages
 from django.core.serializers import serialize
 
@@ -120,8 +120,13 @@ def send_message(request, conversation_id):
             new_message.save()
             conversation.latest_message = message
             conversation.save()
-            # Increment notification counters for both users
-            their_profile.increment_notification_counter()
+            # Creates a notification for the recipient
+            notification = UserNotification(
+                recipient=their_profile,
+                message=Notification.objects.get(notify_type=1),
+                sender=our_profile,
+            )
+            notification.save()
             return redirect('conversation', conversation_id=conversation.id)
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
