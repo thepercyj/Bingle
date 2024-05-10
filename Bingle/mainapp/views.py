@@ -88,7 +88,7 @@ def new_home(request):
 
     return render(request, 'newhome.html', context)
 
-
+@login_required_message
 def sample(request):
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
@@ -99,11 +99,56 @@ def sample(request):
                'user_book_count': books_count, 'library': library}
     return render(request, 'new_home.html', context)
 
-
+@login_required_message
 def chat(request):
-    conversations, our_profile = get_conversation_list(request)
-    return render(request, 'chat.html', {'conversations': conversations,
-                                         'our_profile': our_profile})
+    """
+    View function to get the list of conversations for the logged-in user.
+    """
+    our_profile = UserProfile.objects.get(user=request.user)
+    conversation_list = Conversation.objects.filter(
+        Q(id_1=our_profile) | Q(id_2=our_profile)
+    ).exclude(
+        Q(id_1=our_profile) & Q(id_2=our_profile)
+    ).select_related('id_1__user', 'id_2__user')
+    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile})
+
+@login_required_message
+def load_full_conversation(request, conversation_id):
+    """
+    This function loads the full conversation between two users, ensuring the user is logged in.
+
+    Parameters:
+    request (HttpRequest): The Django HttpRequest object.
+    conversation_id (int): The ID of the conversation between the two users.
+
+    Returns:
+    HttpResponse: Renders the conversation page with the messages between the two users.
+    """
+    try:
+        our_profile = UserProfile.objects.get(user=request.user)
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
+
+        messages_list = Message.objects.filter(
+            Q(from_user=our_profile, to_user=their_profile) | Q(
+                from_user=their_profile, to_user=our_profile)
+        ).select_related('from_user__user', 'to_user__user').order_by('created_on')
+
+        for message in messages_list:
+            message.is_from_our_user = (message.from_user == our_profile)
+
+        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile}
+        return render(request, 'chat.html', context)
+    except UserProfile.DoesNotExist:
+        return HttpResponse("User profile not found", status=404)
+    except Conversation.DoesNotExist:
+        # If no conversation is selected, return a blank variable in the context
+        return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
+# def chat(request):
+#     conversations = get_conversation_list(request)
+#     return render(request, 'chat.html', {'conversations': conversations})
 
 
 def register(request):
