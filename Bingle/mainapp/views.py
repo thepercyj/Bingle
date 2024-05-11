@@ -121,7 +121,7 @@ def new_home(request):
     return render(request, 'home.html')
 
 
-def sample(request):
+def new_profile(request):
     """
     Renders the main dashboard page
 
@@ -181,7 +181,7 @@ def sample(request):
         'borrower_bookings': borrower_bookings,
         'total_bookings': total_bookings,
     }
-    return render(request, 'new_home.html', context)
+    return render(request, 'new_profile.html', context)
 
 @login_required_message
 def chat(request):
