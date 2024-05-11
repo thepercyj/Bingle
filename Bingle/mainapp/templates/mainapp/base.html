@@ -216,8 +216,8 @@
                 <li class="dropdown pc-h-item header-user-profile">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                        role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-                        {% if profile.profile_pic %}
-                <img class="user-avtar" src="{{ profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                        {% if profile_pic %}
+                <img class="user-avtar" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                 {% else %}
                 <img class="user-avtar" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
                 {% endif %}

@@ -151,7 +151,7 @@ def chat(request):
     ).exclude(
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
-    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile})
+    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True})
 
 
 def register(request):

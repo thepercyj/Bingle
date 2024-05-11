@@ -81,17 +81,10 @@
                                                             {{ conversation.id_1.user.username }}<br>
                                                             {% endif %}
 
-                                                            <span
-                                                                    class="float-end text-sm text-muted f-w-400">3h
-                                                                            ago</span></h6>
+
                                                         <span
                                                                 class="text-sm text-muted">{{ conversation.latest_message }}
-                                                                        <span class="float-end">
-                                                                            <span
-                                                                                    class="chat-badge-status bg-success text-white"><i
-                                                                                    class="ti ti-check"></i>
-                                                                            </span>
-                                                                        </span>
+
                                                                     </span>
                                                     </div>
                                                 </div>
@@ -113,8 +106,8 @@
                                         <div class="list-group-item">
                                             <div class="media align-items-center">
                                                 <div class="chat-avtar">
-                                                    {% if our_profile.profile_pic %}
-                                                        <img class="rounded-circle img-fluid wid-40" src="{{ our_profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                    {% if profile_pic %}
+                                                        <img class="rounded-circle img-fluid wid-40" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                                                     {% else %}
                                                         <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
                                                     {% endif %}
@@ -160,8 +153,13 @@
                data-bs-toggle="offcanvas" data-bs-target="#offcanvas_User_list">
                 <i class="ti ti-menu-2 f-18"></i>
             </a>
+            <a href="#"
+               class="d-none d-xxl-inline-flex avtar avtar-s btn-link-secondary"
+               data-bs-toggle="collapse" data-bs-target="#chat-user_list">
+                <i class="ti ti-menu-2 f-18"></i>
+            </a>
                 <!-- Menu and user info toggle -->
-                <ul class="list-inline me-auto mb-0">
+                <ul class="list-inline me-auto mb-0" style="padding-left: 5px;">
                     {% if conversation.id_1 == our_profile %}
                     <li class="list-inline-item">
                        <h6 class="mb-0"><b>{{ conversation.id_2.user.username}}</b></h6>
@@ -193,11 +191,12 @@
                 <div class="{% if message.is_from_our_user %}message-out{% else %}message-in{% endif %}">
                     <div class="d-flex {% if not message.is_from_our_user %}flex-row-reverse{% endif %}">
                         <div class="flex-shrink-0">
+                        {% if not message.is_from_our_user %}
                             <div class="chat-avatar">
                                 <img class="rounded-circle img-fluid wid-40"
-                                     src="{% if message.is_from_our_user %}../assets/images/user/avatar-5.jpg{% else %}../assets/images/user/avatar-3.jpg{% endif %}" alt="User image">
-                                <i class="chat-badge bg-success"></i>
+                                     src="{{ message.from_user.profile_pic.url }}" alt="User image">
                             </div>
+                            {% endif %}
                         </div>
                         <div class="flex-grow-1 mx-3">
                             <div class="d-flex align-items-start flex-column">
@@ -218,6 +217,7 @@
         <!-- Input area -->
         <div class="card-footer py-2 px-3">
     <!-- Start of the form to handle message sending -->
+            {% if not initial %}
 <form action="{% url 'send_chat_message' conversation.id %}" method="post" id="message">
         {% csrf_token %}
         <!-- Textarea for input, adjusted for form submission -->
@@ -236,6 +236,7 @@
             </ul>
         </div>
     </form>
+    {% endif %}
 </div>
 
             <div class="offcanvas-xxl offcanvas-end chat-offcanvas" tabindex="-1" id="offcanvas_User_info">
