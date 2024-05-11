@@ -44,47 +44,46 @@
             </div>
         </div>
         <div id="book-modal" class="modal">
-            <div class="card">
-                <div class="card-body">
-                    <div class="modal-content">
-                        <h3 class="modal-black">My Library</h3>
-                        <button class="btn btn-primary d-flex align-items-center justify-content-center"
-                                onclick="openBookModal('add-book-modal'); closeModal('book-modal')"> Add
-                        </button>
-                        <br>
-                        <div class="user_books">
-                            {% csrf_token %}
-                            {% if user_books %}
-                                <table class="table">
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Author</th>
-                                        <th>Genre</th>
-                                        <th>Publish Date</th>
-                                        <th>Currently With</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    {% for user_book in user_books %}
-                                        <tr>
-                                            <td>{{ user_book.book_id.book_title }}</td>
-                                            <td>{{ user_book.book_id.book_author }}</td>
-                                            <td>{{ user_book.book_id.genre }}</td>
-                                            <td>{{ user_book.book_id.published_date }}</td>
-                                            <td>{{ user_book.currently_with }}</td>
-                                            <td>
-                                                <form action="/remove-book/" method="post">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="book_id"
-                                                           value="{{ user_book.id }}"/>
-                                                    <input type="submit"
-                                                           class="btn btn-primary d-flex align-items-center justify-content-center"
-                                                           value=""/>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                                <div class="pagination">
+            <div class="modal-content">
+                <h3 class="modal-black">My Library</h3>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="openBookModal('add-book-modal'); closeModal('book-modal')"> Add
+                </button>
+                <br>
+
+                <div class="user_books">
+                    {% csrf_token %}
+                    {% if user_books %}
+                        <table class="table">
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Publish Date</th>
+                                <th>Currently With</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for user_book in user_books %}
+                                <tr>
+                                    <td>{{ user_book.book_id.book_title }}</td>
+                                    <td>{{ user_book.book_id.book_author }}</td>
+                                    <td>{{ user_book.book_id.genre }}</td>
+                                    <td>{{ user_book.book_id.published_date }}</td>
+                                    <td>{{ user_book.currently_with }}</td>
+                                    <td>
+                                        <form action="/remove-book/" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="book_id"
+                                                   value="{{ user_book.id }}"/>
+                                            <input type="submit"
+                                                   class="btn btn-primary d-flex align-items-center justify-content-center"
+                                                   value=""/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <div class="pagination">
                                 <span class="step-links">
                                     {% if user_books.has_previous %}
                                         <a href="?page=1">&laquo; first</a>
@@ -100,16 +99,14 @@
                                         <a href="?page={{ user_books.paginator.num_pages }}">last &raquo;</a>
                                     {% endif %}
                                 </span>
-                                </div>
-                            {% else %}
-                                <div>You don't have any books, getting adding!</div>
-                            {% endif %}
                         </div>
-                        <button class="btn btn-primary d-flex align-items-center justify-content-center"
-                                onclick="closeModal('book-modal')">Close
-                        </button>
-                    </div>
+                    {% else %}
+                        <div>You don't have any books, getting adding!</div>
+                    {% endif %}
                 </div>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('book-modal')">Close
+                </button>
             </div>
         </div>
 
