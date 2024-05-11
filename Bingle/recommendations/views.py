@@ -13,15 +13,30 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 def recommendations_view(request):
+    """
+    View for the recommendations page.
+
+    :param request: HttpRequest
+    """
     # Any necessary logic can be added here
     return render(request, 'recommendations/recommendations.html')
 
 def generate_rec(request):
+    """
+    View for generating recommendations.
+
+    :param request: HttpRequest
+    """
     getborrowed_response = getborrowed(request)
     return getborrowed_response
 
 
 def getborrowed(request):
+    """
+    View for getting borrowed books.
+
+    :param request: HttpRequest
+    """
       
     our_profile = UserProfile.objects.get(user=request.user)
     borrow_messages = Message.objects.filter(Q(request_value ="Borrow Request") &
@@ -43,9 +58,25 @@ def getborrowed(request):
 def login_required_message(function):
     """
     Custom decorator to ensure that the user is logged in before accessing a page.
+
+    :param function: Function
     """
 
     def wrapper(request, *args, **kwargs):
+        """
+        Wrapper function for the decorator.
+
+        This function checks if the user is logged in. If the user is not logged in, an error message is displayed.
+
+        Parameters:
+        -----------
+        :param request: HttpRequest
+            The request object.
+        :param *args
+            Variable length argument list.
+        :param **kwargs
+            Arbitrary keyword arguments.
+        """
         if not request.user.is_authenticated:
             messages.error(request, "You must be logged in to view this page.")
             return login_required(function)(request, *args, **kwargs)

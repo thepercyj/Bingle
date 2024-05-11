@@ -15,7 +15,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
 from django.db.models import Q, F
-from messagesApp.views import get_conversation_list
 from django.db import transaction
 from django.utils.timezone import now
 from django.conf import settings
@@ -29,9 +28,21 @@ import json
 def login_required_message(function):
     """
     Decorator to display a message if the user is not logged in
+
+    :param function: function
     """
 
     def wrap(request, *args, **kwargs):
+        """
+        Wrapper function to check if the user is logged in
+
+        Parameters:
+        :param request: HttpRequest
+            The request object
+        :param *args: tuple
+            Additional positional arguments
+        :param **kwargs: dict
+        """
         # If the user is logged in, call the function
         if request.user.is_authenticated:
             return function(request, *args, **kwargs)
@@ -53,8 +64,7 @@ def test(request):
         user_profile = UserProfile.objects.get(user=request.user)
         user_primary = user_profile.primary_location
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery,
-                                                   primary_location=user_primary)  # Filter user profiles based on username
+        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
 
         return render(request, 'test.html', {'searchquery': searchquery,
                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
@@ -64,22 +74,47 @@ def test(request):
 
 # Index Page
 def index(request):
+    """
+    Renders the index page
+
+    :param request: HttpRequest - The request object
+    """
     return render(request, 'index.html')
 
 
 def about(request):
+    """
+    Renders the about page
+
+    :param request: HttpRequest - The request object
+    """
     return render(request, 'about.html')
 
 
 def lend(request):
+    """
+    Renders the lend page
+
+    :param request: HttpRequest - The request object
+    """
     return render(request, 'lend.html')
 
 
 def forgetpass(request):
+    """
+    Renders the forgetpass page
+
+    :param request: HttpRequest - The request object
+    """
     return render(request, 'forgetpass.html')
 
 
 def new_home(request):
+    """
+    Renders the home page
+
+    :param request: HttpRequest - The request object
+    """
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile).select_related('book_id')
@@ -90,66 +125,22 @@ def new_home(request):
     return render(request, 'newhome.html', context)
 
 
-@login_required_message
 def sample(request):
-    form = BookForm(request.POST or None)
+    """
+    Renders the main dashboard page
+
+    :param request: HttpRequest - The request object
+    """
     user = request.user
-    library = Book.objects.all()
-    lib_count = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
-    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
-    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
-    owner_bookings = Booking.objects.filter(owner_id=user_profile)
-    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
-    total_bookings = owner_bookings.count() + borrower_bookings.count()
-
-    # Search functionality
-    user_books_search_query = request.GET.get('user_books_search')
-    if user_books_search_query:
-        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
-
-    library_search_query = request.GET.get('library_search')
-    if library_search_query:
-        library = library.filter(book_title__icontains=library_search_query)
-
-    # Pagination for user_books
-    page_number = request.GET.get('page')
-    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
-    try:
-        user_books = paginator.page(page_number)
-    except PageNotAnInteger:
-        user_books = paginator.page(1)
-    except EmptyPage:
-        user_books = paginator.page(paginator.num_pages)
-
-    # Pagination for library
-    library_page = request.GET.get('library_page')
-    library_paginator = Paginator(library, 10)  # Show 10 books per page
-    try:
-        library = library_paginator.page(library_page)
-    except PageNotAnInteger:
-        library = library_paginator.page(1)
-    except EmptyPage:
-        library = library_paginator.page(library_paginator.num_pages)
-
-    context = {
-        'bookform': form,
-        'user_books': user_books,
-        'user_profile': user_profile,
-        'user': user,
-        'user_books_count': user_books_count,  # Update the count with user_books_count
-        'library': library,
-        'lib_count': lib_count,
-        'pre_booking': pre_booking,
-        'owner_bookings': owner_bookings,
-        'borrower_bookings': borrower_bookings,
-        'total_bookings': total_bookings,
-    }
+    library = Book.objects.all()
+    user_books = UserBook.objects.filter(owner_book_id=user_profile)
+    books_count = user_books.count()  # Count the number of books
+    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
+               'user_book_count': books_count, 'library': library}
     return render(request, 'new_home.html', context)
 
 
-@login_required_message
 def chat(request):
     """
     View function to get the list of conversations for the logged-in user.
@@ -160,51 +151,15 @@ def chat(request):
     ).exclude(
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
-    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile})
-
-
-@login_required_message
-def load_full_conversation(request, conversation_id):
-    """
-    This function loads the full conversation between two users, ensuring the user is logged in.
-
-    Parameters:
-    request (HttpRequest): The Django HttpRequest object.
-    conversation_id (int): The ID of the conversation between the two users.
-
-    Returns:
-    HttpResponse: Renders the conversation page with the messages between the two users.
-    """
-    try:
-        our_profile = UserProfile.objects.get(user=request.user)
-        conversation = get_object_or_404(Conversation, id=conversation_id)
-        their_profile = get_object_or_404(UserProfile,
-                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
-                                          ~Q(user=request.user))
-
-        messages_list = Message.objects.filter(
-            Q(from_user=our_profile, to_user=their_profile) | Q(
-                from_user=their_profile, to_user=our_profile)
-        ).select_related('from_user__user', 'to_user__user').order_by('created_on')
-
-        for message in messages_list:
-            message.is_from_our_user = (message.from_user == our_profile)
-
-        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile}
-        return render(request, 'chat.html', context)
-    except UserProfile.DoesNotExist:
-        return HttpResponse("User profile not found", status=404)
-    except Conversation.DoesNotExist:
-        # If no conversation is selected, return a blank variable in the context
-        return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
-
-
-# def chat(request):
-#     conversations = get_conversation_list(request)
-#     return render(request, 'chat.html', {'conversations': conversations})
+    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True})
 
 
 def register(request):
+    """
+    Processes the request to register a new user
+
+    :param request: HttpRequest - The request object
+    """
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -217,6 +172,11 @@ def register(request):
 
 
 def login_view(request):
+    """
+    Processes the request to log in a user
+
+    :param request: HttpRequest - The request object
+    """
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -239,6 +199,11 @@ def login_view(request):
 
 @login_required_message
 def profile(request):
+    """
+    Renders the profile page
+
+    :param request: HttpRequest - The request object
+    """
     form = BookForm(request.POST or None)
     user = request.user
     library = Book.objects.all()
@@ -298,14 +263,18 @@ def profile(request):
 
 @login_required_message
 def addBook(request):
-    """Processes the request to add a new book"""
+    """
+    Processes the request to add a new book
+
+    :param request: HttpRequest - The request object
+    """
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(request, new_book)
-            return redirect('sample')
+            return redirect('profile')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -319,9 +288,33 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
+@login_required_message
+def sample_search(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    current_location = user_profile.current_location
+    if request.method == "POST":
+        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
+        users_profiles = UserProfile.objects.filter(
+            user__username=searchquery )  # Filter user profiles based on username and primary location
+
+        return render(request, 'samplesearch.html', {'searchquery': searchquery,
+                                               'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
+    else:
+        # Handle GET request
+        # return render(request, 'search.html')
+        users_profiles = UserProfile.objects.all()
+        users_profiles = users_profiles.filter(current_location=current_location)
+        return render(request, 'samplesearch.html', {'users_profiles': users_profiles})
+
 
 @login_required_message
 def addUserBook(request, book):
+    """
+    Adds a new book to the user's library
+
+    :param request: HttpRequest - The request object
+    :param book: Book - The book to add to the user's library
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     """Adds a book to the user's library based on the Book Form submitted"""
     new_user_book = UserBook(
@@ -338,6 +331,11 @@ def addUserBook(request, book):
 
 @login_required_message
 def library(request):
+    """
+    Renders the library page
+
+    :param request: HttpRequest - The request object
+    """
     # Fetch all Book records without prefetch_related
     library = Book.objects.all()
 
@@ -347,6 +345,11 @@ def library(request):
 
 @login_required_message
 def removeBook(request):
+    """
+    Removes a book from the user's library
+
+    :param request: HttpRequest - The request object
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     book_id = request.POST.get('book_id')
     try:
@@ -355,11 +358,16 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('sample') + '?remove=true')
+    return HttpResponseRedirect(reverse('profile') + '?remove=true')
 
 
 @login_required_message
 def updateProfile(request):
+    """
+    Updates the user's profile
+
+    :param request: HttpRequest - The request object
+    """
     if request.method == 'POST':
         user = request.user
         user_profile = UserProfile.objects.get(user=user)
@@ -375,7 +383,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('sample')
+        return redirect('profile')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
@@ -383,6 +391,11 @@ def updateProfile(request):
 
 @login_required_message
 def img_upload(request):
+    """
+    Handles the image upload functionality
+
+    :param request: HttpRequest - The request object
+    """
     if request.method == 'POST':
         form = ProfilePicForm(request.POST, request.FILES)
         if form.is_valid():
@@ -431,7 +444,12 @@ def img_upload(request):
 
 @login_required_message
 def display_pic(request):
-    # Assuming you have a UserProfile instance associated with the currently logged-in user
+    """
+    Displays the user's profile picture
+
+    :param request: HttpRequest - The request object
+    """
+    # Get the user's profile
     display = request.user.profile
 
     return render(request, 'profile_page.html', {'display': display})
@@ -439,12 +457,17 @@ def display_pic(request):
 
 @login_required_message
 def search(request):
+    """
+    Renders the search page and handles search functionality
+
+    :param request: HttpRequest - The request object
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     current_location = user_profile.current_location
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         users_profiles = UserProfile.objects.filter(
-            user__username=searchquery)  # Filter user profiles based on username and primary location
+            user__username=searchquery )  # Filter user profiles based on username and primary location
 
         return render(request, 'search.html', {'searchquery': searchquery,
                                                'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
@@ -456,31 +479,14 @@ def search(request):
         return render(request, 'search.html', {'users_profiles': users_profiles})
 
 
-## search view for new sample frontend
-@login_required_message
-def sample_search(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    current_location = user_profile.current_location
-
-    if request.method == "POST":
-        searchquery = request.POST.get('searchquery', '').strip()
-        if searchquery:  # If search query is not empty
-            users_profiles = UserProfile.objects.filter(
-                user__username__icontains=searchquery,
-                current_location=current_location
-            )
-        else:  # If search query is empty, return all users in the current location
-            users_profiles = UserProfile.objects.filter(current_location=current_location)
-
-        return render(request, 'samplesearch.html', {'searchquery': searchquery, 'users_profiles': users_profiles})
-    else:
-        # Handle GET request
-        users_profiles = UserProfile.objects.filter(current_location=current_location)
-        return render(request, 'samplesearch.html', {'users_profiles': users_profiles})
-
-
 @login_required_message
 def view_profile(request, profile_id):
+    """
+    Renders the user profile page for a specific user
+
+    :param request: HttpRequest - The request object
+    :param profile_id: int - The ID of the user profile to view
+    """
     viewprofile = get_object_or_404(UserProfile, pk=profile_id)
     user = request.user
     pre_message = get_pre_message_content(request, user)
@@ -543,6 +549,12 @@ def view_profile(request, profile_id):
 
 
 def get_pre_message_content(request, user):
+    """
+    Retrieves the pre-message content for the user
+
+    :param request: HttpRequest - The request object
+    :param user: User - The user object
+    """
     notification = Notification.objects.filter(notify_type=1).first()
     if notification:
         if notification.notify_value == 'Simple Message':
@@ -552,11 +564,22 @@ def get_pre_message_content(request, user):
 
 @login_required_message
 def notify_user(request, message):
+    """
+    Notifies the user with a message
+
+    :param request: HttpRequest - The request object
+    :param message: str - The message to send
+    """
     success(request, message)
 
 
 @login_required_message
 def decrement_counter(request):
+    """
+    Decrements the notification counter for the user
+
+    :param request: HttpRequest - The request object
+    """
     if request.method == 'POST':
         # Assuming you have some way to identify the user
         user = request.user
@@ -580,6 +603,9 @@ def decrement_counter(request):
 def borrow(request, user_book_id):
     """
     Combined function to handle both initiating a borrow request and saving booking details.
+
+    :param request: HttpRequest - The request object
+    :param user_book_id: int - The ID of the user book to borrow
     """
     # Get the user_book object based on the user_book_id
     user_book = get_object_or_404(UserBook, id=user_book_id)
@@ -675,6 +701,9 @@ def borrow(request, user_book_id):
 def approve_borrow_request(request, book_id):
     """
     View function to approve a borrow request for a book.
+
+    :param request: HttpRequest - The request object
+    :param book_id: int - The ID of the book to approve the borrow request for
     """
     if request.method == 'POST':
         print("Book ID: ", book_id)
@@ -748,6 +777,9 @@ def approve_borrow_request(request, book_id):
 def deny_borrow_request(request, book_id):
     """
     View function to deny a borrow request for a book.
+
+    :param request: HttpRequest - The request object
+    :param book_id: int - The ID of the book to deny the borrow request for
     """
     if request.method == 'POST':
         print("Book ID: ", book_id)
@@ -797,6 +829,9 @@ def deny_borrow_request(request, book_id):
 def return_book(request, book_id):
     """
     View function to return a book.
+
+    :param request: HttpRequest - The request object
+    :param book_id: int - The ID of the book to return
     """
     if request.method == 'POST':
         print("Book ID: ", book_id)
@@ -853,7 +888,11 @@ def return_book(request, book_id):
 
 
 def redirect_notification(request, notification_id):
-    """Marks notification as read and redirects the user to the appropriate page for the notification type.
+    """
+    Marks notification as read and redirects the user to the appropriate page for the notification type.
+
+    :param request: HttpRequest - The request object
+    :param notification_id: int - The ID of the notification to redirect
     """
     notification = get_object_or_404(UserNotification, id=notification_id)
     notify_type = notification.message.notify_type
@@ -869,7 +908,110 @@ def redirect_notification(request, notification_id):
             (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
         ).first()
         # Redirect to the conversation page
-        return redirect('conversation', conversation_id=conversation.id)
+        return redirect('full_conversation', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
-        return redirect('sample')
+        return redirect('profile')
+
+
+@login_required_message
+def load_full_conversation(request, conversation_id):
+    """
+    This function loads the full conversation between two users, ensuring the user is logged in.
+
+    Parameters:
+    request (HttpRequest): The Django HttpRequest object.
+    conversation_id (int): The ID of the conversation between the two users.
+
+    Returns:
+    HttpResponse: Renders the conversation page with the messages between the two users.
+    """
+    try:
+        our_profile = UserProfile.objects.get(user=request.user)
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
+
+        messages_list = Message.objects.filter(
+            Q(from_user=our_profile, to_user=their_profile) | Q(
+                from_user=their_profile, to_user=our_profile)
+        ).select_related('from_user__user', 'to_user__user').order_by('created_on')
+
+        for message in messages_list:
+            message.is_from_our_user = (message.from_user == our_profile)
+
+        conversations = Conversation.objects.filter(
+            Q(id_1=our_profile) | Q(id_2=our_profile)
+        ).exclude(
+            Q(id_1=our_profile) & Q(id_2=our_profile)
+        ).select_related('id_1__user', 'id_2__user')
+
+        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile, 'conversation_list': conversations}
+        return render(request, 'chat.html', context)
+    except UserProfile.DoesNotExist:
+        return HttpResponse("User profile not found", status=404)
+    except Conversation.DoesNotExist:
+        # If no conversation is selected, return a blank variable in the context
+        return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
+
+@login_required_message
+def send_message(request, conversation_id):
+    """
+    This function handles the POST request to send a message from one user to another,
+    ensuring the user is logged in.
+
+    :param request: The Django HttpRequest object.
+    :param conversation_id: The ID of the conversation between the two users.
+
+    :return: HttpResponse: Redirects to the conversation page after the message is sent or error message if failed.
+    """
+    if request.method == 'POST':
+        try:
+            conversation = get_object_or_404(Conversation, id=conversation_id)
+            our_profile = UserProfile.objects.get(user=request.user)
+            their_profile = get_object_or_404(UserProfile,
+                                              (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                              ~Q(user=request.user))
+
+            message = request.POST.get('message')
+            if not message:
+                messages.error(request, 'Message cannot be empty.')
+                return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+            try:
+                existing_conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                                 (Q(id_2=our_profile) & Q(id_1=their_profile)))
+                conversation = existing_conversation
+
+            except Conversation.DoesNotExist:
+                Conversation(id_1=our_profile, id_2=their_profile).save()
+                conversation = Conversation.objects.get((Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                                                        (Q(id_2=our_profile) & Q(id_1=their_profile)))
+
+            new_message = Message(
+                from_user=our_profile,
+                to_user=their_profile,
+                details=message,
+                request_type=1,
+                request_value='Simple Message',
+                created_on=now(),
+                conversation=conversation
+            )
+
+            new_message.save()
+            conversation.latest_message = message
+            conversation.save()
+            # Creates a notification for the recipient
+            notification = UserNotification(
+                recipient=their_profile,
+                message=Notification.objects.get(notify_type=1),
+                sender=our_profile,
+            )
+            notification.save()
+            print(reverse('send_chat_message', args=[conversation_id]))
+            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+        except UserProfile.DoesNotExist:
+            messages.error(request, 'User profile not found.')
+            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+    else:
+        return HttpResponse("Invalid request method", status=405)

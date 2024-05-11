@@ -9,6 +9,12 @@ from .models import CustomUser  # Import your CustomUser model
 
 
 class BookForm(forms.ModelForm):
+    """
+    Form for adding a new book to the library.
+
+    This form is used to add a new book to the library. It is a ModelForm, which means it is based on the Book model.
+
+    """
     class Meta:
         model = Book
         fields = ['book_title', 'book_author', 'genre', 'published_date']  # List all fields you want from the model
@@ -24,12 +30,21 @@ class BookForm(forms.ModelForm):
 
 
 class UserBooksForm(forms.ModelForm):
+    """
+    Form for adding a new book to the user's library.
+
+    This form is used to add a new book to the user's library. It is a ModelForm, which means it is based on the UserBook model.    """
     class Meta:
         model = UserBook
         fields = ['owner_book_id', 'book_id', 'availability', 'booked']
 
 
 class UserRegisterForm(UserCreationForm):
+    """
+    Form for registering a new user.
+
+    This form is used to register a new user. It is a ModelForm, which means it is based on the User model.
+    """
     username = forms.CharField(max_length=30, required=True, help_text='Required.')
     first_name = forms.CharField(max_length=30, required=True, help_text='Required.')
     last_name = forms.CharField(max_length=30, required=True, help_text='Required.')
@@ -68,6 +83,11 @@ class UserRegisterForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
+    """
+    Form for logging in a user.
+
+    This form is used to log in a user. It is a Form, which means it is not based on a model.
+    """
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
@@ -85,6 +105,11 @@ class LoginForm(forms.Form):
 
 
 class ProfilePicForm(forms.ModelForm):
+    """
+    Form for updating a user's profile picture.
+
+    This form is used to update a user's profile picture. It is a ModelForm, which means it is based on the UserProfile model.
+    """
     class Meta:
         model = UserProfile
         fields = ['profile_pic']
