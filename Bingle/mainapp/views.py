@@ -131,13 +131,60 @@ def sample(request):
 
     :param request: HttpRequest - The request object
     """
+    form = BookForm(request.POST or None)
     user = request.user
-    user_profile = UserProfile.objects.get(user=user)
     library = Book.objects.all()
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    books_count = user_books.count()  # Count the number of books
-    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library': library}
+    lib_count = Book.objects.all()
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
+    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
+    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
+    owner_bookings = Booking.objects.filter(owner_id=user_profile)
+    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
+    total_bookings = owner_bookings.count() + borrower_bookings.count()
+
+    # Search functionality
+    user_books_search_query = request.GET.get('user_books_search')
+    if user_books_search_query:
+        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
+
+    library_search_query = request.GET.get('library_search')
+    if library_search_query:
+        library = library.filter(book_title__icontains=library_search_query)
+
+    # Pagination for user_books
+    page_number = request.GET.get('page')
+    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
+    try:
+        user_books = paginator.page(page_number)
+    except PageNotAnInteger:
+        user_books = paginator.page(1)
+    except EmptyPage:
+        user_books = paginator.page(paginator.num_pages)
+
+    # Pagination for library
+    library_page = request.GET.get('library_page')
+    library_paginator = Paginator(library, 10)  # Show 10 books per page
+    try:
+        library = library_paginator.page(library_page)
+    except PageNotAnInteger:
+        library = library_paginator.page(1)
+    except EmptyPage:
+        library = library_paginator.page(library_paginator.num_pages)
+
+    context = {
+        'bookform': form,
+        'user_books': user_books,
+        'user_profile': user_profile,
+        'user': user,
+        'user_books_count': user_books_count,  # Update the count with user_books_count
+        'library': library,
+        'lib_count': lib_count,
+        'pre_booking': pre_booking,
+        'owner_bookings': owner_bookings,
+        'borrower_bookings': borrower_bookings,
+        'total_bookings': total_bookings,
+    }
     return render(request, 'new_home.html', context)
 
 
