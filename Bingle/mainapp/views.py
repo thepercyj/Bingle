@@ -143,7 +143,7 @@ def sample(request):
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
 
-    # Search functionality
+    # Search functionality impleneted
     user_books_search_query = request.GET.get('user_books_search')
     if user_books_search_query:
         user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
