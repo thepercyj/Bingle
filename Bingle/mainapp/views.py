@@ -92,13 +92,60 @@ def new_home(request):
 
 @login_required_message
 def sample(request):
+    form = BookForm(request.POST or None)
     user = request.user
-    user_profile = UserProfile.objects.get(user=user)
     library = Book.objects.all()
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    books_count = user_books.count()  # Count the number of books
-    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count, 'library': library}
+    lib_count = Book.objects.all()
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
+    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
+    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
+    owner_bookings = Booking.objects.filter(owner_id=user_profile)
+    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
+    total_bookings = owner_bookings.count() + borrower_bookings.count()
+
+    # Search functionality
+    user_books_search_query = request.GET.get('user_books_search')
+    if user_books_search_query:
+        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
+
+    library_search_query = request.GET.get('library_search')
+    if library_search_query:
+        library = library.filter(book_title__icontains=library_search_query)
+
+    # Pagination for user_books
+    page_number = request.GET.get('page')
+    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
+    try:
+        user_books = paginator.page(page_number)
+    except PageNotAnInteger:
+        user_books = paginator.page(1)
+    except EmptyPage:
+        user_books = paginator.page(paginator.num_pages)
+
+    # Pagination for library
+    library_page = request.GET.get('library_page')
+    library_paginator = Paginator(library, 10)  # Show 10 books per page
+    try:
+        library = library_paginator.page(library_page)
+    except PageNotAnInteger:
+        library = library_paginator.page(1)
+    except EmptyPage:
+        library = library_paginator.page(library_paginator.num_pages)
+
+    context = {
+        'bookform': form,
+        'user_books': user_books,
+        'user_profile': user_profile,
+        'user': user,
+        'user_books_count': user_books_count,  # Update the count with user_books_count
+        'library': library,
+        'lib_count': lib_count,
+        'pre_booking': pre_booking,
+        'owner_bookings': owner_bookings,
+        'borrower_bookings': borrower_bookings,
+        'total_bookings': total_bookings,
+    }
     return render(request, 'new_home.html', context)
 
 
@@ -258,7 +305,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(request, new_book)
-            return redirect('profile')
+            return redirect('sample')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -308,7 +355,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('profile') + '?remove=true')
+    return HttpResponseRedirect(reverse('sample') + '?remove=true')
 
 
 @login_required_message
@@ -328,7 +375,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile')
+        return redirect('sample')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
@@ -825,4 +872,4 @@ def redirect_notification(request, notification_id):
         return redirect('conversation', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
-        return redirect('profile')
+        return redirect('sample')
