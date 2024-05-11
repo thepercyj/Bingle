@@ -59,13 +59,13 @@
                                                 <div class="media align-items-center">
                                                     <div class="chat-avtar">
                                                     {% if conversation.id_1 == our_profile %}
-                                                        {% if conversation.id_2.profile_pic %}
+                                                        {% if conversation.id_2.profile_pic.url != "/media/b''"%}
                                                             <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                                                         {% else %}
                                                             <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
                                                         {% endif %}
                                                     {% else %}
-                                                    {% if conversation.id_1.profile_pic %}
+                                                    {% if conversation.id_1.profile_pic.url != "/media/b''"%}
                                                         <img class="user-avtar wid-45 rounded-circle" src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                                                     {% else %}
                                                         <img class="user-avtar wid-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
@@ -164,7 +164,7 @@
                     <li class="list-inline-item">
                        <h6 class="mb-0"><b>{{ conversation.id_2.user.username}}</b></h6>
                     </li>
-                    <li class="list-inline-item"> {% if conversation.id_2.profile_pic %}
+                    <li class="list-inline-item"> {% if conversation.id_2.profile_pic.url != "/media/b''" %}
                         <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                         {% else %}
                         <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
@@ -172,7 +172,7 @@
                     {% else %}
 
                     <li > {{ conversation.id_1.user.username}}</li>
-                    <li> {% if conversation.id_1.profile_pic %}
+                    <li> {% if conversation.id_1.profile_pic.url != "/media/b''"%}
                         <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                         {% else %}
                         <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
@@ -193,8 +193,13 @@
                         <div class="flex-shrink-0">
                         {% if not message.is_from_our_user %}
                             <div class="chat-avatar">
+                            {% if message.from_user.profile_pic.url != "/media/b''" %}
                                 <img class="rounded-circle img-fluid wid-40"
                                      src="{{ message.from_user.profile_pic.url }}" alt="User image">
+                            {% else %}
+                                <img class="rounded-circle img-fluid wid-40"
+                                     src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="User image">
+                            {% endif %}
                             </div>
                             {% endif %}
                         </div>
