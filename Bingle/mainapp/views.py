@@ -349,7 +349,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('profile') + '?remove=true')
+    return HttpResponseRedirect(reverse('sample') + '?remove=true')
 
 
 @login_required_message
@@ -369,7 +369,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('profile')
+        return redirect('sample')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
@@ -866,4 +866,4 @@ def redirect_notification(request, notification_id):
         return redirect('conversation', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
-        return redirect('profile')
+        return redirect('sample')
