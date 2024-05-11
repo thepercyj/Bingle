@@ -19,6 +19,8 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.conf import settings
 import json
+from django.views.decorators.cache import cache_page
+
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -120,7 +122,7 @@ def new_home(request):
 
     return render(request, 'home.html')
 
-
+@cache_page(60 * 15)  # Cache for 15 minutes
 def new_profile(request):
     """
     Renders the main dashboard page
@@ -317,7 +319,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(request, new_book)
-            return redirect('sample')
+            return redirect('new_profile')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -401,7 +403,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('sample') + '?remove=true')
+    return HttpResponseRedirect(reverse('new_profile') + '?remove=true')
 
 
 @login_required_message
@@ -426,7 +428,7 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('sample')
+        return redirect('new_home')
     else:
         # Handle non-POST request
         return render(request, 'profile_page.html')
@@ -954,7 +956,7 @@ def redirect_notification(request, notification_id):
         return redirect('full_conversation', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
-        return redirect('sample')
+        return redirect('new_home')
 
 
 @login_required_message
