@@ -2505,8 +2505,8 @@ progress {
 .form-control,
 .datatable-input,
 .custom-select,
-.dataTable-selector,
-.dataTable-input {
+.datatable-selector,
+.datatable-input {
     display: block;
     width: 100%;
     padding: 0.8rem 0.75rem;
@@ -2529,8 +2529,8 @@ progress {
     .form-control,
     .datatable-input,
     .custom-select,
-    .dataTable-selector,
-    .dataTable-input {
+    .datatable-selector,
+    .datatable-input {
         transition: none;
     }
 }
@@ -2538,24 +2538,24 @@ progress {
 .form-control[type=file],
 [type=file].datatable-input,
 [type=file].custom-select,
-[type=file].dataTable-selector,
-[type=file].dataTable-input {
+[type=file].datatable-selector,
+[type=file].datatable-input {
     overflow: hidden;
 }
 
 .form-control[type=file]:not(:disabled):not([readonly]),
 [type=file].datatable-input:not(:disabled):not([readonly]),
 [type=file].custom-select:not(:disabled):not([readonly]),
-[type=file].dataTable-selector:not(:disabled):not([readonly]),
-[type=file].dataTable-input:not(:disabled):not([readonly]) {
+[type=file].datatable-selector:not(:disabled):not([readonly]),
+[type=file].datatable-input:not(:disabled):not([readonly]) {
     cursor: pointer;
 }
 
 .form-control:focus,
 .datatable-input:focus,
 .custom-select:focus,
-.dataTable-selector:focus,
-.dataTable-input:focus {
+.datatable-selector:focus,
+.datatable-input:focus {
     color: #131920;
     background-color: #f8f9fa;
     border-color: var(--bs-primary);
@@ -2566,8 +2566,8 @@ progress {
 .form-control::-webkit-date-and-time-value,
 .datatable-input::-webkit-date-and-time-value,
 .custom-select::-webkit-date-and-time-value,
-.dataTable-selector::-webkit-date-and-time-value,
-.dataTable-input::-webkit-date-and-time-value {
+.datatable-selector::-webkit-date-and-time-value,
+.datatable-input::-webkit-date-and-time-value {
     min-width: 85px;
     height: 1.5em;
     margin: 0;
@@ -2576,8 +2576,8 @@ progress {
 .form-control::-webkit-datetime-edit,
 .datatable-input::-webkit-datetime-edit,
 .custom-select::-webkit-datetime-edit,
-.dataTable-selector::-webkit-datetime-edit,
-.dataTable-input::-webkit-datetime-edit {
+.datatable-selector::-webkit-datetime-edit,
+.datatable-input::-webkit-datetime-edit {
     display: block;
     padding: 0;
 }
@@ -2585,8 +2585,8 @@ progress {
 .form-control::-moz-placeholder,
 .datatable-input::-moz-placeholder,
 .custom-select::-moz-placeholder,
-.dataTable-selector::-moz-placeholder,
-.dataTable-input::-moz-placeholder {
+.datatable-selector::-moz-placeholder,
+.datatable-input::-moz-placeholder {
     color: #bec8d0;
     opacity: 1;
 }
@@ -2594,8 +2594,8 @@ progress {
 .form-control::placeholder,
 .datatable-input::placeholder,
 .custom-select::placeholder,
-.dataTable-selector::placeholder,
-.dataTable-input::placeholder {
+.datatable-selector::placeholder,
+.datatable-input::placeholder {
     color: #bec8d0;
     opacity: 1;
 }
@@ -2603,8 +2603,8 @@ progress {
 .form-control:disabled,
 .datatable-input:disabled,
 .custom-select:disabled,
-.dataTable-selector:disabled,
-.dataTable-input:disabled {
+.datatable-selector:disabled,
+.datatable-input:disabled {
     background-color: #f3f5f7;
     opacity: 1;
 }
@@ -2612,8 +2612,8 @@ progress {
 .form-control::file-selector-button,
 .datatable-input::file-selector-button,
 .custom-select::file-selector-button,
-.dataTable-selector::file-selector-button,
-.dataTable-input::file-selector-button {
+.datatable-selector::file-selector-button,
+.datatable-input::file-selector-button {
     padding: 0.8rem 0.75rem;
     margin: -0.8rem -0.75rem;
     margin-inline-end: 0.75rem;
@@ -2633,8 +2633,8 @@ progress {
     .form-control::file-selector-button,
     .datatable-input::file-selector-button,
     .custom-select::file-selector-button,
-    .dataTable-selector::file-selector-button,
-    .dataTable-input::file-selector-button {
+    .datatable-selector::file-selector-button,
+    .datatable-input::file-selector-button {
         transition: none;
     }
 }
@@ -2642,8 +2642,8 @@ progress {
 .form-control:hover:not(:disabled):not([readonly])::file-selector-button,
 .datatable-input:hover:not(:disabled):not([readonly])::file-selector-button,
 .custom-select:hover:not(:disabled):not([readonly])::file-selector-button,
-.dataTable-selector:hover:not(:disabled):not([readonly])::file-selector-button,
-.dataTable-input:hover:not(:disabled):not([readonly])::file-selector-button {
+.datatable-selector:hover:not(:disabled):not([readonly])::file-selector-button,
+.datatable-input:hover:not(:disabled):not([readonly])::file-selector-button {
     background-color: #ecedee;
 }
 
@@ -2698,8 +2698,8 @@ progress {
 textarea.form-control,
 textarea.datatable-input,
 textarea.custom-select,
-textarea.dataTable-selector,
-textarea.dataTable-input {
+textarea.datatable-selector,
+textarea.datatable-input {
     min-height: calc(1.5em + 1.6rem + 2px);
 }
 
@@ -3092,8 +3092,8 @@ textarea.form-control-lg {
 .form-floating>.form-control,
 .form-floating>.datatable-input,
 .form-floating>.custom-select,
-.form-floating>.dataTable-selector,
-.form-floating>.dataTable-input,
+.form-floating>.datatable-selector,
+.form-floating>.datatable-input,
 .form-floating>.form-control-plaintext,
 .form-floating>.form-select,
 .form-floating>.datatable-selector {
@@ -3128,8 +3128,8 @@ textarea.form-control-lg {
 .form-floating>.form-control,
 .form-floating>.datatable-input,
 .form-floating>.custom-select,
-.form-floating>.dataTable-selector,
-.form-floating>.dataTable-input,
+.form-floating>.datatable-selector,
+.form-floating>.datatable-input,
 .form-floating>.form-control-plaintext {
     padding: 1rem 0.75rem;
 }
@@ -3137,8 +3137,8 @@ textarea.form-control-lg {
 .form-floating>.form-control::-moz-placeholder,
 .form-floating>.datatable-input::-moz-placeholder,
 .form-floating>.custom-select::-moz-placeholder,
-.form-floating>.dataTable-selector::-moz-placeholder,
-.form-floating>.dataTable-input::-moz-placeholder,
+.form-floating>.datatable-selector::-moz-placeholder,
+.form-floating>.datatable-input::-moz-placeholder,
 .form-floating>.form-control-plaintext::-moz-placeholder {
     color: transparent;
 }
@@ -3146,8 +3146,8 @@ textarea.form-control-lg {
 .form-floating>.form-control::placeholder,
 .form-floating>.datatable-input::placeholder,
 .form-floating>.custom-select::placeholder,
-.form-floating>.dataTable-selector::placeholder,
-.form-floating>.dataTable-input::placeholder,
+.form-floating>.datatable-selector::placeholder,
+.form-floating>.datatable-input::placeholder,
 .form-floating>.form-control-plaintext::placeholder {
     color: transparent;
 }
@@ -3155,8 +3155,8 @@ textarea.form-control-lg {
 .form-floating>.form-control:not(:-moz-placeholder-shown),
 .form-floating>.datatable-input:not(:-moz-placeholder-shown),
 .form-floating>.custom-select:not(:-moz-placeholder-shown),
-.form-floating>.dataTable-selector:not(:-moz-placeholder-shown),
-.form-floating>.dataTable-input:not(:-moz-placeholder-shown),
+.form-floating>.datatable-selector:not(:-moz-placeholder-shown),
+.form-floating>.datatable-input:not(:-moz-placeholder-shown),
 .form-floating>.form-control-plaintext:not(:-moz-placeholder-shown) {
     padding-top: 1.625rem;
     padding-bottom: 0.625rem;
@@ -3165,13 +3165,13 @@ textarea.form-control-lg {
 .form-floating>.form-control:focus,
 .form-floating>.datatable-input:focus,
 .form-floating>.custom-select:focus,
-.form-floating>.dataTable-selector:focus,
-.form-floating>.dataTable-input:focus,
+.form-floating>.datatable-selector:focus,
+.form-floating>.datatable-input:focus,
 .form-floating>.form-control:not(:placeholder-shown),
 .form-floating>.datatable-input:not(:placeholder-shown),
 .form-floating>.custom-select:not(:placeholder-shown),
-.form-floating>.dataTable-selector:not(:placeholder-shown),
-.form-floating>.dataTable-input:not(:placeholder-shown),
+.form-floating>.datatable-selector:not(:placeholder-shown),
+.form-floating>.datatable-input:not(:placeholder-shown),
 .form-floating>.form-control-plaintext:focus,
 .form-floating>.form-control-plaintext:not(:placeholder-shown) {
     padding-top: 1.625rem;
@@ -3181,8 +3181,8 @@ textarea.form-control-lg {
 .form-floating>.form-control:-webkit-autofill,
 .form-floating>.datatable-input:-webkit-autofill,
 .form-floating>.custom-select:-webkit-autofill,
-.form-floating>.dataTable-selector:-webkit-autofill,
-.form-floating>.dataTable-input:-webkit-autofill,
+.form-floating>.datatable-selector:-webkit-autofill,
+.form-floating>.datatable-input:-webkit-autofill,
 .form-floating>.form-control-plaintext:-webkit-autofill {
     padding-top: 1.625rem;
     padding-bottom: 0.625rem;
@@ -3197,8 +3197,8 @@ textarea.form-control-lg {
 .form-floating>.form-control:not(:-moz-placeholder-shown)~label,
 .form-floating>.datatable-input:not(:-moz-placeholder-shown)~label,
 .form-floating>.custom-select:not(:-moz-placeholder-shown)~label,
-.form-floating>.dataTable-selector:not(:-moz-placeholder-shown)~label,
-.form-floating>.dataTable-input:not(:-moz-placeholder-shown)~label {
+.form-floating>.datatable-selector:not(:-moz-placeholder-shown)~label,
+.form-floating>.datatable-input:not(:-moz-placeholder-shown)~label {
     color: rgba(var(--bs-body-color-rgb), 1);
     transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
@@ -3206,13 +3206,13 @@ textarea.form-control-lg {
 .form-floating>.form-control:focus~label,
 .form-floating>.datatable-input:focus~label,
 .form-floating>.custom-select:focus~label,
-.form-floating>.dataTable-selector:focus~label,
-.form-floating>.dataTable-input:focus~label,
+.form-floating>.datatable-selector:focus~label,
+.form-floating>.datatable-input:focus~label,
 .form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.datatable-input:not(:placeholder-shown)~label,
 .form-floating>.custom-select:not(:placeholder-shown)~label,
-.form-floating>.dataTable-selector:not(:placeholder-shown)~label,
-.form-floating>.dataTable-input:not(:placeholder-shown)~label,
+.form-floating>.datatable-selector:not(:placeholder-shown)~label,
+.form-floating>.datatable-input:not(:placeholder-shown)~label,
 .form-floating>.form-control-plaintext~label,
 .form-floating>.form-select~label,
 .form-floating>.datatable-selector~label {
@@ -3223,8 +3223,8 @@ textarea.form-control-lg {
 .form-floating>.form-control:not(:-moz-placeholder-shown)~label::after,
 .form-floating>.datatable-input:not(:-moz-placeholder-shown)~label::after,
 .form-floating>.custom-select:not(:-moz-placeholder-shown)~label::after,
-.form-floating>.dataTable-selector:not(:-moz-placeholder-shown)~label::after,
-.form-floating>.dataTable-input:not(:-moz-placeholder-shown)~label::after {
+.form-floating>.datatable-selector:not(:-moz-placeholder-shown)~label::after,
+.form-floating>.datatable-input:not(:-moz-placeholder-shown)~label::after {
     position: absolute;
     inset: 1rem 0.375rem;
     z-index: -1;
@@ -3237,13 +3237,13 @@ textarea.form-control-lg {
 .form-floating>.form-control:focus~label::after,
 .form-floating>.datatable-input:focus~label::after,
 .form-floating>.custom-select:focus~label::after,
-.form-floating>.dataTable-selector:focus~label::after,
-.form-floating>.dataTable-input:focus~label::after,
+.form-floating>.datatable-selector:focus~label::after,
+.form-floating>.datatable-input:focus~label::after,
 .form-floating>.form-control:not(:placeholder-shown)~label::after,
 .form-floating>.datatable-input:not(:placeholder-shown)~label::after,
 .form-floating>.custom-select:not(:placeholder-shown)~label::after,
-.form-floating>.dataTable-selector:not(:placeholder-shown)~label::after,
-.form-floating>.dataTable-input:not(:placeholder-shown)~label::after,
+.form-floating>.datatable-selector:not(:placeholder-shown)~label::after,
+.form-floating>.datatable-input:not(:placeholder-shown)~label::after,
 .form-floating>.form-control-plaintext~label::after,
 .form-floating>.form-select~label::after,
 .form-floating>.datatable-selector~label::after {
@@ -3259,8 +3259,8 @@ textarea.form-control-lg {
 .form-floating>.form-control:-webkit-autofill~label,
 .form-floating>.datatable-input:-webkit-autofill~label,
 .form-floating>.custom-select:-webkit-autofill~label,
-.form-floating>.dataTable-selector:-webkit-autofill~label,
-.form-floating>.dataTable-input:-webkit-autofill~label {
+.form-floating>.datatable-selector:-webkit-autofill~label,
+.form-floating>.datatable-input:-webkit-autofill~label {
     color: rgba(var(--bs-body-color-rgb), 1);
     transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
@@ -3290,8 +3290,8 @@ textarea.form-control-lg {
 .input-group>.form-control,
 .input-group>.datatable-input,
 .input-group>.custom-select,
-.input-group>.dataTable-selector,
-.input-group>.dataTable-input,
+.input-group>.datatable-selector,
+.input-group>.datatable-input,
 .input-group>.form-select,
 .input-group>.datatable-selector,
 .input-group>.form-floating {
@@ -3304,8 +3304,8 @@ textarea.form-control-lg {
 .input-group>.form-control:focus,
 .input-group>.datatable-input:focus,
 .input-group>.custom-select:focus,
-.input-group>.dataTable-selector:focus,
-.input-group>.dataTable-input:focus,
+.input-group>.datatable-selector:focus,
+.input-group>.datatable-input:focus,
 .input-group>.form-select:focus,
 .input-group>.datatable-selector:focus,
 .input-group>.form-floating:focus-within {
@@ -3343,8 +3343,8 @@ textarea.form-control-lg {
 .input-group-lg>.form-control,
 .input-group-lg>.datatable-input,
 .input-group-lg>.custom-select,
-.input-group-lg>.dataTable-selector,
-.input-group-lg>.dataTable-input,
+.input-group-lg>.datatable-selector,
+.input-group-lg>.datatable-input,
 .input-group-lg>.form-select,
 .input-group-lg>.datatable-selector,
 .input-group-lg>.input-group-text,
@@ -3358,8 +3358,8 @@ textarea.form-control-lg {
 .input-group-sm>.form-control,
 .input-group-sm>.datatable-input,
 .input-group-sm>.custom-select,
-.input-group-sm>.dataTable-selector,
-.input-group-sm>.dataTable-input,
+.input-group-sm>.datatable-selector,
+.input-group-sm>.datatable-input,
 .input-group-sm>.form-select,
 .input-group-sm>.datatable-selector,
 .input-group-sm>.input-group-text,
@@ -3382,8 +3382,8 @@ textarea.form-control-lg {
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.datatable-input,
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.custom-select,
-.input-group:not(.has-validation)>.form-floating:not(:last-child)>.dataTable-selector,
-.input-group:not(.has-validation)>.form-floating:not(:last-child)>.dataTable-input,
+.input-group:not(.has-validation)>.form-floating:not(:last-child)>.datatable-selector,
+.input-group:not(.has-validation)>.form-floating:not(:last-child)>.datatable-input,
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.datatable-selector {
     border-top-right-radius: 0;
@@ -3395,8 +3395,8 @@ textarea.form-control-lg {
 .input-group.has-validation>.form-floating:nth-last-child(n+3)>.form-control,
 .input-group.has-validation>.form-floating:nth-last-child(n+3)>.datatable-input,
 .input-group.has-validation>.form-floating:nth-last-child(n+3)>.custom-select,
-.input-group.has-validation>.form-floating:nth-last-child(n+3)>.dataTable-selector,
-.input-group.has-validation>.form-floating:nth-last-child(n+3)>.dataTable-input,
+.input-group.has-validation>.form-floating:nth-last-child(n+3)>.datatable-selector,
+.input-group.has-validation>.form-floating:nth-last-child(n+3)>.datatable-input,
 .input-group.has-validation>.form-floating:nth-last-child(n+3)>.form-select,
 .input-group.has-validation>.form-floating:nth-last-child(n+3)>.datatable-selector {
     border-top-right-radius: 0;
@@ -3412,8 +3412,8 @@ textarea.form-control-lg {
 .input-group>.form-floating:not(:first-child)>.form-control,
 .input-group>.form-floating:not(:first-child)>.datatable-input,
 .input-group>.form-floating:not(:first-child)>.custom-select,
-.input-group>.form-floating:not(:first-child)>.dataTable-selector,
-.input-group>.form-floating:not(:first-child)>.dataTable-input,
+.input-group>.form-floating:not(:first-child)>.datatable-selector,
+.input-group>.form-floating:not(:first-child)>.datatable-input,
 .input-group>.form-floating:not(:first-child)>.form-select,
 .input-group>.form-floating:not(:first-child)>.datatable-selector {
     border-top-left-radius: 0;
@@ -3453,13 +3453,13 @@ textarea.form-control-lg {
 .was-validated .form-control:valid,
 .was-validated .datatable-input:valid,
 .was-validated .custom-select:valid,
-.was-validated .dataTable-selector:valid,
-.was-validated .dataTable-input:valid,
+.was-validated .datatable-selector:valid,
+.was-validated .datatable-input:valid,
 .form-control.is-valid,
 .is-valid.datatable-input,
 .is-valid.custom-select,
-.is-valid.dataTable-selector,
-.is-valid.dataTable-input {
+.is-valid.datatable-selector,
+.is-valid.datatable-input {
     border-color: #2ca87f;
     padding-right: calc(1.5em + 1.6rem);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%232ca87f' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
@@ -3471,13 +3471,13 @@ textarea.form-control-lg {
 .was-validated .form-control:valid:focus,
 .was-validated .datatable-input:valid:focus,
 .was-validated .custom-select:valid:focus,
-.was-validated .dataTable-selector:valid:focus,
-.was-validated .dataTable-input:valid:focus,
+.was-validated .datatable-selector:valid:focus,
+.was-validated .datatable-input:valid:focus,
 .form-control.is-valid:focus,
 .is-valid.datatable-input:focus,
 .is-valid.custom-select:focus,
-.is-valid.dataTable-selector:focus,
-.is-valid.dataTable-input:focus {
+.is-valid.datatable-selector:focus,
+.is-valid.datatable-input:focus {
     border-color: #2ca87f;
     box-shadow: 0 0 0 0.2rem rgba(44, 168, 127, 0.25);
 }
@@ -3485,13 +3485,13 @@ textarea.form-control-lg {
 .was-validated textarea.form-control:valid,
 .was-validated textarea.datatable-input:valid,
 .was-validated textarea.custom-select:valid,
-.was-validated textarea.dataTable-selector:valid,
-.was-validated textarea.dataTable-input:valid,
+.was-validated textarea.datatable-selector:valid,
+.was-validated textarea.datatable-input:valid,
 textarea.form-control.is-valid,
 textarea.is-valid.datatable-input,
 textarea.is-valid.custom-select,
-textarea.is-valid.dataTable-selector,
-textarea.is-valid.dataTable-input {
+textarea.is-valid.datatable-selector,
+textarea.is-valid.datatable-input {
     padding-right: calc(1.5em + 1.6rem);
     background-position: top calc(0.375em + 0.4rem) right calc(0.375em + 0.4rem);
 }
@@ -3557,13 +3557,13 @@ textarea.is-valid.dataTable-input {
 .was-validated .input-group>.form-control:not(:focus):valid,
 .was-validated .input-group>.datatable-input:not(:focus):valid,
 .was-validated .input-group>.custom-select:not(:focus):valid,
-.was-validated .input-group>.dataTable-selector:not(:focus):valid,
-.was-validated .input-group>.dataTable-input:not(:focus):valid,
+.was-validated .input-group>.datatable-selector:not(:focus):valid,
+.was-validated .input-group>.datatable-input:not(:focus):valid,
 .input-group>.form-control:not(:focus).is-valid,
 .input-group>.datatable-input:not(:focus).is-valid,
 .input-group>.custom-select:not(:focus).is-valid,
-.input-group>.dataTable-selector:not(:focus).is-valid,
-.input-group>.dataTable-input:not(:focus).is-valid,
+.input-group>.datatable-selector:not(:focus).is-valid,
+.input-group>.datatable-input:not(:focus).is-valid,
 .was-validated .input-group>.form-select:not(:focus):valid,
 .was-validated .input-group>.datatable-selector:not(:focus):valid,
 .input-group>.form-select:not(:focus).is-valid,
@@ -3606,13 +3606,13 @@ textarea.is-valid.dataTable-input {
 .was-validated .form-control:invalid,
 .was-validated .datatable-input:invalid,
 .was-validated .custom-select:invalid,
-.was-validated .dataTable-selector:invalid,
-.was-validated .dataTable-input:invalid,
+.was-validated .datatable-selector:invalid,
+.was-validated .datatable-input:invalid,
 .form-control.is-invalid,
 .is-invalid.datatable-input,
 .is-invalid.custom-select,
-.is-invalid.dataTable-selector,
-.is-invalid.dataTable-input {
+.is-invalid.datatable-selector,
+.is-invalid.datatable-input {
     border-color: #dc2626;
     padding-right: calc(1.5em + 1.6rem);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc2626'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc2626' stroke='none'/%3e%3c/svg%3e");
@@ -3624,13 +3624,13 @@ textarea.is-valid.dataTable-input {
 .was-validated .form-control:invalid:focus,
 .was-validated .datatable-input:invalid:focus,
 .was-validated .custom-select:invalid:focus,
-.was-validated .dataTable-selector:invalid:focus,
-.was-validated .dataTable-input:invalid:focus,
+.was-validated .datatable-selector:invalid:focus,
+.was-validated .datatable-input:invalid:focus,
 .form-control.is-invalid:focus,
 .is-invalid.datatable-input:focus,
 .is-invalid.custom-select:focus,
-.is-invalid.dataTable-selector:focus,
-.is-invalid.dataTable-input:focus {
+.is-invalid.datatable-selector:focus,
+.is-invalid.datatable-input:focus {
     border-color: #dc2626;
     box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
 }
@@ -3638,13 +3638,13 @@ textarea.is-valid.dataTable-input {
 .was-validated textarea.form-control:invalid,
 .was-validated textarea.datatable-input:invalid,
 .was-validated textarea.custom-select:invalid,
-.was-validated textarea.dataTable-selector:invalid,
-.was-validated textarea.dataTable-input:invalid,
+.was-validated textarea.datatable-selector:invalid,
+.was-validated textarea.datatable-input:invalid,
 textarea.form-control.is-invalid,
 textarea.is-invalid.datatable-input,
 textarea.is-invalid.custom-select,
-textarea.is-invalid.dataTable-selector,
-textarea.is-invalid.dataTable-input {
+textarea.is-invalid.datatable-selector,
+textarea.is-invalid.datatable-input {
     padding-right: calc(1.5em + 1.6rem);
     background-position: top calc(0.375em + 0.4rem) right calc(0.375em + 0.4rem);
 }
@@ -3710,13 +3710,13 @@ textarea.is-invalid.dataTable-input {
 .was-validated .input-group>.form-control:not(:focus):invalid,
 .was-validated .input-group>.datatable-input:not(:focus):invalid,
 .was-validated .input-group>.custom-select:not(:focus):invalid,
-.was-validated .input-group>.dataTable-selector:not(:focus):invalid,
-.was-validated .input-group>.dataTable-input:not(:focus):invalid,
+.was-validated .input-group>.datatable-selector:not(:focus):invalid,
+.was-validated .input-group>.datatable-input:not(:focus):invalid,
 .input-group>.form-control:not(:focus).is-invalid,
 .input-group>.datatable-input:not(:focus).is-invalid,
 .input-group>.custom-select:not(:focus).is-invalid,
-.input-group>.dataTable-selector:not(:focus).is-invalid,
-.input-group>.dataTable-input:not(:focus).is-invalid,
+.input-group>.datatable-selector:not(:focus).is-invalid,
+.input-group>.datatable-input:not(:focus).is-invalid,
 .was-validated .input-group>.form-select:not(:focus):invalid,
 .was-validated .input-group>.datatable-selector:not(:focus):invalid,
 .input-group>.form-select:not(:focus).is-invalid,
@@ -25039,8 +25039,8 @@ pre[class*=language-]>code {
 .pc-header .header-search .form-control,
 .pc-header .header-search .datatable-input,
 .pc-header .header-search .custom-select,
-.pc-header .header-search .dataTable-selector,
-.pc-header .header-search .dataTable-input {
+.pc-header .header-search .datatable-selector,
+.pc-header .header-search .datatable-input {
     border-radius: 8px;
     padding: 0.344rem 1.8rem;
     width: 200px;
@@ -25052,8 +25052,8 @@ pre[class*=language-]>code {
     .pc-header .header-search .form-control,
     .pc-header .header-search .datatable-input,
     .pc-header .header-search .custom-select,
-    .pc-header .header-search .dataTable-selector,
-    .pc-header .header-search .dataTable-input {
+    .pc-header .header-search .datatable-selector,
+    .pc-header .header-search .datatable-input {
         width: 100%;
     }
 }
@@ -29556,8 +29556,8 @@ select.form-control:hover,
 .form-control:hover,
 .datatable-input:hover,
 .custom-select:hover,
-.dataTable-selector:hover,
-.dataTable-input:hover {
+.datatable-selector:hover,
+.datatable-input:hover {
     background-color: #f8f9fa;
 }
 
@@ -29565,8 +29565,8 @@ select.form-control[readonly],
 .form-control[readonly],
 [readonly].datatable-input,
 [readonly].custom-select,
-[readonly].dataTable-selector,
-[readonly].dataTable-input {
+[readonly].datatable-selector,
+[readonly].datatable-input {
     opacity: 0.6;
 }
 
@@ -29583,8 +29583,8 @@ select.form-control[readonly],
 select.form-control,
 select.datatable-input,
 select.custom-select,
-select.dataTable-selector,
-select.dataTable-input {
+select.datatable-selector,
+select.datatable-input {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -29594,13 +29594,13 @@ select.dataTable-input {
 select.form-control[data-multiselectsplitter-firstselect-selector],
 select[data-multiselectsplitter-firstselect-selector].datatable-input,
 select[data-multiselectsplitter-firstselect-selector].custom-select,
-select[data-multiselectsplitter-firstselect-selector].dataTable-selector,
-select[data-multiselectsplitter-firstselect-selector].dataTable-input,
+select[data-multiselectsplitter-firstselect-selector].datatable-selector,
+select[data-multiselectsplitter-firstselect-selector].datatable-input,
 select.form-control[data-multiselectsplitter-secondselect-selector],
 select[data-multiselectsplitter-secondselect-selector].datatable-input,
 select[data-multiselectsplitter-secondselect-selector].custom-select,
-select[data-multiselectsplitter-secondselect-selector].dataTable-selector,
-select[data-multiselectsplitter-secondselect-selector].dataTable-input {
+select[data-multiselectsplitter-secondselect-selector].datatable-selector,
+select[data-multiselectsplitter-secondselect-selector].datatable-input {
     background: none;
 }
 
@@ -29611,21 +29611,21 @@ select[data-multiselectsplitter-secondselect-selector].dataTable-input {
 .form-floating>.form-control:not(:-moz-placeholder-shown)~label,
 .form-floating>.datatable-input:not(:-moz-placeholder-shown)~label,
 .form-floating>.custom-select:not(:-moz-placeholder-shown)~label,
-.form-floating>.dataTable-selector:not(:-moz-placeholder-shown)~label,
-.form-floating>.dataTable-input:not(:-moz-placeholder-shown)~label {
+.form-floating>.datatable-selector:not(:-moz-placeholder-shown)~label,
+.form-floating>.datatable-input:not(:-moz-placeholder-shown)~label {
     color: #5b6b79;
 }
 
 .form-floating>.form-control:focus~label,
 .form-floating>.datatable-input:focus~label,
 .form-floating>.custom-select:focus~label,
-.form-floating>.dataTable-selector:focus~label,
-.form-floating>.dataTable-input:focus~label,
+.form-floating>.datatable-selector:focus~label,
+.form-floating>.datatable-input:focus~label,
 .form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.datatable-input:not(:placeholder-shown)~label,
 .form-floating>.custom-select:not(:placeholder-shown)~label,
-.form-floating>.dataTable-selector:not(:placeholder-shown)~label,
-.form-floating>.dataTable-input:not(:placeholder-shown)~label,
+.form-floating>.datatable-selector:not(:placeholder-shown)~label,
+.form-floating>.datatable-input:not(:placeholder-shown)~label,
 .form-floating>.form-select~label,
 .form-floating>.datatable-selector~label {
     color: #5b6b79;
@@ -29634,8 +29634,8 @@ select[data-multiselectsplitter-secondselect-selector].dataTable-input {
 .form-floating>.form-control:focus~label,
 .form-floating>.datatable-input:focus~label,
 .form-floating>.custom-select:focus~label,
-.form-floating>.dataTable-selector:focus~label,
-.form-floating>.dataTable-input:focus~label {
+.form-floating>.datatable-selector:focus~label,
+.form-floating>.datatable-input:focus~label {
     color: var(--bs-primary);
 }
 
@@ -29676,8 +29676,8 @@ select[data-multiselectsplitter-secondselect-selector].dataTable-input {
 .form-search .form-control,
 .form-search .datatable-input,
 .form-search .custom-select,
-.form-search .dataTable-selector,
-.form-search .dataTable-input {
+.form-search .datatable-selector,
+.form-search .datatable-input {
     padding-left: 50px;
 }
 
@@ -31927,8 +31927,8 @@ select[data-multiselectsplitter-secondselect-selector].dataTable-input {
 .input-comment .form-control,
 .input-comment .datatable-input,
 .input-comment .custom-select,
-.input-comment .dataTable-selector,
-.input-comment .dataTable-input {
+.input-comment .datatable-selector,
+.input-comment .datatable-input {
     padding: 0.56rem 5.5rem 0.56rem 3.5rem;
 }
 
@@ -35391,8 +35391,8 @@ body.anim-slip-from-top.modal-open .pc-header {
     background-color: #11171a;
 }
 
-.datatable-table.dataTable[class*=table-] thead th,
-.table.dataTable[class*=table-] thead th {
+.datatable-table.datatable[class*=table-] thead th,
+.table.datatable[class*=table-] thead th {
     background: #f8f9fa;
 }
 
@@ -35457,12 +35457,12 @@ body.anim-slip-from-top.modal-open .pc-header {
 }
 
 /* fixed header position */
-table.dataTable.fixedHeader-floating {
+table.datatable.fixedHeader-floating {
     top: calc(74px + 55px) !important;
 }
 
 @media screen and (max-width: 992px) {
-    table.dataTable.fixedHeader-floating {
+    table.datatable.fixedHeader-floating {
         display: none !important;
     }
 }
@@ -35500,23 +35500,23 @@ table.dataTable.fixedHeader-floating {
 }
 
 /**======= basic table css end ======**/
-table.dataTable>thead .sorting:before,
-table.dataTable>thead .sorting:after,
-table.dataTable>thead .sorting_asc:before,
-table.dataTable>thead .sorting_asc:after,
-table.dataTable>thead .sorting_desc:before,
-table.dataTable>thead .sorting_desc:after,
-table.dataTable>thead .sorting_asc_disabled:before,
-table.dataTable>thead .sorting_asc_disabled:after,
-table.dataTable>thead .sorting_desc_disabled:before,
-table.dataTable>thead .sorting_desc_disabled:after {
+table.datatable>thead .sorting:before,
+table.datatable>thead .sorting:after,
+table.datatable>thead .sorting_asc:before,
+table.datatable>thead .sorting_asc:after,
+table.datatable>thead .sorting_desc:before,
+table.datatable>thead .sorting_desc:after,
+table.datatable>thead .sorting_asc_disabled:before,
+table.datatable>thead .sorting_asc_disabled:after,
+table.datatable>thead .sorting_desc_disabled:before,
+table.datatable>thead .sorting_desc_disabled:after {
     top: 13px;
 }
 
-table.dataTable tbody>tr>.selected td.select-checkbox:after,
-table.dataTable tbody>tr>.selected th.select-checkbox:after,
-table.dataTable tbody>tr.selected td.select-checkbox:after,
-table.dataTable tbody>tr.selected th.select-checkbox:after {
+table.datatable tbody>tr>.selected td.select-checkbox:after,
+table.datatable tbody>tr>.selected th.select-checkbox:after,
+table.datatable tbody>tr.selected td.select-checkbox:after,
+table.datatable tbody>tr.selected th.select-checkbox:after {
     margin-top: -21px;
     margin-left: -7px;
 }
@@ -35570,33 +35570,33 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
     float: right;
 }
 
-.dataTable-dropdown label {
+.datatable-dropdown label {
     display: flex;
     align-items: center;
     width: 230px;
     white-space: nowrap;
 }
 
-.dataTable-dropdown label select {
+.datatable-dropdown label select {
     margin-right: 8px;
 }
 
-.dataTable-info {
+.datatable-info {
     margin: 7px 0;
 }
 
 /* PAGER */
-.dataTable-pagination ul {
+.datatable-pagination ul {
     margin: 0;
     padding-left: 0;
 }
 
-.dataTable-pagination li {
+.datatable-pagination li {
     list-style: none;
     float: left;
 }
 
-.dataTable-pagination a {
+.datatable-pagination a {
     border: 1px solid transparent;
     float: left;
     margin-left: 2px;
@@ -35607,87 +35607,87 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
     color: #131920;
 }
 
-.dataTable-pagination a:hover {
+.datatable-pagination a:hover {
     background-color: var(--bs-primary-light);
     color: var(--bs-primary);
 }
 
-.dataTable-pagination .active a {
+.datatable-pagination .active a {
     background-color: var(--bs-primary);
     color: #fff;
     cursor: default;
 }
 
-.dataTable-pagination .active a:focus,
-.dataTable-pagination .active a:hover {
+.datatable-pagination .active a:focus,
+.datatable-pagination .active a:hover {
     background-color: var(--bs-primary);
     color: #fff;
     cursor: default;
 }
 
-.dataTable-pagination .ellipsis a {
+.datatable-pagination .ellipsis a {
     cursor: not-allowed;
 }
 
-.dataTable-pagination .disabled a {
+.datatable-pagination .disabled a {
     cursor: not-allowed;
     cursor: not-allowed;
     opacity: 0.4;
 }
 
-.dataTable-pagination .disabled a:focus,
-.dataTable-pagination .disabled a:hover {
+.datatable-pagination .disabled a:focus,
+.datatable-pagination .disabled a:hover {
     cursor: not-allowed;
 }
 
-.dataTable-pagination .disabled a:focus,
-.dataTable-pagination .disabled a:hover {
+.datatable-pagination .disabled a:focus,
+.datatable-pagination .disabled a:hover {
     cursor: not-allowed;
     opacity: 0.4;
 }
 
-.dataTable-pagination .pager a {
+.datatable-pagination .pager a {
     font-weight: bold;
 }
 
 /* TABLE */
-.dataTable-table>tbody>tr>td,
-.dataTable-table>tbody>tr>th {
+.datatable-table>tbody>tr>td,
+.datatable-table>tbody>tr>th {
     vertical-align: middle;
 }
 
-.dataTable-table>tfoot>tr>td,
-.dataTable-table>tfoot>tr>th {
+.datatable-table>tfoot>tr>td,
+.datatable-table>tfoot>tr>th {
     vertical-align: middle;
 }
 
-.dataTable-table>thead>tr>td {
+.datatable-table>thead>tr>td {
     vertical-align: middle;
 }
 
-.dataTable-table>thead>tr>th {
+.datatable-table>thead>tr>th {
     vertical-align: middle;
 }
 
-.dataTable-table th {
+.datatable-table th {
     vertical-align: middle;
 }
 
-.dataTable-table th a {
+.datatable-table th a {
     text-decoration: none;
     color: inherit;
     padding-right: 16px;
 }
 
-.dataTable-sorter {
+.datatable-sorter {
     display: inline-block;
     height: 100%;
     position: relative;
     width: 100%;
 }
 
-.dataTable-sorter::before,
-.dataTable-sorter::after {
+.datatable-sorter::before,
+.datatable-sorter::after {
     content: "";
     height: 0;
     width: 0;
@@ -35698,23 +35698,23 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
     opacity: 0.2;
 }
 
-.dataTable-sorter::before {
+.datatable-sorter::before {
     border-top: 4px solid #000;
     bottom: 0px;
 }
 
-.dataTable-sorter::after {
+.datatable-sorter::after {
     border-bottom: 4px solid #000;
     border-top: 4px solid transparent;
     top: 0px;
 }
 
-.asc .dataTable-sorter::after,
-.desc .dataTable-sorter::before {
+.asc .datatable-sorter::after,
+.desc .datatable-sorter::before {
     opacity: 0.6;
 }
 
-.dataTables-empty {
+.datatables-empty {
     text-align: center;
 }
 
@@ -35729,34 +35729,34 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
     overflow: auto;
 }
 
-.dataTables_scrollHeadInner,
-.dataTables_scrollFootInner {
+.datatables_scrollHeadInner,
+.datatables_scrollFootInner {
     width: calc(100% - 6px) !important;
 }
 
-.dataTables_scrollBody::-webkit-scrollbar {
+.datatables_scrollBody::-webkit-scrollbar {
     width: 6px;
     opacity: 0;
 }
 
-.dataTables_scrollBody::-webkit-scrollbar:hover {
+.datatables_scrollBody::-webkit-scrollbar:hover {
     opacity: 1;
 }
 
-.dataTables_scrollBody::-webkit-scrollbar-track {
+.datatables_scrollBody::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.dataTables_scrollBody::-webkit-scrollbar-thumb {
+.datatables_scrollBody::-webkit-scrollbar-thumb {
     background: #e9ecef;
 }
 
-.dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+.datatables_scrollBody::-webkit-scrollbar-thumb:hover {
     background: #aeb9c5;
 }
 
-table.dataTable tbody th.focus,
-table.dataTable tbody td.focus {
+table.datatable tbody th.focus,
+table.datatable tbody td.focus {
     outline: 2px solid var(--bs-primary);
 }
 
@@ -35764,27 +35764,27 @@ div.dt-autofill-handle {
     background: var(--bs-primary);
 }
 
-table.dataTable {
+table.datatable {
     border-collapse: collapse !important;
     width: 100% !important;
 }
 
-table.dataTable .form-control,
-table.dataTable .datatable-input,
-table.dataTable .custom-select,
-table.dataTable .dataTable-selector,
-table.dataTable .dataTable-input {
+table.datatable .form-control,
+table.datatable .datatable-input,
+table.datatable .custom-select,
+table.datatable .datatable-selector,
+table.datatable .datatable-input {
     min-width: 100px;
     padding-right: 30px;
 }
 
-table.dataTable>tbody>tr.child ul.dtr-details {
+table.datatable>tbody>tr.child ul.dtr-details {
     display: block;
 }
 
-#basic-scroller_wrapper .dataTables_paginate,
-#state-scroller_wrapper .dataTables_paginate,
-#api-scroller_wrapper .dataTables_paginate {
+#basic-scroller_wrapper .datatables_paginate,
+#state-scroller_wrapper .datatables_paginate,
+#api-scroller_wrapper .datatables_paginate {
     padding-top: 5px;
 }
 
@@ -35806,31 +35806,31 @@ table.dataTable>tbody>tr.child ul.dtr-details {
     --bs-table-accent-bg: transparent;
 }
 
-.dataTables_length select.form-select,
-.dataTables_length select.datatable-selector {
+.datatables_length select.form-select,
+.datatables_length select.datatable-selector {
     padding-right: 30px;
 }
 
 @media screen and (max-width: 767px) {
-    div.dataTables_wrapper div.dataTables_filter input {
+    div.datatables_wrapper div.datatables_filter input {
         width: 155px;
     }
 }
 
-.dataTables_length,
-.dataTables_filter {
+.datatables_length,
+.datatables_filter {
     margin: 0 0 8px;
 }
 
-table.dataTable>tbody>tr,
+table.datatable>tbody>tr,
 table.DTFC_Cloned tr {
     background-color: var(--bs-card-bg);
 }
 
-.DTFC_LeftBodyWrapper .table.dataTable.DTFC_Cloned thead .sorting:after,
-.DTFC_LeftBodyWrapper .table.dataTable.DTFC_Cloned thead .sorting:before,
-.DTFC_RightBodyLiner .table.dataTable.DTFC_Cloned thead .sorting:after,
-.DTFC_RightBodyLiner .table.dataTable.DTFC_Cloned thead .sorting:before {
+.DTFC_LeftBodyWrapper .table.datatable.DTFC_Cloned thead .sorting:after,
+.DTFC_LeftBodyWrapper .table.datatable.DTFC_Cloned thead .sorting:before,
+.DTFC_RightBodyLiner .table.datatable.DTFC_Cloned thead .sorting:after,
+.DTFC_RightBodyLiner .table.datatable.DTFC_Cloned thead .sorting:before {
     display: none;
 }
 
@@ -35876,35 +35876,35 @@ div.dt-button-info>div {
     margin-bottom: 5px;
 }
 
-table.dataTable tbody td.focus,
-table.dataTable tbody th.focus {
+table.datatable tbody td.focus,
+table.datatable tbody th.focus {
     box-shadow: inset 0 0 1px 2px #4680ff;
 }
 
-div.dtk-focus-alt table.dataTable tbody td.focus,
-div.dtk-focus-alt table.dataTable tbody th.focus {
+div.dtk-focus-alt table.datatable tbody td.focus,
+div.dtk-focus-alt table.datatable tbody th.focus {
     box-shadow: inset 0 0 1px 2px #e58a00;
     background: rgba(229, 138, 0, 0.15);
     color: #e58a00;
 }
 
-table.dataTable>thead .sorting:before,
-table.dataTable>thead .sorting:after,
-table.dataTable>thead .sorting_asc:before,
-table.dataTable>thead .sorting_asc:after,
-table.dataTable>thead .sorting_desc:before,
-table.dataTable>thead .sorting_desc:after,
-table.dataTable>thead .sorting_asc_disabled:before,
-table.dataTable>thead .sorting_asc_disabled:after,
-table.dataTable>thead .sorting_desc_disabled:before,
-table.dataTable>thead .sorting_desc_disabled:after {
+table.datatable>thead .sorting:before,
+table.datatable>thead .sorting:after,
+table.datatable>thead .sorting_asc:before,
+table.datatable>thead .sorting_asc:after,
+table.datatable>thead .sorting_desc:before,
+table.datatable>thead .sorting_desc:after,
+table.datatable>thead .sorting_asc_disabled:before,
+table.datatable>thead .sorting_asc_disabled:after,
+table.datatable>thead .sorting_desc_disabled:before,
+table.datatable>thead .sorting_desc_disabled:after {
     top: 13px;
 }
 
-table.dataTable tbody>tr>.selected td.select-checkbox:after,
-table.dataTable tbody>tr>.selected th.select-checkbox:after,
-table.dataTable tbody>tr.selected td.select-checkbox:after,
-table.dataTable tbody>tr.selected th.select-checkbox:after {
+table.datatable tbody>tr>.selected td.select-checkbox:after,
+table.datatable tbody>tr>.selected th.select-checkbox:after,
+table.datatable tbody>tr.selected td.select-checkbox:after,
+table.datatable tbody>tr.selected th.select-checkbox:after {
     margin-top: -21px;
     margin-left: -7px;
 }
@@ -35928,7 +35928,7 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
 }
 
 .datatable-dropdown label,
-.dataTable-dropdown label {
+.datatable-dropdown label {
     display: flex;
     align-items: center;
     width: 230px;
@@ -35936,7 +35936,7 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
 }
 
 .datatable-dropdown label select,
-.dataTable-dropdown label select {
+.datatable-dropdown label select {
     margin-right: 8px;
     margin-left: 0px;
 }
@@ -36028,11 +36028,11 @@ table.dataTable tbody>tr.selected th.select-checkbox:after {
     margin-bottom: 5px;
 }
 
-.dataTable[aria-describedby=no-style_info] th {
+.datatable[aria-describedby=no-style_info] th {
     padding: 14px 0;
 }
 
-div.dataTables_wrapper div.dt-row {
+div.datatables_wrapper div.dt-row {
     margin-top: 8px !important;
     margin-bottom: 8px !important;
 }
@@ -36363,3 +36363,116 @@ div.dataTables_wrapper div.dt-row {
       max-width: 50%;
     }
   }
+
+
+/* Custom CSS */
+.table-responsive {
+    margin: 30px 0;
+}
+.table-wrapper {
+    min-width: 1000px;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.table-title {
+    padding-bottom: 10px;
+    margin: 0 0 10px;
+    min-width: 100%;
+}
+.table-title h2 {
+    margin: 8px 0 0;
+    font-size: 22px;
+}
+.search-box {
+    position: relative;
+    float: right;
+}
+.search-box input {
+    height: 34px;
+    border-radius: 20px;
+    padding-left: 35px;
+    border-color: #ddd;
+    box-shadow: none;
+}
+.search-box input:focus {
+    border-color: #3FBAE4;
+}
+.search-box i {
+    color: #a0a5b1;
+    position: absolute;
+    font-size: 19px;
+    top: 8px;
+    left: 10px;
+}
+table.table tr th, table.table tr td {
+    border-color: #e9e9e9;
+}
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+table.table-striped.table-hover tbody tr:hover {
+    background: #f5f5f5;
+}
+table.table th i {
+    font-size: 13px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+table.table td:last-child {
+    width: 130px;
+}
+table.table td a {
+    color: #a0a5b1;
+    display: inline-block;
+    margin: 0 5px;
+}
+table.table td a.view {
+    color: #03A9F4;
+}
+table.table td a.edit {
+    color: #FFC107;
+}
+table.table td a.delete {
+    color: #E34724;
+}
+table.table td i {
+    font-size: 19px;
+}
+.pagination {
+    float: right;
+    margin: 0 0 5px;
+}
+.pagination li a {
+    border: none;
+    font-size: 95%;
+    width: 30px;
+    height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 30px !important;
+    text-align: center;
+    padding: 0;
+}
+.pagination li a:hover {
+    color: #666;
+}
+.pagination li.active a {
+    background: #03A9F4;
+}
+.pagination li.active a:hover {
+    background: #0397d6;
+}
+.pagination li.disabled i {
+    color: #ccc;
+}
+.pagination li i {
+    font-size: 16px;
+    padding-top: 6px
+}
+.hint-text {
+    float: left;
+    margin-top: 6px;
+    font-size: 95%;
+}

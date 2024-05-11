@@ -53,7 +53,8 @@ def test(request):
         user_profile = UserProfile.objects.get(user=request.user)
         user_primary = user_profile.primary_location
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
+        user_profiles = UserProfile.objects.filter(user__username=searchquery,
+                                                   primary_location=user_primary)  # Filter user profiles based on username
 
         return render(request, 'test.html', {'searchquery': searchquery,
                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
@@ -88,6 +89,7 @@ def new_home(request):
 
     return render(request, 'newhome.html', context)
 
+
 @login_required_message
 def sample(request):
     user = request.user
@@ -98,6 +100,7 @@ def sample(request):
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count, 'library': library}
     return render(request, 'new_home.html', context)
+
 
 @login_required_message
 def chat(request):
@@ -111,6 +114,7 @@ def chat(request):
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
     return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile})
+
 
 @login_required_message
 def load_full_conversation(request, conversation_id):
@@ -146,6 +150,8 @@ def load_full_conversation(request, conversation_id):
     except Conversation.DoesNotExist:
         # If no conversation is selected, return a blank variable in the context
         return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
+
+
 # def chat(request):
 #     conversations = get_conversation_list(request)
 #     return render(request, 'chat.html', {'conversations': conversations})
@@ -391,7 +397,7 @@ def search(request):
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         users_profiles = UserProfile.objects.filter(
-            user__username=searchquery )  # Filter user profiles based on username and primary location
+            user__username=searchquery)  # Filter user profiles based on username and primary location
 
         return render(request, 'search.html', {'searchquery': searchquery,
                                                'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
@@ -403,27 +409,27 @@ def search(request):
         return render(request, 'search.html', {'users_profiles': users_profiles})
 
 
-
-
 ## search view for new sample frontend
 @login_required_message
 def sample_search(request):
     user_profile = UserProfile.objects.get(user=request.user)
     current_location = user_profile.current_location
-    if request.method == "POST":
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        users_profiles = UserProfile.objects.filter(
-            user__username=searchquery )  # Filter user profiles based on username and primary location
 
-        return render(request, 'samplesearch.html', {'searchquery': searchquery,
-                                               'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
+    if request.method == "POST":
+        searchquery = request.POST.get('searchquery', '').strip()
+        if searchquery:  # If search query is not empty
+            users_profiles = UserProfile.objects.filter(
+                user__username__icontains=searchquery,
+                current_location=current_location
+            )
+        else:  # If search query is empty, return all users in the current location
+            users_profiles = UserProfile.objects.filter(current_location=current_location)
+
+        return render(request, 'samplesearch.html', {'searchquery': searchquery, 'users_profiles': users_profiles})
     else:
         # Handle GET request
-        # return render(request, 'search.html')
-        users_profiles = UserProfile.objects.all()
-        users_profiles = users_profiles.filter(current_location=current_location)
+        users_profiles = UserProfile.objects.filter(current_location=current_location)
         return render(request, 'samplesearch.html', {'users_profiles': users_profiles})
-
 
 
 @login_required_message

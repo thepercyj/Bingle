@@ -6,14 +6,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/inter.css' %}" id="main-font-link" />
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/tabler-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/feather.css' %}">
-    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/fontawesome.css' %}">
+<!--    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/fontawesome.css' %}">-->
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/material.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style-preset.css' %}">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14K1GBX9FG"></script>
 
 </head>
@@ -396,7 +399,7 @@
 
 <script src="{% static 'mainapp/vendor/js/apexcharts.min.js' %}"></script>
 <script src="{% static 'mainapp/vendor/js/dashboard-default.js' %}"></script>
-<script src="{% static 'mainapp/vendor/js/popper.js' %}"></script>
+<script src="{% static 'mainapp/vendor/js/popper.min.js' %}"></script>
 <script src="{% static 'mainapp/vendor/js/simplebar.min.js' %}"></script>
 <script src="{% static 'mainapp/vendor/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'mainapp/vendor/js/custom-font.js' %}"></script>
@@ -427,12 +430,18 @@
 <script>
     preset_change("preset-1");
 </script>
+<script>
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 
 </body>
-<script type="module">
-    import { DataTable } from '{% static 'mainapp/vendor/js/module.js' %}';
-    window.dt = new DataTable('#pc-dt-simple');
-</script>
+<!--<script type="module">-->
+<!--    import { DataTable } from '{% static 'mainapp/vendor/js/module.js' %}';-->
+<!--    window.dt = new DataTable('#pc-dt-simple');-->
+<!--</script>-->
 <script src="{% static 'mainapp/js/modal.js' %}"></script>
+<!--<script src="{% static 'mainapp/vendor/js/script.js' %}"></script>-->
 
 </html>
