@@ -77,7 +77,7 @@
                                                    value="{{ user_book.id }}"/>
                                             <input type="submit"
                                                    class="btn btn-primary d-flex align-items-center justify-content-center"
-                                                   value=""/>
+                                                   value="X"/>
                                         </form>
                                     </td>
                                 </tr>
@@ -362,441 +362,51 @@
                 </div>
             </a>
         </div>
-        {#                <div class="col-md-6">#}
-        {#                    <div class="card">#}
-        {#                        <div class="card-body border-bottom pb-0">#}
-        {#                            <div class="d-flex align-items-center justify-content-between">#}
-        {#                                <h5 class="mb-0">Transactions</h5>#}
-        {#                                <div class="dropdown">#}
-        {#                                    <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#"#}
-        {#                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-        {#                                        <i class="ti ti-dots-vertical f-18"></i>#}
-        {#                                    </a>#}
-        {#                                    <div class="dropdown-menu dropdown-menu-end">#}
-        {#                                        <a class="dropdown-item" href="#">Today</a>#}
-        {#                                        <a class="dropdown-item" href="#">Weekly</a>#}
-        {#                                        <a class="dropdown-item" href="#">Monthly</a>#}
-        {#                                    </div>#}
-        {#                                </div>#}
-        {#                            </div>#}
-        {#                            <ul class="nav nav-tabs analytics-tab" id="myTab" role="tablist">#}
-        {#                                <li class="nav-item" role="presentation">#}
-        {#                                    <button class="nav-link active" id="analytics-tab-1" data-bs-toggle="tab"#}
-        {#                                        data-bs-target="#analytics-tab-1-pane" type="button" role="tab"#}
-        {#                                        aria-controls="analytics-tab-1-pane" aria-selected="true">All#}
-        {#                                        Transaction</button>#}
-        {#                                </li>#}
-        {#                                <li class="nav-item" role="presentation">#}
-        {#                                    <button class="nav-link" id="analytics-tab-2" data-bs-toggle="tab"#}
-        {#                                        data-bs-target="#analytics-tab-2-pane" type="button" role="tab"#}
-        {#                                        aria-controls="analytics-tab-2-pane" aria-selected="false">Success</button>#}
-        {#                                </li>#}
-        {#                                <li class="nav-item" role="presentation">#}
-        {#                                    <button class="nav-link" id="analytics-tab-3" data-bs-toggle="tab"#}
-        {#                                        data-bs-target="#analytics-tab-3-pane" type="button" role="tab"#}
-        {#                                        aria-controls="analytics-tab-3-pane" aria-selected="false">Pending</button>#}
-        {#                                </li>#}
-        {#                            </ul>#}
-        {#                        </div>#}
-        {#                        <div class="tab-content" id="myTabContent">#}
-        {#                            <div class="tab-pane fade show active" id="analytics-tab-1-pane" role="tabpanel"#}
-        {#                                aria-labelledby="analytics-tab-1" tabindex="0">#}
-        {#                                <ul class="list-group list-group-flush">#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border"> AI </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Apple Inc.</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">$210,000</h6>#}
-        {#                                                        <p class="text-danger mb-0"><i#}
-        {#                                                                class="ti ti-arrow-down-left"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"#}
-        {#                                                    data-bs-title="10,000 Tracks"><span>SM</span></div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Spotify Music</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">- 10,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 30.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border bg-light-primary"#}
-        {#                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Medium</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>06:30 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">-26</h6>#}
-        {#                                                        <p class="text-warning mb-0"><i#}
-        {#                                                                class="ti ti-arrows-left-right"></i> 5%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"#}
-        {#                                                    data-bs-title="143 Posts"><span>U</span> </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Uber</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>08:40 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">+210,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border bg-light-warning"#}
-        {#                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>OC</span>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Ola Cabs</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>07:40 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">+210,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                </ul>#}
-        {#                            </div>#}
-        {#                            <div class="tab-pane fade" id="analytics-tab-2-pane" role="tabpanel"#}
-        {#                                aria-labelledby="analytics-tab-2" tabindex="0">#}
-        {#                                <ul class="list-group list-group-flush">#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"#}
-        {#                                                    data-bs-title="143 Posts"><span>U</span> </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Uber</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>08:40 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">+210,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border bg-light-warning"#}
-        {#                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>OC</span>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Ola Cabs</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>07:40 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">+210,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border">AI</div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Apple Inc.</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">$210,000</h6>#}
-        {#                                                        <p class="text-danger mb-0"><i#}
-        {#                                                                class="ti ti-arrow-down-left"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"#}
-        {#                                                    data-bs-title="10,000 Tracks"><span>SM</span></div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Spotify Music</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">- 10,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 30.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border bg-light-primary"#}
-        {#                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Medium</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>06:30 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">-26</h6>#}
-        {#                                                        <p class="text-warning mb-0"><i#}
-        {#                                                                class="ti ti-arrows-left-right"></i> 5%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                </ul>#}
-        {#                            </div>#}
-        {#                            <div class="tab-pane fade" id="analytics-tab-3-pane" role="tabpanel"#}
-        {#                                aria-labelledby="analytics-tab-3" tabindex="0">#}
-        {#                                <ul class="list-group list-group-flush">#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"#}
-        {#                                                    data-bs-title="10,000 Tracks"><span>SM</span></div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Spotify Music</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">- 10,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 30.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border bg-light-primary"#}
-        {#                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Medium</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>06:30 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">-26</h6>#}
-        {#                                                        <p class="text-warning mb-0"><i#}
-        {#                                                                class="ti ti-arrows-left-right"></i> 5%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border" data-bs-toggle="tooltip"#}
-        {#                                                    data-bs-title="143 Posts"><span>U</span> </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Uber</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>08:40 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">+210,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border"> AI </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Apple Inc.</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">$210,000</h6>#}
-        {#                                                        <p class="text-danger mb-0"><i#}
-        {#                                                                class="ti ti-arrow-down-left"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                    <li class="list-group-item">#}
-        {#                                        <div class="d-flex align-items-center">#}
-        {#                                            <div class="flex-shrink-0">#}
-        {#                                                <div class="avtar avtar-s border bg-light-warning"#}
-        {#                                                    data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>OC</span>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                            <div class="flex-grow-1 ms-3">#}
-        {#                                                <div class="row g-1">#}
-        {#                                                    <div class="col-6">#}
-        {#                                                        <h6 class="mb-0">Ola Cabs</h6>#}
-        {#                                                        <p class="text-muted mb-0"><small>07:40 pm</small></p>#}
-        {#                                                    </div>#}
-        {#                                                    <div class="col-6 text-end">#}
-        {#                                                        <h6 class="mb-1">+210,000</h6>#}
-        {#                                                        <p class="text-success mb-0"><i#}
-        {#                                                                class="ti ti-arrow-up-right"></i> 10.6%</p>#}
-        {#                                                    </div>#}
-        {#                                                </div>#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-        {#                                    </li>#}
-        {#                                </ul>#}
-        {#                            </div>#}
-        {#                        </div>#}
-        {#                        <div class="card-footer">#}
-        {#                            <div class="row g-2">#}
-        {#                                <div class="col-md-6">#}
-        {#                                    <div class="d-grid">#}
-        {#                                        <button class="btn btn-outline-secondary d-grid"><span#}
-        {#                                                class="text-truncate w-100">View all Transaction History</span></button>#}
-        {#                                    </div>#}
-        {#                                </div>#}
-        {#                                <div class="col-md-6">#}
-        {#                                    <div class="d-grid">#}
-        {#                                        <button class="btn btn-primary d-grid"><span class="text-truncate w-100">Create#}
-        {#                                                new Transaction</span></button>#}
-        {#                                    </div>#}
-        {#                                </div>#}
-        {#                            </div>#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
-
     </div>
     <div class="row">
-        <form method="post" action="/update-profile/">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Personal Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="mb-4 mb-xl-0 text-center mb-3">
-                                <div class="card-body text-center">
-                                    <!-- Profile picture image-->
-                                    {% if user_profile.profile_pic %}
-                                        <img class="img-account-profile rounded-circle mb-2 custom-img"
-                                             src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
-                                    {% else %}
-                                        <img class="img-account-profile rounded-circle mb-2 custom-img"
-                                             src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                    {% endif %}
-                                    <div id="picture-modal" class="modal">
-                                        <div class="modal-content">
-                                            <form id="upload-form" enctype="multipart/form-data">
-                                                {% csrf_token %}
-                                                <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
-                                                <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
-                                                <button id="upload-btn" class="btn btn-primary" type="button">Upload
-                                                </button>
-                                            </form>
-                                            <button class="close-btn" onclick="closeModal('picture-modal')">Close
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-4 mb-xl-0 text-center mb-3">
+                            <div class="card-body text-center">
+                                <!-- Profile picture image-->
+                                {% if user_profile.profile_pic %}
+                                    <img class="img-account-profile rounded-circle mb-2 custom-img"
+                                         src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
+                                {% else %}
+                                    <img class="img-account-profile rounded-circle mb-2 custom-img"
+                                         src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                {% endif %}
+                                <div id="picture-modal" class="modal">
+                                    <div class="modal-content">
+                                        <form id="upload-form" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
+                                            <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                                            <button id="upload-btn" class="btn btn-primary" type="button">Upload
                                             </button>
-                                            <p id="error-message" style="color: red;"></p>
-                                        </div>
-                                    </div>
-                                    <!-- Profile picture help block-->
-                                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                                    <!-- Profile picture upload button-->
-                                    <a>
-                                        <button class="btn btn-primary" onclick="openUploadModal('picture-modal')">
-                                            Upload
+                                        </form>
+                                        <button class="close-btn" onclick="closeModal('picture-modal')">Close
                                         </button>
-                                    </a>
+                                        <p id="error-message" style="color: red;"></p>
+                                    </div>
                                 </div>
+                                <!-- Profile picture help block-->
+                                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                <!-- Profile picture upload button-->
+                                <a>
+                                    <button class="btn btn-primary" onclick="openUploadModal('picture-modal')">
+                                        Upload
+                                    </button>
+                                </a>
                             </div>
-                            <div class="col-sm-4">
+                        </div>
+                        <form method="post" action="/update-profile/">
+                            <div class="col-sm-3">
                                 <div class="mb-3">
                                     <label class="form-label">First Name</label>
                                     <input type="text" class="form-control" name="inputFirstName" id="inputFirstName"
@@ -804,7 +414,7 @@
                                            value={{ user.first_name }}>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="mb-3">
                                     <label class="form-label">Last Name</label>
                                     <input type="text" class="form-control" name="inputLastName" id="inputLastName"
@@ -812,7 +422,7 @@
                                            value={{ user.last_name }}>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="mb-3">
                                     <label class="form-label">Username</label>
                                     <input type="text" class="form-control" name="inputUserName" id="inputUsername"
@@ -820,58 +430,61 @@
                                            value={{ user.username }}>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <div class="mb-3">
                                     <label class="form-label">Birthday</label>
                                     <div>{{ user_profile.birth_date }}</div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Contact Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Contact Phone</label>
+                                                    <input type="text" class="form-control" name="inputPhone"
+                                                           id="inputPhone" type="tel"
+                                                           placeholder="Enter your phone number"
+                                                           value={{ user_profile.phone_number }}>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">
+                                                        Email <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" name="inputEmailAddress"
+                                                           id="inputEmailAddress"
+                                                           type="email"
+                                                           placeholder="Enter your email address"
+                                                           value={{ user.email }}>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Location</label>
+                                                    <input type="text" class="form-control" name="inputLocation"
+                                                           id="inputLocation"
+                                                           type="text" placeholder="Enter your location"
+                                                           value={{ user_profile.primary_location }}>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 text-end btn-page">
+                                <div class="btn btn-primary" type="submit">Save Changes</div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Contact Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="mb-3">
-                                    <label class="form-label">Contact Phone</label>
-                                    <input type="text" class="form-control" name="inputPhone" id="inputPhone" type="tel"
-                                           placeholder="Enter your phone number"
-                                           value={{ user_profile.phone_number }}>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Email <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="text" class="form-control" name="inputEmailAddress"
-                                           id="inputEmailAddress"
-                                           type="email"
-                                           placeholder="Enter your email address" value={{ user.email }}>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="mb-3">
-                                    <label class="form-label">Location</label>
-                                    <input type="text" class="form-control" name="inputLocation" id="inputLocation"
-                                           type="text" placeholder="Enter your location"
-                                           value={{ user_profile.primary_location }}>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 text-end btn-page">
-                <div class="btn btn-primary" type="submit">Save Changes</div>
-            </div>
-        </form>
+        </div>
     </div>
     <!-- [ Main Content ] end -->
 {% endblock %}
