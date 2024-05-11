@@ -90,6 +90,8 @@ def about(request):
     """
     return render(request, 'about.html')
 
+def new_about(request):
+    return render(request, 'new_about_us.html')
 
 def lend(request):
     """
@@ -115,14 +117,8 @@ def new_home(request):
 
     :param request: HttpRequest - The request object
     """
-    user = request.user
-    user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile).select_related('book_id')
-    books_count = user_books.count()  # Count the number of books
-    context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
-               'user_book_count': books_count}
 
-    return render(request, 'newhome.html', context)
+    return render(request, 'home.html')
 
 
 def sample(request):
@@ -187,7 +183,7 @@ def sample(request):
     }
     return render(request, 'new_home.html', context)
 
-
+@login_required_message
 def chat(request):
     """
     View function to get the list of conversations for the logged-in user.

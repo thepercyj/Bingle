@@ -22,12 +22,21 @@
                             <h6 class="mb-0">{{user.username}}</h6>
                         </div>
                     </div>
+                {% if profile_pic %}
                         <div class="pt-3">
                             <a href="/logout/">
                                 <i class="ti ti-power"></i>
                                 <span>Logout</span>
                             </a>
                         </div>
+                {% else %}
+                    <div class="pt-3">
+                        <a href="/login/">
+                            <i class="ti ti-power"></i>
+                            <span>Login</span>
+                        </a>
+                    </div>
+                {% endif %}
                 </div>
             </div>
 
