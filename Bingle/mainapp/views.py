@@ -20,7 +20,7 @@ from django.utils.timezone import now
 from django.conf import settings
 import json
 from django.views.decorators.cache import cache_page
-
+from recommendations.views import getborrowed
 
 
 # test_user2 = User.objects.get(username='TestUser2')
