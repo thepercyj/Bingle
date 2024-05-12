@@ -21,6 +21,7 @@ from django.conf import settings
 import json
 from recommendations.views import getborrowed
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 
 
@@ -125,7 +126,6 @@ def new_home(request):
     return render(request, 'home.html',{'recs':recs})
 def new_landing_page(request):
     return render (request, 'new_landing_page.html')
-@cache_page(60 * 5)  # Cache for 5 minutes
 def new_profile(request):
     """
     Renders the main dashboard page
@@ -134,8 +134,11 @@ def new_profile(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
-    library = Book.objects.all()
-    lib_count = Book.objects.all()
+    library = cache.get('library')
+    if library is None:
+        library = Book.objects.all()
+        cache.set('library', library, 60 * 5)  # Cache for 5 minutes
+    lib_count = library.count()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
@@ -188,7 +191,6 @@ def new_profile(request):
     }
     return render(request, 'new_profile.html', context)
 
-@cache_page(60 * 5)  # Cache for 15 minutes
 @login_required_message
 def chat(request):
     """
@@ -257,8 +259,11 @@ def profile(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
-    library = Book.objects.all()
-    lib_count = Book.objects.all()
+    library = cache.get('library')
+    if library is None:
+        library = Book.objects.all()
+        cache.set('library', library, 60 * 5)  # Cache for 5 minutes
+    lib_count = library.count()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
     user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()

@@ -266,10 +266,10 @@
                                 <p class="mb-1 fw-medium text-muted">My Library</p>
                                 {% csrf_token %}
                                 {% if user_books %}
-                                    <h2>No. of books -</h2>
+                                    <h2>No. of books</h2>
                                     <h5 class="mb-1">{{ user_books|length }} Books</h5>
                                 {% else %}
-                                    <h2>No. of books -</h2>
+                                    <h2>No. of books</h2>
                                     <h5 class="mb-1">0</h5>
                                 {% endif %}
                             </div>
@@ -292,7 +292,7 @@
                                 <p class="mb-1 fw-medium text-muted">Bingle Store</p>
                                 {% if library %}
                                     <h2>Bingle Store</h2>
-                                    <h4 class="mb-1">{{ lib_count|length }}</h4>
+                                    <h4 class="mb-1">{{ lib_count }}</h4>
                                 {% else %}
                                     <h2>Bingle Store </h2>
                                     <h4 class="mb-1">0</h4>
