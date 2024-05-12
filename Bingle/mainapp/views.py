@@ -19,8 +19,9 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.conf import settings
 import json
-from django.views.decorators.cache import cache_page
 from recommendations.views import getborrowed
+from django.views.decorators.cache import cache_page
+
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -119,8 +120,9 @@ def new_home(request):
 
     :param request: HttpRequest - The request object
     """
+    recs = getborrowed(request)
 
-    return render(request, 'home.html')
+    return render(request, 'home.html',{'recs':recs})
 def new_landing_page(request):
     return render (request, 'new_landing_page.html')
 @cache_page(60 * 5)  # Cache for 5 minutes
@@ -190,7 +192,9 @@ def new_profile(request):
 @login_required_message
 def chat(request):
     """
-    View function to get the list of conversations for the logged-in user.
+    Renders the chat page
+
+    :param request: HttpRequest - The request object
     """
     our_profile = UserProfile.objects.get(user=request.user)
     conversation_list = Conversation.objects.filter(
