@@ -121,7 +121,8 @@ def new_home(request):
     """
 
     return render(request, 'home.html')
-
+def new_landing_page(request):
+    return render (request, 'new_landing_page.html')
 @cache_page(60 * 5)  # Cache for 5 minutes
 def new_profile(request):
     """
