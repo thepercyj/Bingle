@@ -1066,3 +1066,27 @@ def send_message(request, conversation_id):
             return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
     else:
         return HttpResponse("Invalid request method", status=405)
+
+@login_required_message
+def mark_all_as_read(request):
+    """
+    Marks all notifications as read for the user
+
+    :param request: HttpRequest - The request object
+    """
+    if request.method == 'POST':
+        user = request.user
+        try:
+            # Retrieve UserProfile object for the user
+            user_profile = UserProfile.objects.get(user=user)
+            # Get all notifications for the user
+            notifications = UserNotification.objects.filter(recipient=user_profile)
+            # Mark all notifications as read
+            notifications.update(read=True)
+            # Refresh the page to display the updated notifications
+            return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))
+        except UserProfile.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User profile does not exist'})
+
+
+

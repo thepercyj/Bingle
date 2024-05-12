@@ -10,10 +10,14 @@ def get_user_notifications(request):
     :param request: HttpRequest
     """
     if request.user.is_authenticated:
-        notifications = UserNotification.objects.filter(recipient__user=request.user, read=False)
-        notification_count = notifications.count()
-        print(notification_count, notifications)
-        return {'notifications': notifications, 'notification_count': notification_count}
+        notifications = UserNotification.objects.filter(recipient__user=request.user)
+        read_notifications = notifications.filter(read=True)  # get the read notifications
+        unread_notifications = notifications.filter(read=False)  # get the unread notifications
+        unread_notification_count = notifications.count()  # get the count of unread notifications
+        read_notification_count = read_notifications.count()
+
+        return {'notifications':notifications, 'unread_notifications': unread_notifications, 'unread_notification_count': unread_notification_count,
+                'read_notifications': read_notifications, read_notification_count: 'read_notification_count'}
     return {}
 
 
