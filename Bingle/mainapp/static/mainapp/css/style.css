@@ -809,11 +809,11 @@ a:focus {
   -ms-flex-pack: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: #fdfeff;
+  background-color: #1c2e34;
 }
 
 .footer_section p {
-  color: #171717;
+  color: #ffffff;
   margin: 0;
   padding: 25px 0 20px 0;
   margin: 0 auto;
@@ -821,7 +821,7 @@ a:focus {
 }
 
 .footer_section a {
-  color: #171717;
+  color: #ffffff;
 }
 
 /* end footer section*/
