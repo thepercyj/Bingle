@@ -114,7 +114,7 @@ def forgetpass(request):
     """
     return render(request, 'forgetpass.html')
 
-
+@login_required_message
 def new_home(request):
     """
     Renders the home page
@@ -244,7 +244,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('index')
+                return redirect('new_landing_page')
             else:
                 # Handle the case where authentication fails
                 form.add_error(None, "Invalid username or password.")
