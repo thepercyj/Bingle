@@ -21,6 +21,7 @@ from django.conf import settings
 import json
 from recommendations.views import getborrowed
 from django.views.decorators.cache import cache_page
+from recommendations.views import getborrowed
 
 
 
@@ -120,8 +121,9 @@ def new_home(request):
 
     :param request: HttpRequest - The request object
     """
-
-    return render(request, 'home.html')
+    recs = getborrowed(request)
+    
+    return render(request, 'home.html',{'recs':recs})
 def new_landing_page(request):
     return render (request, 'new_landing_page.html')
 @cache_page(60 * 5)  # Cache for 5 minutes
