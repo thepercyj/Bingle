@@ -121,8 +121,9 @@ def new_home(request):
     """
 
     return render(request, 'home.html')
-
-@cache_page(60 * 15)  # Cache for 15 minutes
+def new_landing_page(request):
+    return render (request, 'new_landing_page.html')
+@cache_page(60 * 5)  # Cache for 5 minutes
 def new_profile(request):
     """
     Renders the main dashboard page
@@ -185,6 +186,7 @@ def new_profile(request):
     }
     return render(request, 'new_profile.html', context)
 
+@cache_page(60 * 5)  # Cache for 15 minutes
 @login_required_message
 def chat(request):
     """

@@ -2,10 +2,8 @@
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header">
-            <a href="../dashboard/index.html" class="b-brand text-primary">
-                <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" class="img-fluid logo-lg" alt="logo">
-                <span class="badge bg-light-success rounded-pill ms-2 theme-version">v9.0</span>
-            </a>
+            <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" style=" border-radius: 50%; height:150%; width:30%;" class="img-fluid logo-lg">
+            &nbsp; &nbsp; <h1>Bingle</h1>
         </div>
         <div class="navbar-content">
             <div class="card pc-user-card">
@@ -13,30 +11,15 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             {% if profile_pic %}
-                <img class="user-avtar wid-45 rounded-circle" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
-                {% else %}
-                <img class="user-avtar wid-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
-                {% endif %}
+                            <img class="user-avtar wid-35 rounded-circle" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                            {% else %}
+                            <img class="user-avtar wid-35 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                            {% endif %}
                         </div>
                         <div class="flex-grow-1 ms-3 me-2">
-                            <h6 class="mb-0">{{user.username}}</h6>
+                            <h6 class="mb-0">Hello, {{user.username}}</h6>
                         </div>
                     </div>
-                {% if profile_pic %}
-                        <div class="pt-3">
-                            <a href="/logout/">
-                                <i class="ti ti-power"></i>
-                                <span>Logout</span>
-                            </a>
-                        </div>
-                {% else %}
-                    <div class="pt-3">
-                        <a href="/login/">
-                            <i class="ti ti-power"></i>
-                            <span>Login</span>
-                        </a>
-                    </div>
-                {% endif %}
                 </div>
             </div>
 
@@ -48,31 +31,10 @@
                                     <use xlink:href="#custom-status-up"></use>
                                 </svg>
                             </span>
-                        <span class="pc-mtext">Home</span>
+                        <span class="pc-mtext">Dashboard</span>
                     </a>
                 </li>
 
-                <li class="pc-item pc-hasmenu">
-                    <a href="/new_about/" class="pc-link">
-                            <span class="pc-micon">
-                                <svg class="pc-icon">
-                                    <use xlink:href="#custom-document"></use>
-                                </svg>
-                            </span>
-                        <span class="pc-mtext">About Us</span>
-                    </a>
-                </li>
-
-                <li class="pc-item">
-                    <a href="/new_profile/" class="pc-link">
-                            <span class="pc-micon">
-                                <svg class="pc-icon">
-                                    <use xlink:href="#custom-story"></use>
-                                </svg>
-                            </span>
-                        <span class="pc-mtext">Profile Page</span>
-                    </a>
-                </li>
 
                 <li class="pc-item">
                     <a href="{% url 'chat' %}" class="pc-link">
