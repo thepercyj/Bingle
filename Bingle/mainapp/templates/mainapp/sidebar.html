@@ -22,18 +22,27 @@
                             <h6 class="mb-0">{{user.username}}</h6>
                         </div>
                     </div>
+                {% if profile_pic %}
                         <div class="pt-3">
                             <a href="/logout/">
                                 <i class="ti ti-power"></i>
                                 <span>Logout</span>
                             </a>
                         </div>
+                {% else %}
+                    <div class="pt-3">
+                        <a href="/login/">
+                            <i class="ti ti-power"></i>
+                            <span>Login</span>
+                        </a>
+                    </div>
+                {% endif %}
                 </div>
             </div>
 
             <ul class="pc-navbar">
                 <li class="pc-item pc-hasmenu">
-                    <a href='/sample/' class="pc-link">
+                    <a href='/new_home/' class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
                                     <use xlink:href="#custom-status-up"></use>
@@ -44,7 +53,7 @@
                 </li>
 
                 <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link">
+                    <a href="/new_about/" class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
                                     <use xlink:href="#custom-document"></use>
@@ -55,7 +64,7 @@
                 </li>
 
                 <li class="pc-item">
-                    <a href="../widget/w_statistics.html" class="pc-link">
+                    <a href="/new_profile/" class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
                                     <use xlink:href="#custom-story"></use>
