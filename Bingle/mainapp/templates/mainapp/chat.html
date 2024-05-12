@@ -3,397 +3,427 @@
 {% block title %} Chat | Bingle {% endblock %}
 {% block content %}
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="chat-wrapper">
-            <div class="offcanvas-xxl offcanvas-start chat-offcanvas" tabindex="-1"
-                 id="offcanvas_User_list">
-                <div class="offcanvas-header">
-                    <button class="btn-close" data-bs-dismiss="offcanvas"
-                            data-bs-target="#offcanvas_User_list" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body p-0">
-                    <div id="chat-user_list" class="show collapse collapse-horizontal">
-                        <div class="chat-user_list">
-                            <div class="card overflow-hidden">
-                                <div class="card-body">
-                                    <h5 class="mb-4">Messages <span
-                                            class="avtar avtar-xs bg-light-primary rounded-circle">9</span>
-                                    </h5>
-                                    <div class="form-search">
-                                        <i class="ti ti-search"></i>
-                                        <input type="search" class="form-control"
-                                               placeholder="Search Followers">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="chat-wrapper">
+                <div class="offcanvas-xxl offcanvas-start chat-offcanvas" tabindex="-1"
+                     id="offcanvas_User_list">
+                    <div class="offcanvas-header">
+                        <button class="btn-close" data-bs-dismiss="offcanvas"
+                                data-bs-target="#offcanvas_User_list" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body p-0">
+                        <div id="chat-user_list" class="show collapse collapse-horizontal">
+                            <div class="chat-user_list">
+                                <div class="card overflow-hidden">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Messages <span
+                                                class="avtar avtar-xs bg-light-primary rounded-circle">9</span>
+                                        </h5>
+                                        <div class="form-search">
+                                            <i class="ti ti-search"></i>
+                                            <input type="search" class="form-control"
+                                                   placeholder="Search Followers">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="scroll-block">
+                                    <div class="scroll-block">
+                                        <div class="card-body p-0">
+                                            <div class="list-group list-group-flush">
+
+                                                {#                                            <a href="#" class="list-group-item list-group-item-action p-3">#}
+                                                {#                                                <div class="media align-items-center">#}
+                                                {#                                                    <div class="chat-avtar">#}
+                                                {#                                                        {% if our_profile.profile_pic %}#}
+                                                {#                                                            <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">#}
+                                                {#                                                        {% else %}#}
+                                                {#                                                            <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">#}
+                                                {#                                                        {% endif %}#}
+                                                {#                                                        <div class="bg-success chat-badge"></div>#}
+                                                {#                                                    </div>#}
+                                                {#                                                    <div class="media-body mx-2">#}
+                                                {#                                                        <h6 class="mb-0">John Doe <span#}
+                                                {#                                                                class="float-end text-sm text-muted f-w-400">2h#}
+                                                {#                                                                            ago</span></h6>#}
+                                                {#                                                        <span class="text-sm text-muted">Technical#}
+                                                {#                                                                        Department#}
+                                                {#                                                                        <span class="float-end">#}
+                                                {#                                                                            <span#}
+                                                {#                                                                                    class="chat-badge-status bg-danger text-white">9</span>#}
+                                                {#                                                                        </span></span>#}
+                                                {#                                                    </div>#}
+                                                {#                                                </div>#}
+                                                {#                                            </a>#}
+                                                {#Showing all users here#}
+                                                {% for conversation in conversation_list %}
+                                                    <a href="{% url 'full_conversation' conversation.id %}"
+                                                       class="list-group-item list-group-item-action p-3">
+                                                        <div class="media align-items-center">
+                                                            <div class="chat-avtar">
+                                                                {% if conversation.id_1 == our_profile %}
+                                                                    {% if conversation.id_2.profile_pic.url != "/media/b''" %}
+                                                                        <img class="rounded-circle img-fluid wid-40"
+                                                                             src="{{ conversation.id_2.profile_pic.url }}"
+                                                                             alt="Profile Picture"
+                                                                             style="max-width: 100px;">
+                                                                    {% else %}
+                                                                        <img class="rounded-circle img-fluid wid-40"
+                                                                             src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                                                             alt="Default Profile Picture"
+                                                                             style="max-width: 100px;">
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {% if conversation.id_1.profile_pic.url != "/media/b''" %}
+                                                                        <img class="user-avtar wid-45 rounded-circle"
+                                                                             src="{{ conversation.id_1.profile_pic.url }}"
+                                                                             alt="Profile Picture"
+                                                                             style="max-width: 100px;">
+                                                                    {% else %}
+                                                                        <img class="user-avtar wid-45 rounded-circle"
+                                                                             src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                                                             alt="Default Profile Picture"
+                                                                             style="max-width: 100px;">
+                                                                    {% endif %}
+                                                                {% endif %}
+
+                                                            </div>
+                                                            <div class="media-body mx-2">
+                                                                <h6 class="mb-0">
+                                                                    {% if conversation.id_1 == our_profile %}
+                                                                        {{ conversation.id_2.user.username }}<br>
+                                                                    {% else %}
+                                                                        {{ conversation.id_1.user.username }}<br>
+                                                                    {% endif %}
+                                                                </h6>
+                                                                    <span class="text-sm text-muted">{{ conversation.latest_message }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body p-0">
                                         <div class="list-group list-group-flush">
-
-{#                                            <a href="#" class="list-group-item list-group-item-action p-3">#}
-{#                                                <div class="media align-items-center">#}
-{#                                                    <div class="chat-avtar">#}
-{#                                                        {% if our_profile.profile_pic %}#}
-{#                                                            <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">#}
-{#                                                        {% else %}#}
-{#                                                            <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">#}
-{#                                                        {% endif %}#}
-{#                                                        <div class="bg-success chat-badge"></div>#}
-{#                                                    </div>#}
-{#                                                    <div class="media-body mx-2">#}
-{#                                                        <h6 class="mb-0">John Doe <span#}
-{#                                                                class="float-end text-sm text-muted f-w-400">2h#}
-{#                                                                            ago</span></h6>#}
-{#                                                        <span class="text-sm text-muted">Technical#}
-{#                                                                        Department#}
-{#                                                                        <span class="float-end">#}
-{#                                                                            <span#}
-{#                                                                                    class="chat-badge-status bg-danger text-white">9</span>#}
-{#                                                                        </span></span>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </a>#}
-                                            {#Showing all users here#}
-                                            {% for conversation in conversation_list %}
-                                            <a href="{% url 'full_conversation' conversation.id %}" class="list-group-item list-group-item-action p-3">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="ti ti-power"></i>
+                                                <span>Logout</span>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <i class="ti ti-settings"></i>
+                                                <span>Setting</span>
+                                            </a>
+                                            <div class="list-group-item">
                                                 <div class="media align-items-center">
                                                     <div class="chat-avtar">
-                                                    {% if conversation.id_1 == our_profile %}
-                                                        {% if conversation.id_2.profile_pic.url != "/media/b''"%}
-                                                            <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                                        {% if profile_pic %}
+                                                            <img class="rounded-circle img-fluid wid-40"
+                                                                 src="{{ profile_pic.url }}" alt="Profile Picture"
+                                                                 style="max-width: 100px;">
                                                         {% else %}
-                                                            <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                                            <img class="rounded-circle img-fluid wid-40"
+                                                                 src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                                                 alt="Default Profile Picture"
+                                                                 style="max-width: 100px;">
                                                         {% endif %}
-                                                    {% else %}
-                                                    {% if conversation.id_1.profile_pic.url != "/media/b''"%}
-                                                        <img class="user-avtar wid-45 rounded-circle" src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
-                                                    {% else %}
-                                                        <img class="user-avtar wid-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
-                                                    {% endif %}
+                                                    </div>
+                                                    <div class="media-body mx-3">
+                                                        <h6 class="mb-0">{{ our_profile.user.username }}</h6>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none"
+                                                           href="#" data-bs-toggle="dropdown"
+                                                           aria-haspopup="true" aria-expanded="false">
+                                                            <i class="ti ti-chevron-right f-16"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#"><i
+                                                                    class="chat-badge bg-success"></i>
+                                                                Active</a>
+                                                            <a class="dropdown-item" href="#"><i
+                                                                    class="chat-badge bg-warning"></i>
+                                                                Away</a>
+                                                            <a class="dropdown-item" href="#"><i
+                                                                    class="chat-badge bg-secondary"></i> Edit Do
+                                                                not
+                                                                disturb</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-content">
+                    <div class="card mb-0">
+                        <!-- Header -->
+                        <div class="card-header p-3">
+                            <div class="d-flex align-items-center">
+                                <a href="#" class="d-xxl-none avtar avtar-s btn-link-secondary"
+                                   data-bs-toggle="offcanvas" data-bs-target="#offcanvas_User_list">
+                                    <i class="ti ti-menu-2 f-18"></i>
+                                </a>
+                                <a href="#"
+                                   class="d-none d-xxl-inline-flex avtar avtar-s btn-link-secondary"
+                                   data-bs-toggle="collapse" data-bs-target="#chat-user_list">
+                                    <i class="ti ti-menu-2 f-18"></i>
+                                </a>
+                                <!-- Menu and user info toggle -->
+                                <ul class="list-inline me-auto mb-0" style="padding-left: 5px;">
+                                    {% if conversation.id_1 == our_profile %}
+                                        <li class="list-inline-item">
+                                            <h6 class="mb-0"><b>{{ conversation.id_2.user.username }}</b></h6>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            {% if conversation.id_2.profile_pic.url != "/media/b''" %}
+                                                <img class="rounded-circle img-fluid wid-40"
+                                                     src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture"
+                                                     style="max-width: 100px;">
+                                            {% else %}
+                                                <img class="rounded-circle img-fluid wid-40"
+                                                     src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                                     alt="Default Profile Picture" style="max-width: 100px;">
+                                            {% endif %}
+                                            {% else %}
+
+                                        <li> {{ conversation.id_1.user.username }}</li>
+                                        <li> {% if conversation.id_1.profile_pic.url != "/media/b''" %}
+                                        <img class="rounded-circle img-fluid wid-40"
+                                             src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture"
+                                             style="max-width: 100px;">
+                                    {% else %}
+                                        <img class="rounded-circle img-fluid wid-40"
+                                             src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                             alt="Default Profile Picture" style="max-width: 100px;">
+                                    {% endif %}
+                                    {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Message area -->
+                        <div class="scroll-block chat-message" style="overflow-y: auto; max-height: 500px;">
+                            <div class="card-body">
+                                {% for message in messages %}
+                                    <div class="{% if message.is_from_our_user %}message-out{% else %}message-in{% endif %}">
+                                        <div class="d-flex {% if not message.is_from_our_user %}flex-row-reverse{% endif %}">
+                                            <div class="flex-shrink-0">
+                                                {% if not message.is_from_our_user %}
+                                                    <div class="chat-avatar">
+                                                        {% if message.from_user.profile_pic.url != "/media/b''" %}
+                                                            <img class="rounded-circle img-fluid wid-40"
+                                                                 src="{{ message.from_user.profile_pic.url }}"
+                                                                 alt="User image">
+                                                        {% else %}
+                                                            <img class="rounded-circle img-fluid wid-40"
+                                                                 src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                                                 alt="User image">
+                                                        {% endif %}
+                                                    </div>
                                                 {% endif %}
-
-                                                    </div>
-                                                    <div class="media-body mx-2">
-                                                        <h6 class="mb-0">
-                                                            {% if conversation.id_1 == our_profile %}
-                                                            {{ conversation.id_2.user.username }}<br>
-                                                            {% else %}
-                                                            {{ conversation.id_1.user.username }}<br>
-                                                            {% endif %}
-
-
-                                                        <span
-                                                                class="text-sm text-muted">{{ conversation.latest_message }}
-
-                                                                    </span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="list-group list-group-flush">
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <i class="ti ti-power"></i>
-                                            <span>Logout</span>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <i class="ti ti-settings"></i>
-                                            <span>Setting</span>
-                                        </a>
-                                        <div class="list-group-item">
-                                            <div class="media align-items-center">
-                                                <div class="chat-avtar">
-                                                    {% if profile_pic %}
-                                                        <img class="rounded-circle img-fluid wid-40" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
-                                                    {% else %}
-                                                        <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
-                                                    {% endif %}
-                                                </div>
-                                                <div class="media-body mx-3">
-                                                    <h6 class="mb-0">{{ our_profile.user.username }}</h6>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none"
-                                                       href="#" data-bs-toggle="dropdown"
-                                                       aria-haspopup="true" aria-expanded="false">
-                                                        <i class="ti ti-chevron-right f-16"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#"><i
-                                                                class="chat-badge bg-success"></i>
-                                                            Active</a>
-                                                        <a class="dropdown-item" href="#"><i
-                                                                class="chat-badge bg-warning"></i>
-                                                            Away</a>
-                                                        <a class="dropdown-item" href="#"><i
-                                                                class="chat-badge bg-secondary"></i> Edit Do
-                                                            not
-                                                            disturb</a>
+                                            </div>
+                                            <div class="flex-grow-1 mx-3">
+                                                <div class="d-flex align-items-start flex-column">
+                                                    <p class="mb-1 text-muted">{{ message.sender_username }} <small>
+                                                        {{ message.created_on|date:"H:i A" }}</small></p>
+                                                    <div class="message d-flex align-items-start flex-column">
+                                                        <div class="msg-content bg-primary">
+                                                            <p class="mb-0">{{ message.details }}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-<div class="chat-content">
-    <div class="card mb-0">
-        <!-- Header -->
-        <div class="card-header p-3">
-            <div class="d-flex align-items-center">
-            <a href="#" class="d-xxl-none avtar avtar-s btn-link-secondary"
-               data-bs-toggle="offcanvas" data-bs-target="#offcanvas_User_list">
-                <i class="ti ti-menu-2 f-18"></i>
-            </a>
-            <a href="#"
-               class="d-none d-xxl-inline-flex avtar avtar-s btn-link-secondary"
-               data-bs-toggle="collapse" data-bs-target="#chat-user_list">
-                <i class="ti ti-menu-2 f-18"></i>
-            </a>
-                <!-- Menu and user info toggle -->
-                <ul class="list-inline me-auto mb-0" style="padding-left: 5px;">
-                    {% if conversation.id_1 == our_profile %}
-                    <li class="list-inline-item">
-                       <h6 class="mb-0"><b>{{ conversation.id_2.user.username}}</b></h6>
-                    </li>
-                    <li class="list-inline-item"> {% if conversation.id_2.profile_pic.url != "/media/b''" %}
-                        <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_2.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
-                        {% else %}
-                        <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
-                        {% endif %}
-                    {% else %}
-
-                    <li > {{ conversation.id_1.user.username}}</li>
-                    <li> {% if conversation.id_1.profile_pic.url != "/media/b''"%}
-                        <img class="rounded-circle img-fluid wid-40" src="{{ conversation.id_1.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
-                        {% else %}
-                        <img class="rounded-circle img-fluid wid-40" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
-                        {% endif %}
-                    {% endif %}
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-
-        <!-- Message area -->
-        <div class="scroll-block chat-message" style="overflow-y: auto; max-height: 500px;">
-            <div class="card-body">
-                {% for message in messages %}
-                <div class="{% if message.is_from_our_user %}message-out{% else %}message-in{% endif %}">
-                    <div class="d-flex {% if not message.is_from_our_user %}flex-row-reverse{% endif %}">
-                        <div class="flex-shrink-0">
-                        {% if not message.is_from_our_user %}
-                            <div class="chat-avatar">
-                            {% if message.from_user.profile_pic.url != "/media/b''" %}
-                                <img class="rounded-circle img-fluid wid-40"
-                                     src="{{ message.from_user.profile_pic.url }}" alt="User image">
-                            {% else %}
-                                <img class="rounded-circle img-fluid wid-40"
-                                     src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="User image">
-                            {% endif %}
-                            </div>
+                        <!-- Input area -->
+                        <div class="card-footer py-2 px-3">
+                            <!-- Start of the form to handle message sending -->
+                            {% if not initial %}
+                                <form action="{% url 'send_chat_message' conversation.id %}" method="post" id="message">
+                                    {% csrf_token %}
+                                    <!-- Textarea for input, adjusted for form submission -->
+                                    <textarea class="form-control border-0 shadow-none px-0" name="message"
+                                              placeholder="Type a Message" rows="2"></textarea>
+                                    <hr class="my-2">
+                                    <div class="d-sm-flex align-items-center">
+                                        <!-- Placeholder for attachment buttons -->
+                                        <!-- other list items here -->
+                                        <ul class="list-inline ms-auto mb-0">
+                                            <li class="list-inline-item">
+                                                <!-- Submit button disguised as a link, maintaining the original design -->
+                                                <button type="submit" class="avtar avtar-s btn-link-primary"
+                                                        style="background: none; border: none; padding: 0;">
+                                                    <i class="ti ti-send f-18"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
                             {% endif %}
                         </div>
-                        <div class="flex-grow-1 mx-3">
-                            <div class="d-flex align-items-start flex-column">
-                                <p class="mb-1 text-muted">{{ message.sender_username }} <small>{{ message.created_on|date:"H:i A" }}</small></p>
-                                <div class="message d-flex align-items-start flex-column">
-                                    <div class="msg-content bg-primary">
-                                        <p class="mb-0">{{ message.details }}</p>
-                                    </div>
-                                </div>
+
+                        <div class="offcanvas-xxl offcanvas-end chat-offcanvas" tabindex="-1" id="offcanvas_User_info">
+                            <div class="offcanvas-header">
+                                <button class="btn-close" data-bs-dismiss="offcanvas"
+                                        data-bs-target="#offcanvas_User_info" aria-label="Close"></button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Input area -->
-        <div class="card-footer py-2 px-3">
-    <!-- Start of the form to handle message sending -->
-            {% if not initial %}
-<form action="{% url 'send_chat_message' conversation.id %}" method="post" id="message">
-        {% csrf_token %}
-        <!-- Textarea for input, adjusted for form submission -->
-        <textarea class="form-control border-0 shadow-none px-0" name="message" placeholder="Type a Message" rows="2"></textarea>
-        <hr class="my-2">
-        <div class="d-sm-flex align-items-center">
-            <!-- Placeholder for attachment buttons -->
-            <!-- other list items here -->
-            <ul class="list-inline ms-auto mb-0">
-                <li class="list-inline-item">
-                    <!-- Submit button disguised as a link, maintaining the original design -->
-                    <button type="submit" class="avtar avtar-s btn-link-primary" style="background: none; border: none; padding: 0;">
-                        <i class="ti ti-send f-18"></i>
-                    </button>
-                </li>
-            </ul>
-        </div>
-    </form>
-    {% endif %}
-</div>
-
-            <div class="offcanvas-xxl offcanvas-end chat-offcanvas" tabindex="-1" id="offcanvas_User_info">
-                <div class="offcanvas-header">
-                    <button class="btn-close" data-bs-dismiss="offcanvas"
-                            data-bs-target="#offcanvas_User_info" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body p-0">
-                    <div id="chat-user_info" class="collapse collapse-horizontal">
-                        <div class="chat-user_info">
-                            <div class="card">
-                                <div class="text-center card-body position-relative pb-0">
-                                    <h5 class="text-start">Profile View</h5>
-                                    <div class="position-absolute end-0 top-0 p-3 d-none d-xxl-inline-flex">
-                                        <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default"
-                                           data-bs-toggle="collapse" data-bs-target="#chat-user_info">
-                                            <i class="ti ti-x f-16"></i>
-                                        </a>
-                                    </div>
-                                    <div class="chat-avtar d-inline-flex mx-auto">
-                                        <img class="rounded-circle img-fluid wid-100"
-                                             src="../assets/images/user/avatar-5.jpg" alt="User image">
-                                    </div>
-                                    <h5 class="mb-0">Alene</h5>
-                                    <p class="text-muted text-sm">Sr. Customer Manager</p>
-                                    <div class="d-flex align-items-center justify-content-center mb-4">
-                                        <i class="chat-badge bg-success me-2"></i>
-                                        <span class="badge bg-light-success">Available</span>
-                                    </div>
-                                    <ul class="list-inline ms-auto mb-0">
-                                        <li class="list-inline-item">
-                                            <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                <i class="ti ti-phone-call f-18"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                <i class="ti ti-message-circle f-18"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                <i class="ti ti-video f-18"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="scroll-block">
-                                    <div class="card-body">
-                                        <div class="row mb-3">
-                                            <div class="col-6">
-                                                <div class="p-3 rounded bg-light-primary">
-                                                    <p class="mb-1">All File</p>
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="ti ti-folder f-22 text-primary"></i>
-                                                        <h4 class="mb-0 ms-2">231</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="p-3 rounded bg-light-secondary">
-                                                    <p class="mb-1">All Link</p>
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="ti ti-link f-22 text-secondary"></i>
-                                                        <h4 class="mb-0 ms-2">231</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                                class="form-check form-switch d-flex align-items-center justify-content-between p-0">
-                                            <label class="form-check-label h5 mb-0"
-                                                   for="customSwitchemlnot1">Notification</label>
-                                            <input class="form-check-input h5 m-0 position-relative"
-                                                   type="checkbox" id="customSwitchemlnot1" checked="">
-                                        </div>
-                                        <hr class="my-3 border border-secondary-subtle">
-                                        <a class="btn border-0 p-0 text-start w-100"
-                                           data-bs-toggle="collapse" href="#filtercollapse1">
-                                            <div class="float-end"><i class="ti ti-chevron-down"></i></div>
-                                            <h5 class="mb-0">Information</h5>
-                                        </a>
-                                        <div class="collapse show" id="filtercollapse1">
-                                            <div class="py-3">
-                                                <div
-                                                        class="d-flex align-items-center justify-content-between mb-2">
-                                                    <p class="mb-0">Address</p>
-                                                    <p class="mb-0 text-muted">Port Narcos</p>
-                                                </div>
-                                                <div
-                                                        class="d-flex align-items-center justify-content-between mb-2">
-                                                    <p class="mb-0">Email</p>
-                                                    <p class="mb-0 text-muted">alene@company.com</p>
-                                                </div>
-                                                <div
-                                                        class="d-flex align-items-center justify-content-between mb-2">
-                                                    <p class="mb-0">Phone</p>
-                                                    <p class="mb-0 text-muted">380-293-0177</p>
-                                                </div>
-                                                <div
-                                                        class="d-flex align-items-center justify-content-between">
-                                                    <p class="mb-0">Last visited</p>
-                                                    <p class="mb-0 text-muted">2 hours</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr class="my-3 border border-secondary-subtle">
-                                        <a class="btn border-0 p-0 text-start w-100"
-                                           data-bs-toggle="collapse" href="#filtercollapse2">
-                                            <div class="float-end"><i class="ti ti-chevron-down"></i></div>
-                                            <h5 class="mb-0">File type</h5>
-                                        </a>
-                                        <div class="collapse show" id="filtercollapse2">
-                                            <div class="py-3">
-                                                <div class="media align-items-center mb-2">
-                                                    <a href="#" class="avtar avtar-s btn-light-success">
-                                                        <i class="ti ti-file-text f-20"></i>
+                            <div class="offcanvas-body p-0">
+                                <div id="chat-user_info" class="collapse collapse-horizontal">
+                                    <div class="chat-user_info">
+                                        <div class="card">
+                                            <div class="text-center card-body position-relative pb-0">
+                                                <h5 class="text-start">Profile View</h5>
+                                                <div class="position-absolute end-0 top-0 p-3 d-none d-xxl-inline-flex">
+                                                    <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default"
+                                                       data-bs-toggle="collapse" data-bs-target="#chat-user_info">
+                                                        <i class="ti ti-x f-16"></i>
                                                     </a>
-                                                    <div class="media-body ms-3">
-                                                        <h6 class="mb-0">Document</h6>
-                                                        <span class="text-muted text-sm">123 files,
+                                                </div>
+                                                <div class="chat-avtar d-inline-flex mx-auto">
+                                                    <img class="rounded-circle img-fluid wid-100"
+                                                         src="../assets/images/user/avatar-5.jpg" alt="User image">
+                                                </div>
+                                                <h5 class="mb-0">Alene</h5>
+                                                <p class="text-muted text-sm">Sr. Customer Manager</p>
+                                                <div class="d-flex align-items-center justify-content-center mb-4">
+                                                    <i class="chat-badge bg-success me-2"></i>
+                                                    <span class="badge bg-light-success">Available</span>
+                                                </div>
+                                                <ul class="list-inline ms-auto mb-0">
+                                                    <li class="list-inline-item">
+                                                        <a href="#" class="avtar avtar-s btn-link-secondary">
+                                                            <i class="ti ti-phone-call f-18"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <a href="#" class="avtar avtar-s btn-link-secondary">
+                                                            <i class="ti ti-message-circle f-18"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <a href="#" class="avtar avtar-s btn-link-secondary">
+                                                            <i class="ti ti-video f-18"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="scroll-block">
+                                                <div class="card-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col-6">
+                                                            <div class="p-3 rounded bg-light-primary">
+                                                                <p class="mb-1">All File</p>
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="ti ti-folder f-22 text-primary"></i>
+                                                                    <h4 class="mb-0 ms-2">231</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="p-3 rounded bg-light-secondary">
+                                                                <p class="mb-1">All Link</p>
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="ti ti-link f-22 text-secondary"></i>
+                                                                    <h4 class="mb-0 ms-2">231</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                            class="form-check form-switch d-flex align-items-center justify-content-between p-0">
+                                                        <label class="form-check-label h5 mb-0"
+                                                               for="customSwitchemlnot1">Notification</label>
+                                                        <input class="form-check-input h5 m-0 position-relative"
+                                                               type="checkbox" id="customSwitchemlnot1" checked="">
+                                                    </div>
+                                                    <hr class="my-3 border border-secondary-subtle">
+                                                    <a class="btn border-0 p-0 text-start w-100"
+                                                       data-bs-toggle="collapse" href="#filtercollapse1">
+                                                        <div class="float-end"><i class="ti ti-chevron-down"></i></div>
+                                                        <h5 class="mb-0">Information</h5>
+                                                    </a>
+                                                    <div class="collapse show" id="filtercollapse1">
+                                                        <div class="py-3">
+                                                            <div
+                                                                    class="d-flex align-items-center justify-content-between mb-2">
+                                                                <p class="mb-0">Address</p>
+                                                                <p class="mb-0 text-muted">Port Narcos</p>
+                                                            </div>
+                                                            <div
+                                                                    class="d-flex align-items-center justify-content-between mb-2">
+                                                                <p class="mb-0">Email</p>
+                                                                <p class="mb-0 text-muted">alene@company.com</p>
+                                                            </div>
+                                                            <div
+                                                                    class="d-flex align-items-center justify-content-between mb-2">
+                                                                <p class="mb-0">Phone</p>
+                                                                <p class="mb-0 text-muted">380-293-0177</p>
+                                                            </div>
+                                                            <div
+                                                                    class="d-flex align-items-center justify-content-between">
+                                                                <p class="mb-0">Last visited</p>
+                                                                <p class="mb-0 text-muted">2 hours</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-3 border border-secondary-subtle">
+                                                    <a class="btn border-0 p-0 text-start w-100"
+                                                       data-bs-toggle="collapse" href="#filtercollapse2">
+                                                        <div class="float-end"><i class="ti ti-chevron-down"></i></div>
+                                                        <h5 class="mb-0">File type</h5>
+                                                    </a>
+                                                    <div class="collapse show" id="filtercollapse2">
+                                                        <div class="py-3">
+                                                            <div class="media align-items-center mb-2">
+                                                                <a href="#" class="avtar avtar-s btn-light-success">
+                                                                    <i class="ti ti-file-text f-20"></i>
+                                                                </a>
+                                                                <div class="media-body ms-3">
+                                                                    <h6 class="mb-0">Document</h6>
+                                                                    <span class="text-muted text-sm">123 files,
                                                                         193MB</span>
-                                                    </div>
-                                                    <a href="#" class="avtar avtar-xs btn-link-secondary">
-                                                        <i class="ti ti-chevron-right f-16"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="media align-items-center mb-2">
-                                                    <a href="#" class="avtar avtar-s btn-light-warning">
-                                                        <i class="ti ti-photo f-20"></i>
-                                                    </a>
-                                                    <div class="media-body ms-3">
-                                                        <h6 class="mb-0">Photos</h6>
-                                                        <span class="text-muted text-sm">53 files,
+                                                                </div>
+                                                                <a href="#" class="avtar avtar-xs btn-link-secondary">
+                                                                    <i class="ti ti-chevron-right f-16"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="media align-items-center mb-2">
+                                                                <a href="#" class="avtar avtar-s btn-light-warning">
+                                                                    <i class="ti ti-photo f-20"></i>
+                                                                </a>
+                                                                <div class="media-body ms-3">
+                                                                    <h6 class="mb-0">Photos</h6>
+                                                                    <span class="text-muted text-sm">53 files,
                                                                         321MB</span>
-                                                    </div>
-                                                    <a href="#" class="avtar avtar-xs btn-link-secondary">
-                                                        <i class="ti ti-chevron-right f-16"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="media align-items-center mb-2">
-                                                    <a href="#" class="avtar avtar-s btn-light-primary">
-                                                        <i class="ti ti-id f-20"></i>
-                                                    </a>
-                                                    <div class="media-body ms-3">
-                                                        <h6 class="mb-0">Other</h6>
-                                                        <span class="text-muted text-sm">49 files,
+                                                                </div>
+                                                                <a href="#" class="avtar avtar-xs btn-link-secondary">
+                                                                    <i class="ti ti-chevron-right f-16"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="media align-items-center mb-2">
+                                                                <a href="#" class="avtar avtar-s btn-light-primary">
+                                                                    <i class="ti ti-id f-20"></i>
+                                                                </a>
+                                                                <div class="media-body ms-3">
+                                                                    <h6 class="mb-0">Other</h6>
+                                                                    <span class="text-muted text-sm">49 files,
                                                                         193MB</span>
+                                                                </div>
+                                                                <a href="#" class="avtar avtar-xs btn-link-secondary">
+                                                                    <i class="ti ti-chevron-right f-16"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <a href="#" class="avtar avtar-xs btn-link-secondary">
-                                                        <i class="ti ti-chevron-right f-16"></i>
-                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -404,8 +434,7 @@
                     </div>
                 </div>
             </div>
+            <script src="{% static 'messagesApp/js/chat.js' %}"></script>
         </div>
     </div>
-</div>
-<script src="{% static 'messagesApp/js/chat.js' %}"></script>
 {% endblock %}
