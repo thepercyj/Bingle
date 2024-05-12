@@ -1,0 +1,496 @@
+{% extends 'mainapp/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-xxl-3 col-md-6">
+            <a class="nav-link" href="#" onclick="openViewModal('book-modal')">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <p class="mb-1 fw-medium text-muted">My Library</p>
+                                {% csrf_token %}
+                                {% if user_books %}
+                                    <h2>No. of books -</h2>
+                                    <h5 class="mb-1">{{ user_books|length }} Books</h5>
+                                {% else %}
+                                    <h2>No. of books -</h2>
+                                    <h5 class="mb-1">0</h5>
+                                {% endif %}
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <i class="ph-duotone ph-book-bookmark f-28"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="add-book-modal" class="modal">
+            <div class="modal-content">
+                <form method="POST" action="/add-book/">
+                    {% csrf_token %}
+                    {{ bookform |crispy }}
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </form>
+                <br>
+                <button
+                        class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('add-book-modal')">Close
+                </button>
+            </div>
+        </div>
+        <div id="book-modal" class="modal">
+            <div class="modal-content" style="max-width: 600px; max-height: 400px; overflow-x: auto; overflow-y: auto;" >
+                <h3 class="modal-black">My Library</h3>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="openBookModal('add-book-modal'); closeModal('book-modal')"> Add
+                </button>
+                <br>
+
+                <div class="user_books">
+                    {% csrf_token %}
+                    {% if user_books %}
+                        <table class="table">
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Publish Date</th>
+                                <th>Currently With</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for user_book in user_books %}
+                                <tr>
+                                    <td>{{ user_book.book_id.book_title }}</td>
+                                    <td>{{ user_book.book_id.book_author }}</td>
+                                    <td>{{ user_book.book_id.genre }}</td>
+                                    <td>{{ user_book.book_id.published_date }}</td>
+                                    <td>{{ user_book.currently_with }}</td>
+                                    <td>
+                                        <form action="/remove-book/" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="book_id"
+                                                   value="{{ user_book.id }}"/>
+                                            <input type="submit"
+                                                   class="btn btn-primary d-flex align-items-center justify-content-center"
+                                                   value="X"/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <div class="pagination">
+                                <span class="step-links">
+                                    {% if user_books.has_previous %}
+                                        <a href="?page=1">&laquo; first</a>
+                                        <a href="?page={{ user_books.previous_page_number }}">previous</a>
+                                    {% endif %}
+
+                                    <span class="current">
+                                        Page {{ user_books.number }} of {{ user_books.paginator.num_pages }}.
+                                    </span>
+
+                                    {% if user_books.has_next %}
+                                        <a href="?page={{ user_books.next_page_number }}">next</a>
+                                        <a href="?page={{ user_books.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </span>
+                        </div>
+                    {% else %}
+                        <div>You don't have any books, getting adding!</div>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('book-modal')">Close
+                </button>
+            </div>
+        </div>
+
+        <div id="library-modal" class="modal">
+            <div class="card">
+                <div class="card-body">
+                    <div class="modal-content-lib">
+                        <div class="library">
+                            {% csrf_token %}
+                            {% if library %}
+                                <h1 class="modal-black">Bingle Store</h1>
+                                <input type="text" id="searchLibrary" placeholder="Search Library">
+                                <button class="btn btn-primary" onclick="searchLibrary()">
+                                    Search
+                                </button>
+                                <div class="table-responsive">
+                                <table class="table table-hover table-borderless mb-0">
+                                    <tr>
+                                        <th>Book Title</th>
+                                        <th>Book Author</th>
+                                        <th>Current Owner(s)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    {% for book in library %}
+                                        {% if book.user_books_book.first.owner_book_id.user != request.user %}
+                                            <tr>
+                                                <td>{{ book.book_title }}</td>
+                                                <td>{{ book.book_author }}</td>
+                                                <td style="max-width: 200px; overflow-x: auto;">
+                                                    {% for user_book in book.user_books_book.all %}
+                                                        {% if user_book.currently_with %}
+                                                            {{ user_book.currently_with.user }}
+                                                            {% if not forloop.last %}, {% endif %}
+                                                        {% else %}
+                                                            Not currently owned
+                                                        {% endif %}
+                                                        {% empty %}
+                                                        Not currently owned
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'borrow' book.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="submit" class="btn btn-primary"
+                                                               value="Borrow"/>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                            onclick="closeModal('library-modal')">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="borrow-modal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-black">Borrow Requests</h3>
+                <div class="borrow">
+                    <table class="table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Borrower</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Status</th>
+                        </tr>
+                        {% if pre_booking %}
+                            {% for prebook in pre_booking %}
+                                <tr>
+                                    <td>{{ prebook.user_book_id.book_id.book_title }}</td>
+                                    <td>{{ prebook.borrower_id }}</td>
+                                    <td>{{ prebook.from_date }}</td>
+                                    <td>{{ prebook.to_date }}</td>
+                                    {% if prebook.status == "pending" %}
+                                        <td>
+                                            <form action="{% url 'approve_borrow_request' prebook.user_book_id.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="book_id"
+                                                       value="{{ prebook.user_book_id.id }}"/>
+                                                <input type="submit" class="btn btn-success" value="Approve"/>
+                                            </form>
+                                            <br>
+                                            <form action="{% url 'deny_borrow_request' prebook.user_book_id.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="book_id"
+                                                       value="{{ prebook.user_book_id.id }}"/>
+                                                <input type="submit" class="btn btn-danger " value="Deny"/>
+                                            </form>
+                                        </td>
+                                    {% elif prebook.status == "approved" %}
+                                        <td>Approved</td>
+                                    {% elif prebook.status == "denied" %}
+                                        <td>Denied</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('borrow-modal')">Close
+                </button>
+            </div>
+        </div>
+
+        <div id="booking-modal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-black">Booking History</h3>
+                <div class="booking">
+                    <table class="table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Owner</th>
+                            <th>Borrower</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Returned</th>
+                            <th>Action</th> <!-- Add a column for action -->
+                        </tr>
+                        {% if owner_bookings %}
+                            {% for booked in owner_bookings %}
+                                <tr>
+                                    <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                                    <td>{{ booked.owner_id }}</td>
+                                    <td>{{ booked.borrower_id }}</td>
+                                    <td>{{ booked.from_date }}</td>
+                                    <td>{{ booked.to_date }}</td>
+                                    <td>{{ booked.returned }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if borrower_bookings %}
+                            {% for booked in borrower_bookings %}
+                                <tr>
+                                    <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                                    <td>{{ booked.owner_id }}</td>
+                                    <td>{{ booked.borrower_id }}</td>
+                                    <td>{{ booked.from_date }}</td>
+                                    <td>{{ booked.to_date }}</td>
+                                    <td>{{ booked.returned }}</td>
+                                    <td>
+                                        {% if not booked.returned %}
+                                            <form action="{% url 'return_book' booked.user_book_id.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="book_id"
+                                                       value="{{ booked.user_book_id.id }}"/>
+                                                <input type="submit" class="btn btn-success" value="Return Book"/>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center"
+                        onclick="closeModal('booking-modal')">Close
+                </button>
+            </div>
+        </div>
+
+        <div class="col-xxl-3 col-md-6">
+            <a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <p class="mb-1 fw-medium text-muted">Bingle Store</p>
+                                {% if library %}
+                                    <h2>Bingle Store</h2>
+                                    <h4 class="mb-1">{{ lib_count|length }}</h4>
+                                {% else %}
+                                    <h2>Bingle Store</h2>
+                                    <h4 class="mb-1">0</h4>
+                                {% endif %}
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <i class="ph-duotone ph-book-bookmark f-28"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        {#            Adding Borrow requests here#}
+        <div class="col-xxl-3 col-md-6">
+            <a class=" nav-link" href="#"
+               onclick="openViewModal('borrow-modal')">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <p class="mb-1 fw-medium text-muted">Borrow requests</p>
+                                {% if pre_booking %}
+                                    <h4 class="mb-1">Pending - </h4>
+                                    <h2>{{ pre_booking.count }}</h2>
+                                {% else %}
+                                    <h4 class="mb-1">Pending - </h4>
+                                    <h2>0</h2>
+                                {% endif %}
+                                <p class="mb-0 text-sm"></p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <i class="ph-duotone ph-book-bookmark f-28"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-xxl-3 col-md-6">
+            <a class="nav-link" href="#"
+               onclick="openBookingModal('booking-modal')">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <p class="mb-1 fw-medium text-muted">Booking History</p>
+                                {% if owner_bookings or borrower_bookings %}
+                                    <h4 class="mb-1">Booking History</h4>
+                                    <h2>{{ total_bookings }}</h2>
+                                {% else %}
+                                    <h4 class="mb-1">Booking History</h4>
+                                    <h2>0</h2>
+                                {% endif %}
+                                <p class="mb-0 text-sm"></p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <i class="ph-duotone ph-book-bookmark f-28"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Personal Information</h5>
+                </div>
+                <!-- Profile picture image-->
+                <div id="picture-modal" class="modal">
+                    <div class="modal-content">
+                        <form id="upload-form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
+                            <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                            <button id="upload-btn" class="btn btn-primary" type="button">Upload
+                            </button>
+                        </form>
+                        <button class="close-btn" onclick="closeModal('picture-modal')">Close
+                        </button>
+                        <p id="error-message" style="color: red;"></p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-6 mb-xl-0">
+                        <div class="card-body">
+                            <div class="col-sm-auto text-center">
+                                <div class="position-relative me-3 d-inline-flex">
+                                    <div class="position-absolute top-50 start-100 translate-middle">
+                                        <button class="btn btn-sm btn-primary btn-icon" onclick="openUploadModal('picture-modal')">
+                                            <i class="ti ti-pencil"></i>
+                                        </button>
+                                    </div>
+                                    {% if user_profile.profile_pic %}
+                                        <img class=" rounded img-fluid ms-2"
+                                             src="{{ user_profile.profile_pic.url }}" alt="Profile Picture">
+                                    {% else %}
+                                        <img class=" rounded img-fluid ms-2"
+                                             src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Profile picture help block-->
+                            <div class="small font-italic text-center text-muted mb-4">JPG or PNG no larger than 5 MB
+                            </div>
+                            <!-- Profile picture upload button-->
+                            {#                            <div class="col-12 text-center btn-page">#}
+                            {#                                <a>#}
+                            {#                                    <button class="btn btn-primary" onclick="openUploadModal('picture-modal')">#}
+                            {#                                        Upload#}
+                            {#                                    </button>#}
+                            {#                                </a>#}
+                            {#                            </div>#}
+                        </div>
+                    </div>
+                    <form method="post" action="/update-profile/">
+                        <div class="col-sm-6">
+                            <div class="mb-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="inputFirstName" id="inputFirstName"
+                                       type="text" placeholder="Enter your first name"
+                                       value={{ user.first_name }}>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="inputLastName" id="inputLastName"
+                                       type="text" placeholder="Enter your last name"
+                                       value={{ user.last_name }}>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="mb-4">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" name="inputUserName" id="inputUsername"
+                                       type="text" placeholder="Enter your username"
+                                       value={{ user.username }}>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="mb-3">
+                                <label class="form-label">Birthday</label>
+                                <div>{{ user_profile.birth_date }}</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="mb-4">
+                                <label class="form-label">Contact Phone</label>
+                                <input type="text" class="form-control" name="inputPhone"
+                                       id="inputPhone" type="tel"
+                                       placeholder="Enter your phone number"
+                                       value={{ user_profile.phone_number }}>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="inputEmailAddress"
+                                       id="inputEmailAddress"
+                                       type="email"
+                                       placeholder="Enter your email address"
+                                       value={{ user.email }}>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" name="inputLocation"
+                                       id="inputLocation"
+                                       type="text" placeholder="Enter your location"
+                                       value={{ user_profile.primary_location }}>
+                            </div>
+                        </div>
+                        <div class="col-12 text-end btn-page">
+                            <div class="btn btn-primary" type="submit">Save Changes</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Recommendations</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+{% endblock %}

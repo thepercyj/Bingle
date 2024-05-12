@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>{% block title %} Bingle {% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" >
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/css/responsive.css' %}" />
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body class="sub_page">
+<div class="hero_area">
+    <header class="header_section">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+                <a class="navbar-brand" href="/">
+                    <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" alt="" />
+                    <span>Bingle</span></a>
+
+                <div class="navbar-nav" id="">
+                    <ul class="navbar-nav">
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'about' %}">About</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'profile' %}">Profile </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'search' %}">Search </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user_option">
+                    {% if user.is_authenticated %}
+                    <ul class="main-menu notification-drop">
+                        <li class="">
+                            <i class="fa fa-bell-o bell-color" aria-hidden="true"></i>
+                            {% if notifications %}
+                                <span class="btn__badge">{{ notification_count }}</span>
+                            <ul class="sub-menu">
+                                {% for notification in notifications %}
+                                <li><a href="{% url 'redirect_notification' notification.id %}">{{ notification }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <ul class="sub-menu">
+                                <li>No notifications found.</li>
+                            </ul>
+                            {% endif %}
+                        </li>
+                    </ul>
+
+                    <ul class="main-menu primary-menu">
+                        <li><a> Welcome, {{ user.username }}</a>
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'logout_view' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% else %}
+                    <ul class="main-menu primary-menu">
+                        <li><a> My Bingle</a>
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'login_view' %}">Login</a></li>
+                                <li><a href="{% url 'register' %}">Register</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </nav>
+
+        </div>
+    </header>
+</div>
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<section class="info_section ">
+    <div class="info_container layout_padding-top">
+        <div class="container">
+            <div class="info_top">
+                <div class="info_logo">
+                    <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" alt="" />
+                    <span> Bingle </span>
+                </div>
+            </div>
+
+            <div class="info_main">
+                <div class="row">
+                    <div class="col-md-3 col-lg-2">
+                        <div class="info_link-box">
+                            <h5>
+                                Useful Link
+                            </h5>
+                            <ul>
+                                <li class=" active">
+                                    <a class="" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="">
+                                    <a class="" href="{% url 'about' %}">About </a>
+                                </li>
+                                <li class="">
+                                    <a class="" href="{% url 'profile' %}">Profile </a>
+                                </li>
+                                <li class="">
+                                    <a class="" href="{% url 'search' %}">Search</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <h5>
+                            Offices
+                        </h5>
+                        <p>
+                            University of Sussex, Brighton, United Kingdom
+                        </p>
+                    </div>
+
+                    <div class="col-md-3 col-lg-2 offset-lg-1">
+                        <h5>
+                            Information
+                        </h5>
+                        <p>
+                            Welcome to our book lending app. Join our community today and embark on a literary adventure like never before.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="container-fluid footer_section ">
+    <div class="container">
+        <p>
+            &copy; <span id="displayDate"></span> All Rights Reserved By
+            <a href="#">Bingle</a>
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script src="{% static 'mainapp/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'mainapp/js/bootstrap.js' %}"></script>
+<script src="{% static 'mainapp/js/custom.js' %}"></script>
+<script src="{% static 'mainapp/js/modal.js' %}"></script>
+
+
+</body>
+</html>
