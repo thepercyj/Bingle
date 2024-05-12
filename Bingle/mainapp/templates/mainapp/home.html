@@ -368,12 +368,26 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header text-center">
-                    <h5> Recommendations </h5>
-                    <li>{{ recs}}</li>
+                    <h4> Recommendations </h4>
+
                 </div>
                 <div class="card-body">
-                    Add recommendation table here
-                </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <td><h5>Book Title</h5></td>
+                                <td><h5>Book Author</h5></td>
+                                <td><h5>Genre</h5></td>
+                            </tr>
+                        {% for rec in recs %}
+                        <tr>
+                            <td>{{ rec.book_title }}</td>
+                            <td>{{ rec.book_author }}</td>
+                            <td>{{ rec.genre }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    </div>
             </div>
         </div>
     </div>

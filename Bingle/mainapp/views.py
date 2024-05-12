@@ -21,7 +21,6 @@ from django.conf import settings
 import json
 from recommendations.views import getborrowed
 from django.views.decorators.cache import cache_page
-from recommendations.views import getborrowed
 
 
 
@@ -122,7 +121,7 @@ def new_home(request):
     :param request: HttpRequest - The request object
     """
     recs = getborrowed(request)
-    
+
     return render(request, 'home.html',{'recs':recs})
 def new_landing_page(request):
     return render (request, 'new_landing_page.html')
@@ -163,7 +162,7 @@ def new_profile(request):
         user_books = paginator.page(1)
     except EmptyPage:
         user_books = paginator.page(paginator.num_pages)
-    library = Book.objects.all()
+
     # Pagination for library
     library_page = request.GET.get('library_page')
     library_paginator = Paginator(library, 10)  # Show 10 books per page
@@ -173,8 +172,7 @@ def new_profile(request):
         library = library_paginator.page(1)
     except EmptyPage:
         library = library_paginator.page(library_paginator.num_pages)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile)
-    books_count = user_books.count()  # Count the number of books
+
     context = {
         'bookform': form,
         'user_books': user_books,
@@ -188,12 +186,6 @@ def new_profile(request):
         'borrower_bookings': borrower_bookings,
         'total_bookings': total_bookings,
     }
-
-    return render(request, 'new_home.html', context)
-
-
-
-
     return render(request, 'new_profile.html', context)
 
 @cache_page(60 * 5)  # Cache for 15 minutes
