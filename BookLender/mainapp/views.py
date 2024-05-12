@@ -20,6 +20,7 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.conf import settings
 import json
+from recommendations.views import getborrowed
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -139,6 +140,7 @@ def sample(request):
     books_count = user_books.count()  # Count the number of books
     context = {'user_books': user_books, 'user_profile': user_profile, 'user': user,
                'user_book_count': books_count, 'library': library}
+    
     return render(request, 'new_home.html', context)
 
 
