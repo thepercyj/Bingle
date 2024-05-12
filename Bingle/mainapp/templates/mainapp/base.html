@@ -7,13 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/inter.css' %}" id="main-font-link" />
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/tabler-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/feather.css' %}">
-    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/fontawesome.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/material.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style-preset.css' %}">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14K1GBX9FG"></script>
 
 </head>
@@ -184,6 +187,60 @@
                         </div>
                     </div>
                 </li>
+                <li class="dropdown pc-h-item header-user-profile">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
+                        {% if profile_pic %}
+                        <img class="user-avtar" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                        {% else %}
+                        <img class="user-avtar" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+                        <div class="dropdown-body">
+                            <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 225px)">
+                                <div class="d-flex mb-1">
+                                    <div class="flex-shrink-0">
+                                        {% if profile_pic %}
+                                        <img class="user-avtar wid-35" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                        {% else %}
+                                        <img class="user-avtar wid-35" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1">{{user.first_name}} {{user.last_name}} 🖖</h6>
+                                    </div>
+                                </div>
+                                <hr class="border-secondary border-opacity-50">
+                                <p class="text-span">Manage</p>
+                                <a href="{% url 'new_profile' %}" class="dropdown-item">
+                                            <span>
+                                                <svg class="pc-icon text-muted me-2">
+                                                    <use xlink:href="#custom-setting-outline"></use>
+                                                </svg>
+                                                <span>Profile</span>
+                                            </span>
+                                </a>
+                                <a href="{% url 'new_about' %}" class="dropdown-item">
+                                            <span>
+                                                <svg class="pc-icon text-muted me-2">
+                                                    <use xlink:href="#custom-profile-2user-outline"></use>
+                                                </svg>
+                                                <span>About Us</span>
+                                            </span>
+                                </a>
+                                <hr class="border-secondary border-opacity-50">
+                                <div class="d-grid mb-3">
+                                    <button class="btn btn-primary">
+                                        <svg class="pc-icon me-2">
+                                            <use xlink:href="#custom-logout-1-outline"></use>
+                                        </svg>
+                                        Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
@@ -217,9 +274,10 @@
 <script src="{% static 'mainapp/vendor/js/simplebar.min.js' %}"></script>
 <script src="{% static 'mainapp/vendor/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'mainapp/vendor/js/custom-font.js' %}"></script>
-<script src="{% static 'mainapp/vendor/js/pcoded.js' %}"></script>
+<!--<script src="{% static 'mainapp/vendor/js/pcoded.js' %}"></script>-->
 <script src="{% static 'mainapp/vendor/js/feather.min.js' %}"></script>
-
+<script src="{% static 'messagesApp/js/chat.js' %}"></script>
+<script src="{% static 'mainapp/js/modal.js' %}"></script>
 
 <script>
     layout_change('light');
@@ -245,11 +303,14 @@
     preset_change("preset-1");
 </script>
 
-</body>
-<script type="module">
-    import { DataTable } from '{% static 'mainapp/vendor/js/module.js' %}';
-    window.dt = new DataTable('#pc-dt-simple');
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
-<script src="{% static 'mainapp/js/modal.js' %}"></script>
+
+
+</body>
+
 
 </html>

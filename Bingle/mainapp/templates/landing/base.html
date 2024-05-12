@@ -24,22 +24,22 @@
                     <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" alt="" />
                     <span>Bingle</span></a>
 
-                <div class="navbar-nav" id="">
-                    <ul class="navbar-nav">
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'about' %}">About</a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'profile' %}">Profile </a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'search' %}">Search </a>
-                        </li>
-                    </ul>
-                </div>
+<!--                <div class="navbar-nav" id="">-->
+<!--                    <ul class="navbar-nav">-->
+<!--                        <li class="nav-item ">-->
+<!--                            <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="{% url 'about' %}">About</a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item active">-->
+<!--                            <a class="nav-link" href="{% url 'profile' %}">Profile </a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item active">-->
+<!--                            <a class="nav-link" href="{% url 'search' %}">Search </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
                 <div class="user_option">
                     {% if user.is_authenticated %}
                     <ul class="main-menu notification-drop">
@@ -88,62 +88,62 @@
     {% endblock %}
 </div>
 
-<section class="info_section ">
-    <div class="info_container layout_padding-top">
-        <div class="container">
-            <div class="info_top">
-                <div class="info_logo">
-                    <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" alt="" />
-                    <span> Bingle </span>
-                </div>
-            </div>
+<!--<section class="info_section ">-->
+<!--    <div class="info_container layout_padding-top">-->
+<!--        <div class="container">-->
+<!--            <div class="info_top">-->
+<!--                <div class="info_logo">-->
+<!--                    <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" alt="" />-->
+<!--                    <span> Bingle </span>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="info_main">
-                <div class="row">
-                    <div class="col-md-3 col-lg-2">
-                        <div class="info_link-box">
-                            <h5>
-                                Useful Link
-                            </h5>
-                            <ul>
-                                <li class=" active">
-                                    <a class="" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="">
-                                    <a class="" href="{% url 'about' %}">About </a>
-                                </li>
-                                <li class="">
-                                    <a class="" href="{% url 'profile' %}">Profile </a>
-                                </li>
-                                <li class="">
-                                    <a class="" href="{% url 'search' %}">Search</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-3 ">
-                        <h5>
-                            Offices
-                        </h5>
-                        <p>
-                            University of Sussex, Brighton, United Kingdom
-                        </p>
-                    </div>
+<!--            <div class="info_main">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-md-3 col-lg-2">-->
+<!--                        <div class="info_link-box">-->
+<!--                            <h5>-->
+<!--                                Useful Link-->
+<!--                            </h5>-->
+<!--                            <ul>-->
+<!--                                <li class=" active">-->
+<!--                                    <a class="" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>-->
+<!--                                </li>-->
+<!--                                <li class="">-->
+<!--                                    <a class="" href="{% url 'about' %}">About </a>-->
+<!--                                </li>-->
+<!--                                <li class="">-->
+<!--                                    <a class="" href="{% url 'profile' %}">Profile </a>-->
+<!--                                </li>-->
+<!--                                <li class="">-->
+<!--                                    <a class="" href="{% url 'search' %}">Search</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-3 ">-->
+<!--                        <h5>-->
+<!--                            Offices-->
+<!--                        </h5>-->
+<!--                        <p>-->
+<!--                            University of Sussex, Brighton, United Kingdom-->
+<!--                        </p>-->
+<!--                    </div>-->
 
-                    <div class="col-md-3 col-lg-2 offset-lg-1">
-                        <h5>
-                            Information
-                        </h5>
-                        <p>
-                            Welcome to our book lending app. Join our community today and embark on a literary adventure like never before.
-                        </p>
-                    </div>
+<!--                    <div class="col-md-3 col-lg-2 offset-lg-1">-->
+<!--                        <h5>-->
+<!--                            Information-->
+<!--                        </h5>-->
+<!--                        <p>-->
+<!--                            Welcome to our book lending app. Join our community today and embark on a literary adventure like never before.-->
+<!--                        </p>-->
+<!--                    </div>-->
 
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
 
 <footer class="container-fluid footer_section ">
     <div class="container">
