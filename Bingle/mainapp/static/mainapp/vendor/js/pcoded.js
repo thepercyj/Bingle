@@ -456,46 +456,46 @@ function layout_change(layout) {
     if (btn_control) {
         btn_control.classList.remove('active');
     }
-    if (layout == 'dark') {
-        dark_flag = true;
-        if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
-            document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '../assets/images/logo-white.svg');
-        }
-
-        if (document.querySelector('.navbar-brand .logo-lg')) {
-            document.querySelector('.navbar-brand .logo-lg').setAttribute('src', '../assets/images/logo-white.svg');
-        }
-        if (document.querySelector('.auth-main.v1 .auth-sidefooter')) {
-            document.querySelector('.auth-main.v1 .auth-sidefooter img').setAttribute('src', '../assets/images/logo-white.svg');
-        }
-        if (document.querySelector('.footer-top .footer-logo')) {
-            document.querySelector('.footer-top .footer-logo').setAttribute('src', '../assets/images/logo-white.svg');
-        }
-        var control = document.querySelector('.theme-layout .btn.active');
-        if (control) {
-            document.querySelector('.theme-layout .btn.active').classList.remove('active');
-            document.querySelector(".theme-layout .btn[data-value='false']").classList.add('active');
-        }
-    } else {
-        dark_flag = false;
-        if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
-            document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '');
-        }
-        if (document.querySelector('.navbar-brand .logo-lg')) {
-            document.querySelector('.navbar-brand .logo-lg').setAttribute('src', '');
-        }
-        if (document.querySelector('.auth-main.v1 .auth-sidefooter')) {
-            document.querySelector('.auth-main.v1 .auth-sidefooter img').setAttribute('src', '');
-        }
-        if (document.querySelector('.footer-top .footer-logo')) {
-            document.querySelector('.footer-top .footer-logo').setAttribute('src', '');
-        }
-        var control = document.querySelector('.theme-layout .btn.active');
-        if (control) {
-            document.querySelector('.theme-layout .btn.active').classList.remove('active');
-            document.querySelector(".theme-layout .btn[data-value='true']").classList.add('active');
-        }
-    }
+    // if (layout == 'dark') {
+    //     dark_flag = true;
+    //     if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
+    //         document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '../assets/images/logo-white.svg');
+    //     }
+    //
+    //     if (document.querySelector('.navbar-brand .logo-lg')) {
+    //         document.querySelector('.navbar-brand .logo-lg').setAttribute('src', '../assets/images/logo-white.svg');
+    //     }
+    //     if (document.querySelector('.auth-main.v1 .auth-sidefooter')) {
+    //         document.querySelector('.auth-main.v1 .auth-sidefooter img').setAttribute('src', '../assets/images/logo-white.svg');
+    //     }
+    //     if (document.querySelector('.footer-top .footer-logo')) {
+    //         document.querySelector('.footer-top .footer-logo').setAttribute('src', '../assets/images/logo-white.svg');
+    //     }
+    //     var control = document.querySelector('.theme-layout .btn.active');
+    //     if (control) {
+    //         document.querySelector('.theme-layout .btn.active').classList.remove('active');
+    //         document.querySelector(".theme-layout .btn[data-value='false']").classList.add('active');
+    //     }
+    // } else {
+    //     dark_flag = false;
+    //     if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
+    //         document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '');
+    //     }
+    //     if (document.querySelector('.navbar-brand .logo-lg')) {
+    //         document.querySelector('.navbar-brand .logo-lg').setAttribute('src', '');
+    //     }
+    //     if (document.querySelector('.auth-main.v1 .auth-sidefooter')) {
+    //         document.querySelector('.auth-main.v1 .auth-sidefooter img').setAttribute('src', '');
+    //     }
+    //     if (document.querySelector('.footer-top .footer-logo')) {
+    //         document.querySelector('.footer-top .footer-logo').setAttribute('src', '');
+    //     }
+    //     var control = document.querySelector('.theme-layout .btn.active');
+    //     if (control) {
+    //         document.querySelector('.theme-layout .btn.active').classList.remove('active');
+    //         document.querySelector(".theme-layout .btn[data-value='true']").classList.add('active');
+    //     }
+    // }
 }
 
 function change_box_container(value) {

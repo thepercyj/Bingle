@@ -2,8 +2,10 @@
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header">
-            <img src="{% static 'mainapp/images/Bingle-logos.jpeg' %}" style=" border-radius: 50%; height:150%; width:30%;" class="img-fluid logo-lg">
-            &nbsp; &nbsp; <h1>Bingle</h1>
+            <a class="m-header" href="{% url 'new_landing_page' %}">
+            <img src="{% static 'mainapp/images/Bingle-logos.jpeg'%}" style=" border-radius: 50%; height:150%; width:30%;" class="img-fluid logo-lg">
+            &nbsp; &nbsp; <h2>Bingle</h2>
+            </a>
         </div>
         <div class="navbar-content">
             <div class="card pc-user-card">

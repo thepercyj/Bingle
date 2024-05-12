@@ -26,9 +26,8 @@ def get_profile_pic(request):
     if request.user.is_authenticated:
         profile = UserProfile.objects.get(user=request.user)
         if profile.profile_pic:
-            # print(profile.profile_pic.url)
             if profile.profile_pic.url != "/media/b''":
                 return {'profile_pic': profile.profile_pic}
-            else:
-                return {}
+        else:
+            return {}
     return {}
