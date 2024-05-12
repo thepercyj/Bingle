@@ -1,0 +1,96 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %} Search | Bingle {% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0)">Table</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Search</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h2 class="mb-0">Search</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2>Search <b> books around your area</b> </h2></div>
+                <div class="col-sm-4">
+                    <div class="search-box">
+                        <i class="material-icons">&#xE8B6;</i>
+                        <form class=" hidden" role="search" method="POST" id="search-form">
+                            {% csrf_token %}
+                            <input
+                                    class="form-control me-2"
+                                    type="search"
+                                    placeholder="Search"
+                                    name="searchquery"
+                                    required aria-label="Search"
+                            >
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if users_profiles %}
+        <table class="table table-striped table-hover table-bordered" id="user-profile-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Username</th>
+                <th>Location</th>
+                <th>Review</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for profile in users_profiles %}
+            <tr>
+                <td>
+                    {% if profile.profile_pic %}
+                    <img class="rounded-circle custom-img-small" src="{{ profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                    {% else %}
+                    <img class="rounded-circle custom-img-small" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                    {% endif %}
+                </td>
+                <td>{{ profile.user.username }}</td>
+                <td>{{ profile.current_location }}</td>
+                <td>{{ profile.review }}</td>
+                <td>
+                    {% if profile.user == request.user %}
+                    <a href="{% url 'profile' %}" class="btn btn-primary">View</a>
+                    {% else %}
+                    <a href="{% url 'viewprofile' profile.id %}" class="btn btn-primary">View</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        <div class="clearfix">
+            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <ul class="pagination">
+                <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
+                <li class="page-item"><a href="#" class="page-link">1</a></li>
+                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                <li class="page-item"><a href="#" class="page-link">4</a></li>
+                <li class="page-item"><a href="#" class="page-link">5</a></li>
+                <li class="page-item"><a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

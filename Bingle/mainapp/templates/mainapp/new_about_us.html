@@ -1,0 +1,200 @@
+{% extends 'mainapp/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} About Us | Bingle {% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header-title">
+                <h2 class="mb-0">Team Members</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Aman.jpg"
+                                     alt="DevOps">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Aman Thapa Magar</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Back End & DevOps</h4>
+                                <span class="text-success fw-medium">Student ID - 277822</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Tom.jpg"
+                                     alt="Full Stack">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Tom Naccarato</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Full Stack</h4>
+                                <span class="text-success fw-medium">Student ID - 276187</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Moka.jpg"
+                                     alt="Back End & Documentation">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Moldir Zhumakhazi</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Back End & Documentation</h4>
+                                <span class="text-success fw-medium">Student ID - 284496</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Mya.png"
+                                     alt="Front End & Documentation">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Mya Lwin </p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Front End & Documentation</h4>
+                                <span class="text-success fw-medium">Student ID - 284318</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Rohan.jpg"
+                                     alt="Team Lead">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Rohan Kadam</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Team lead, Front-End</h4>
+                                <span class="text-success fw-medium">Student ID - 276280</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Rob.png"
+                                     alt="Back End">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Rob Ryan</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Back End & Logics</h4>
+                                <span class="text-success fw-medium">Student ID - 260029</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-primary">
+                                <img class="user-avtar wid-45 rounded-circle" src="/static/mainapp/images/Jawad.png"
+                                     alt="Database">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">Jawad Nassar</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Database</h4>
+                                <span class="text-success fw-medium">Student ID - 276267</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-4 sm-text-center">
+                        <div class="team-overview">
+                            <h2>Who Are We?</h2>
+                            <p>We are Group - 9</p>
+                        </div>
+                    </div>
+                    <div class="detail-box" style="margin-top: 1rem; margin-bottom: 3rem;">
+                        <h2 style="margin-bottom: 1rem; font-size: 1.85rem;">
+                            About Bingle
+                        </h2>
+                        <p>
+                            In Bingle, book enthusiasts can indulge in the joy of physical book reading while leveraging
+                            the convenience
+                            of digital technology. With our user-friendly interface, users can effortlessly swipe
+                            through available
+                            books, selecting their next literary adventure with ease. Whether you're a die-hard
+                            bibliophile or simply
+                            seeking a new page-turner, our app provides access to a diverse collection of books for
+                            every taste and
+                            interest. Say goodbye to the limitations of e-books and embrace the tangible experience of
+                            holding a book in
+                            your hands, immersing yourself in its pages, and savoring the unique scent of ink and paper.
+                            Join our
+                            community of book lovers and rediscover the timeless pleasure of reading with our book
+                            lending app.
+                            Join us in celebrating the magic of physical books and the joy of connecting with fellow
+                            book lovers.
+                        </p>
+                        <a href="">
+                            Read More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
