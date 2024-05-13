@@ -110,13 +110,12 @@
                                                                 <!-- You can change this icon per notification type -->
                                                             </svg>
                                                         </div>
-                                                        <h5 class="text-body mb-2">{{ notification.message.notify_value|capfirst }}</h5>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <p class="mb-0">{{ notification }}</p>
-                                                        </div>
-                                                        <div class="flex-shrink-0">
-                                                            <span class="float-end text-sm text-muted">{{ notification.created_on|timesince }} ago</span>
-                                                        </div>
+                                                    <span class="float-end text-sm text-muted">{{ notification.created_on|timesince }}</span>
+                                                    <h5 class="text-body mb-2">{{ notification.message.notify_value|capfirst }}</h5>
+                                                    <p class="mb-0">{{ notification }}</p>
+                                                </div>
+
                                                     </a>
                                                 </div>
                                             </div>
