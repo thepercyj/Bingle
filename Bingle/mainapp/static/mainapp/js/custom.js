@@ -19,37 +19,6 @@ $("#displayDate").html(currentYear);
 
 getCurrentYear();
 
-//function populateTable() {
-//    fetch('/list-book/')
-//        .then(response => response.json())
-//        .then(data => {
-//            const tableBody = document.getElementById('book-table');
-//            // Clear existing table content
-//            tableBody.innerHTML = '';
-//            // Create table header row
-//            const headerRow = document.createElement('tr');
-//            headerRow.innerHTML = `
-//                <th>Title</th>
-//                <th>Author</th>
-//                <th>Genre</th>
-//                <th>Published Date</th>
-//            `;
-//            tableBody.appendChild(headerRow);
-//            // Populate table with fetched data
-//            data.forEach(book => {
-//                const row = document.createElement('tr');
-//                row.innerHTML = `
-//                    <td>${book.book_title}</td>
-//                    <td>${book.book_author}</td>
-//                    <td>${book.genre}</td>
-//                    <td>${book.published_date}</td>
-//                `;
-//                tableBody.appendChild(row);
-//            });
-//        })
-//        .catch(error => console.error('Error fetching data:', error));
-//}
-
 
 document.addEventListener("DOMContentLoaded", function() {
 const urlParams = new URLSearchParams(window.location.search);
@@ -121,34 +90,6 @@ if (document.cookie && document.cookie !== '') {
 return cookieValue;
 }
 
-// document.addEventListener("DOMContentLoaded", function() {
-// // Get all sub-menu items
-// var subMenuItems = document.querySelectorAll(".notification-drop .sub-menu li");
-//
-// // Add event listener to each sub-menu item
-// subMenuItems.forEach(function(item) {
-//     item.addEventListener("click", function() {
-//         callDecrementNotificationCounterFunction();
-//     });
-// });
-//
-// function callDecrementNotificationCounterFunction() {
-//     // Send an AJAX request to call the decrement_notification_counter function
-//     var xhr = new XMLHttpRequest();
-//     var csrftoken = getCookie('csrftoken');
-//     xhr.open("POST", "/decrement_counter/", true);
-//     xhr.setRequestHeader("X-CSRFToken", csrftoken);
-//     xhr.setRequestHeader("Content-Type", "application/json");
-//     xhr.onreadystatechange = function() {
-//         if (xhr.readyState === 4 && xhr.status === 200) {
-//             // Handle response if needed
-//             // For example, you can update the UI here if necessary
-//         }
-//     };
-//     xhr.send();
-// }
-// });
-
 function loadUserBooks(url) {
     fetch(url)
         .then(response => response.text())
@@ -183,28 +124,67 @@ document.addEventListener('DOMContentLoaded', () => {
             loadLibraryBooks(url);
         });
     });
+
+    // Add a check to ensure the 'reveal' element exists
+    var revealElement = document.getElementById('reveal');
+    if (revealElement) {
+        revealElement.addEventListener('click', function() {
+            // Add console.log statements to debug
+            console.log('Reveal button clicked.');
+
+            var selectedOwner = document.getElementById('owner').value;
+            console.log('Selected owner:', selectedOwner);
+
+            if (selectedOwner) {
+                // Add a check to ensure the 'booking-form' element exists
+                var bookingForm = document.getElementById('booking-form');
+                if (bookingForm) {
+                    // Display the 'booking-form'
+                    bookingForm.style.display = 'block';
+                    console.log('Booking form displayed.');
+                } else {
+                    console.error('Booking form element not found.');
+                }
+            } else {
+                console.error('No owner selected.');
+            }
+        });
+    } else {
+        console.error('Reveal button element not found.');
+    }
 });
 
 
 function searchUserBooks() {
     var query = document.getElementById("searchUserBooks").value;
-    window.location.href = '/profile_page/?user_books_search=' + query;
-}
-
-function searchStore() {
-    var query = document.getElementById("searchStore").value;
-    window.location.href = '/profile_page/?store_search=' + query;
+    window.location.href = '/new_home/?user_books_search=' + query;
 }
 
 function searchLibrary() {
     var query = document.getElementById("searchLibrary").value;
-    window.location.href = '/profile_page/?library_search=' + query;
+    window.location.href = '/new_home/?library_search=' + query;
+}
+
+function libraryPress(event) {
+    // Check if the key pressed is "Enter"
+    if (event.key === 'Enter') {
+        // Trigger the search function
+        searchUserBooks();
+    }
+}
+
+function storePress(event) {
+    // Check if the key pressed is "Enter"
+    if (event.key === 'Enter') {
+        // Trigger the search function
+        searchLibrary();
+    }
 }
 
 
-document.getElementById('reveal-form').addEventListener('click', function() {
-    var selectedOwner = document.getElementById('owner').value;
-    if (selectedOwner) {
-        document.getElementById('booking-form').style.display = 'block';
-    }
-});
+//document.getElementById('reveal').addEventListener('click', function() {
+//    var selectedOwner = document.getElementById('owner').value;
+//    if (selectedOwner) {
+//        document.getElementById('booking-form').style.display = 'block';
+//    }
+//});

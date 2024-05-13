@@ -38,6 +38,7 @@ urlpatterns = [
     path('approve_borrow_request/<int:book_id>/', views.approve_borrow_request, name='approve_borrow_request'),
     path('deny_borrow_request/<int:book_id>/', views.deny_borrow_request, name='deny_borrow_request'),
     path('return_book/<int:book_id>/', views.return_book, name='return_book'),
+    path('request_return_book/<int:book_id>/', views.request_return_book, name='request_return_book'),
     #path('test/', views.test, name='test'),
     path('redirect_notification/<int:notification_id>', views.redirect_notification, name='redirect_notification'),
     path('mark_all_as_read/', views.mark_all_as_read, name='mark_all_as_read'),

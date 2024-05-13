@@ -148,6 +148,7 @@ def new_home(request):
     if library_search_query:
         library = library.filter(book_title__icontains=library_search_query)
 
+
     # Pagination for user_books
     page_number = request.GET.get('page')
     paginator = Paginator(user_books, 10)  # Show 10 user_books per page
@@ -210,7 +211,7 @@ def new_profile(request):
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
 
-    # Search functionality impleneted
+    # Search functionality implemented
     user_books_search_query = request.GET.get('user_books_search')
     if user_books_search_query:
         user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
@@ -252,7 +253,7 @@ def new_profile(request):
         'borrower_bookings': borrower_bookings,
         'total_bookings': total_bookings,
     }
-    return render(request, 'new_profile.html', context)
+    return render(request, 'new_home.html', context)
 
 
 @login_required_message
@@ -395,7 +396,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(request, new_book)
-            return redirect('new_profile')
+            return redirect('new_home')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -480,7 +481,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('new_profile') + '?remove=true')
+    return HttpResponseRedirect(reverse('new_home') + '?remove=true')
 
 
 @login_required_message
@@ -636,7 +637,7 @@ def view_profile(request, profile_id):
                     )
                     new_message.save()
 
-                    return redirect('conversation', conversation_id=existing_conversation.id)
+                    return redirect('chat', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
                     new_conversation_object.save()
@@ -660,7 +661,7 @@ def view_profile(request, profile_id):
 
                     messages.success(request,
                                      pre_message if pre_message else 'Message sent successfully')
-                    return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={viewprofile}')
+                    return HttpResponseRedirect(reverse('chat') + f'?recipient={viewprofile}')
         except Exception as e:
             messages.error(request, 'An error occurred.')
             print(e)
@@ -808,8 +809,8 @@ def borrow(request, user_book_id):
 
                 messages.success(request, 'Borrow request saved successfully!')
 
-                # Redirect to appropriate conversation page
-                return redirect('conversation', conversation_id=conversation.id)
+                # Redirect to appropriate chat page
+                return redirect('chat', conversation_id=conversation.id)
 
         except Exception as e:
             print(e)
@@ -885,8 +886,8 @@ def approve_borrow_request(request, book_id):
         # Display a success message
         messages.success(request, 'Borrow request approved successfully.')
 
-        # Redirect to the conversations page
-        return redirect('conversation', conversation_id=message.conversation.id)
+        # Redirect to the chats page
+        return redirect('chat', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -938,8 +939,8 @@ def deny_borrow_request(request, book_id):
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
 
-        # Redirect to the conversations page
-        return redirect('conversation', conversation_id=message.conversation.id)
+        # Redirect to the chas page
+        return redirect('chat', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1000,8 +1001,70 @@ def return_book(request, book_id):
         # Display a success message
         messages.success(request, 'Book returned successfully.')
 
-        # Redirect to the conversations page
-        return redirect('conversation', conversation_id=message.conversation.id)
+        # Redirect to the chas page
+        return redirect('chat', conversation_id=message.conversation.id)
+
+    else:
+        # If the request method is not POST, display an error message and redirect
+        messages.error(request, 'Invalid request method.')
+        return redirect('library')
+
+
+@login_required_message
+def request_return_book(request, book_id):
+    """
+    View function to request return a book.
+
+    :param request: HttpRequest - The request object
+    :param book_id: int - The ID of the book to return
+    """
+    if request.method == 'POST':
+        print("Book ID: ", book_id)
+        # Get the message object based on the book ID and request type
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=3)
+
+        # Create a pre-message to notify the recipient
+        pre_message_content = f" {message.from_user} has requested you to return {message.user_book_id.book_id.book_title}."
+        new_message = Message(
+            from_user=message.to_user,
+            to_user=message.from_user,
+            details=pre_message_content,
+            request_type=8,
+            request_value='Request Return',
+            user_book_id=message.user_book_id,
+            conversation=message.conversation,
+        )
+        new_message.save()
+
+        # Update UserBook values
+        with transaction.atomic():
+            user_book = message.user_book_id
+            user_book.currently_with = message.from_user
+            user_book.availability = False
+            user_book.booked = "Yes"
+            user_book.save()
+            print('user_book updated successfully')
+
+            # Update Booking values
+            booking = Booking.objects.get(user_book_id=user_book)
+            booking.returned = False
+            booking.save()
+            print('booking updated successfully')
+
+            # Adds a notification for the owner
+            notification = UserNotification(
+                sender=message.to_user,
+                message=Notification.objects.get(notify_type=8),
+                recipient=message.from_user,
+                book=message.user_book_id
+            )
+            notification.save()
+
+        # Display a success message
+        messages.success(request, 'Book return request sent successfully.')
+
+        # Redirect to the chats page
+        return redirect('chat', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1030,7 +1093,7 @@ def redirect_notification(request, notification_id):
             (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
         ).first()
         # Redirect to the conversation page
-        return redirect('full_conversation', conversation_id=conversation.id)
+        return redirect('chat', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
         return redirect('new_home')
@@ -1133,10 +1196,10 @@ def send_message(request, conversation_id):
             )
             notification.save()
             print(reverse('send_chat_message', args=[conversation_id]))
-            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+            return HttpResponseRedirect(reverse('chat', args=[conversation_id]))
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
-            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
+            return HttpResponseRedirect(reverse('chat', args=[conversation_id]))
     else:
         return HttpResponse("Invalid request method", status=405)
 
