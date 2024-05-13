@@ -125,18 +125,21 @@ def new_home(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
-    library = Book.objects.all()
-    lib_count = Book.objects.all()
+    # Attempt to retrieve library from cache
+    library = cache.get('library_cache_key')
+    if library is None:
+        library = list(Book.objects.all())
+        cache.set('library_cache_key', library, timeout=660)
+
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
-    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
     pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
     owner_bookings = Booking.objects.filter(owner_id=user_profile)
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
     recs = getborrowed(request)
 
-    # Search functionality impleneted
+    # Search functionality implemented
     user_books_search_query = request.GET.get('user_books_search')
     if user_books_search_query:
         user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
@@ -170,9 +173,8 @@ def new_home(request):
         'user_books': user_books,
         'user_profile': user_profile,
         'user': user,
-        'user_books_count': user_books_count,  # Update the count with user_books_count
+        # 'user_books_count': user_books_count,  # Update the count with user_books_count
         'library': library,
-        'lib_count': lib_count,
         'pre_booking': pre_booking,
         'owner_bookings': owner_bookings,
         'borrower_bookings': borrower_bookings,
@@ -186,7 +188,7 @@ def new_home(request):
 def new_landing_page(request):
     return render (request, 'new_landing_page.html')
 
-
+#Need to remove all modal related code as it is shifted to dashboard
 def new_profile(request):
     """
     Renders the main dashboard page
