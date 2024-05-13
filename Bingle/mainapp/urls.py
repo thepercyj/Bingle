@@ -40,4 +40,5 @@ urlpatterns = [
     path('return_book/<int:book_id>/', views.return_book, name='return_book'),
     #path('test/', views.test, name='test'),
     path('redirect_notification/<int:notification_id>', views.redirect_notification, name='redirect_notification'),
+    path('mark_all_as_read/', views.mark_all_as_read, name='mark_all_as_read'),
 ]
