@@ -191,6 +191,11 @@ function searchUserBooks() {
     window.location.href = '/profile_page/?user_books_search=' + query;
 }
 
+function searchStore() {
+    var query = document.getElementById("searchStore").value;
+    window.location.href = '/profile_page/?store_search=' + query;
+}
+
 function searchLibrary() {
     var query = document.getElementById("searchLibrary").value;
     window.location.href = '/profile_page/?library_search=' + query;
