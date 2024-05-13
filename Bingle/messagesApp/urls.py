@@ -8,5 +8,5 @@ urlpatterns = [
     path('', get_conversation_list, name='conversation_list'),
     path('new_conversation/', new_conversation, name='new_conversation'),
     path('old_conversation/', old_conversation, name='old_conversation'),
-    path('rate_user/<int:conversation_id>/', rate_user, name='rate_user'),
+    path('rate_user/<int:conversation_id>/', rate_user, name='rate_user_old'),
 ]

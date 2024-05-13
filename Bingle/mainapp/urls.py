@@ -32,6 +32,7 @@ urlpatterns = [
     path('chat/', views.chat, name='chat'),
     path('chat/<int:conversation_id>/', views.load_full_conversation, name='full_conversation'),
     path('chat/<int:conversation_id>/send_message/', views.send_message, name='send_chat_message'),
+    path('chat/<int:conversation_id>/rate_user/', views.rate_user, name='rate_user'),
     path('viewprofile/<int:profile_id>/', views.view_profile, name='viewprofile'),
     path('decrement_counter/', views.decrement_counter, name='decrement_counter'),
     # path('save_borrow_request/', views.save_borrow_request, name='save_borrow_request'),

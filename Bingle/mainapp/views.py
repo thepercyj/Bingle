@@ -1159,5 +1159,63 @@ def mark_all_as_read(request):
         except UserProfile.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User profile does not exist'})
 
+def rate_user(request, conversation_id):
+    """
+    This function allows a user to rate another user after a conversation has ended.
+
+    Parameters:
+    :param request: The Django HttpRequest object.
+    :param conversation_id: The ID of the conversation between the two users.
+
+    Returns:
+    :return Redirects to the conversation page after the rating is submitted.
+
+    """
+    user_profile = UserProfile.objects.get(user=request.user)
+    if request.method == 'POST':
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        their_profile = get_object_or_404(UserProfile,
+                                          (Q(id=conversation.id_1.id) | Q(id=conversation.id_2.id)) &
+                                          ~Q(user=request.user))
+
+        rating = request.POST.get('rating')
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(
+                    request, "Rating must be an integer between 1 and 5.")
+                return HttpResponseBadRequest("Rating must be an integer between 1 and 5.")
+        except ValueError:
+            messages.error(
+                request, "Invalid input. Rating must be an integer.")
+            return HttpResponseBadRequest("Invalid input. Rating must be an integer.")
+
+        current_rating = their_profile.review
+        if current_rating:
+            their_profile.review = (current_rating + rating) / 2
+        else:
+            their_profile.review = rating
+        their_profile.save()
+        pre_message_content = f"User {user_profile.user.username} rated you {rating} stars."
+
+        new_message = Message(
+            from_user=user_profile,
+            to_user=their_profile,
+            details=pre_message_content,
+            request_type=7,
+            request_value='Review Given',
+            conversation=conversation,
+        )
+        new_message.save()
+
+        # Creates a notification for the recipient
+        notification = UserNotification(
+            sender=user_profile,
+            message=Notification.objects.get(notify_type=7),
+            recipient=their_profile,
+        )
+        notification.save()
+        return redirect('full_conversation', conversation_id=conversation_id)
+
 
 

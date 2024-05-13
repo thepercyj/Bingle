@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/material.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style-preset.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/bootstrap-slider.min.css' %}">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14K1GBX9FG"></script>
     <script src="{% static 'mainapp/vendor/js/pcoded.js' %}"></script>
@@ -81,7 +82,7 @@
                         <svg class="pc-icon">
                             <use xlink:href="#custom-notification"></use>
                         </svg>
-                        {% if notification_count %}
+                        {% if unread_notifications %}
                             <span class="badge bg-success pc-h-badge">{{ unread_notification_count }}</span>
                         {% endif %}
                     </a>
@@ -271,6 +272,9 @@
 <script src="{% static 'mainapp/vendor/js/feather.min.js' %}"></script>
 <script src="{% static 'messagesApp/js/chat.js' %}"></script>
 <script src="{% static 'mainapp/js/modal.js' %}"></script>
+<script src="{% static 'mainapp/vendor/js/ac-rangeslider.js' %}"></script>
+<script src="{% static 'mainapp/vendor/js/bootstrap-slider.min.js' %}"></script>
+<script src="{% static 'mainapp/vendor/js/clipboard.min.js' %}"></script>
 
 <script>
     layout_change('light');

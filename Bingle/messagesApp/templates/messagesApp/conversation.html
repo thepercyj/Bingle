@@ -162,7 +162,7 @@
     <form action = "{% url 'rate_user' conversation.id %}" method="post" name="rating">
         {% csrf_token %}
         <label for="rating">
-            <input type="number" name="rating" min="1" max="5">
+            <input type="range" name="rating" min="1" max="5">
         </label>
         <input type="submit" value="Rate">
     </form>

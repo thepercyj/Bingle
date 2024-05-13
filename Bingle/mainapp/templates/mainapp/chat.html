@@ -395,4 +395,13 @@
 
     </div>
 </div>
+    {% if not initial %}
+    <form action = "{% url 'rate_user' conversation.id %}" method="post" name="rating">
+        {% csrf_token %}
+        <label for="rating">
+            <input name=rating id="ex10" type="range" data-slider-handle="custom" min="1" max="5">
+        </label>
+        <input type="submit" value="Rate">
+    </form>
+    {% endif %}
 {% endblock %}

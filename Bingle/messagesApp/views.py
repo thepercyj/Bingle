@@ -296,4 +296,4 @@ def rate_user(request, conversation_id):
             recipient=their_profile,
         )
         notification.save()
-        return redirect('conversation', conversation_id=conversation_id)
+        return redirect('full_conversation', conversation_id=conversation_id)
