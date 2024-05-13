@@ -100,9 +100,7 @@
                                 {% if unread_notifications %}
                                     <p class="text-span">Unread</p>
                                     {% for notification in notifications %}
-
                                         <div class="card mb-2">
-
                                             <div class="card-body">
                                                 <div class="d-flex">
                                                     <a href="{% url 'redirect_notification' notification.id %}">
@@ -119,11 +117,9 @@
                                                         <div class="flex-shrink-0">
                                                             <span class="float-end text-sm text-muted">{{ notification.created_on|timesince }} ago</span>
                                                         </div>
+                                                    </a>
                                                 </div>
-
-
                                             </div>
-                                            </a>
                                         </div>
                                     {% endfor %}
                                 {% else %}

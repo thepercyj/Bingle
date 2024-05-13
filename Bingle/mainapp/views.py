@@ -121,7 +121,7 @@ def new_home(request):
 
     :param request: HttpRequest - The request object
     """
-    recs = getborrowed(request)
+    recs = getborrowed(request) #Recommendation from Rob
 
     return render(request, 'home.html',{'recs':recs})
 def new_landing_page(request):
