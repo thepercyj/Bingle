@@ -20,13 +20,8 @@ from django.utils.timezone import now
 from django.conf import settings
 import json
 from recommendations.views import getborrowed
-<<<<<<< Updated upstream
-from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
-=======
-# from django.views.decorators.cache import cache_page
->>>>>>> Stashed changes
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -128,9 +123,6 @@ def new_home(request):
 
     :param request: HttpRequest - The request object
     """
-<<<<<<< Updated upstream
-    recs = getborrowed(request) #Recommendation from Rob
-=======
     form = BookForm(request.POST or None)
     user = request.user
     library = Book.objects.all()
@@ -143,7 +135,6 @@ def new_home(request):
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
     recs = getborrowed(request)
->>>>>>> Stashed changes
 
     # Search functionality impleneted
     user_books_search_query = request.GET.get('user_books_search')
@@ -193,13 +184,9 @@ def new_home(request):
 
 
 def new_landing_page(request):
-<<<<<<< Updated upstream
     return render (request, 'new_landing_page.html')
-=======
-    return render(request, 'new_landing_page.html')
 
 
->>>>>>> Stashed changes
 def new_profile(request):
     """
     Renders the main dashboard page
@@ -265,10 +252,7 @@ def new_profile(request):
     }
     return render(request, 'new_profile.html', context)
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 @login_required_message
 def chat(request):
     """
