@@ -2501,6 +2501,23 @@ progress {
     font-size: 80%;
     color: #5b6b79;
 }
+.select-form-control {
+    display: block;
+    width: 100%;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #131920;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #bec8d0;
+    border-radius: 8px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 
 .form-control,
 .datatable-input,
