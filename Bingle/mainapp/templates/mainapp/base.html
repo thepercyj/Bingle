@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/inter.css' %}" id="main-font-link" />
+    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/inter.css' %}" id="main-font-link"/>
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/tabler-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/feather.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/material.css' %}">
@@ -164,26 +164,33 @@
 </li>
 
                 <li class="dropdown pc-h-item header-user-profile">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                       role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
                         {% if profile_pic %}
-                        <img class="user-avtar" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                            <img class="user-avtar" src="{{ profile_pic.url }}" alt="Profile Picture"
+                                 style="max-width: 100px;">
                         {% else %}
-                        <img class="user-avtar" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                            <img class="user-avtar" src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                 alt="Default Profile Picture" style="max-width: 100px;">
                         {% endif %}
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-body">
-                            <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 225px)">
+                            <div class="profile-notification-scroll position-relative"
+                                 style="max-height: calc(100vh - 225px)">
                                 <div class="d-flex mb-1">
                                     <div class="flex-shrink-0">
                                         {% if profile_pic %}
-                                        <img class="user-avtar wid-35" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                                            <img class="user-avtar wid-35" src="{{ profile_pic.url }}"
+                                                 alt="Profile Picture" style="max-width: 100px;">
                                         {% else %}
-                                        <img class="user-avtar wid-35" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                                            <img class="user-avtar wid-35"
+                                                 src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                                 alt="Default Profile Picture" style="max-width: 100px;">
                                         {% endif %}
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1">{{user.first_name}} {{user.last_name}} 🖖</h6>
+                                        <h6 class="mb-1">{{ user.first_name }} {{ user.last_name }} 🖖</h6>
                                     </div>
                                 </div>
                                 <hr class="border-secondary border-opacity-50">
@@ -206,12 +213,22 @@
                                 </a>
                                 <hr class="border-secondary border-opacity-50">
                                 <div class="d-grid mb-3">
+                                    {% if user.is_authenticated %}
+
                                     <a href="/logout/" class="btn btn-primary">
                                         <svg class="pc-icon me-2">
                                             <use xlink:href="#custom-logout-1-outline"></use>
                                         </svg>
                                         Logout
                                     </a>
+                                    {% else %}
+                                    <a href="/login/" class="btn btn-primary">
+                                        <svg class="pc-icon me-2">
+                                            <use xlink:href="#custom-logout-1-outline"></use>
+                                        </svg>
+                                        Login
+                                    </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -280,7 +297,7 @@
 </script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
