@@ -82,7 +82,7 @@ def getborrowed(request):
     for book in Book.objects.all():
         # if the book's genre is the most common genre
 
-        if len(recommended_books) == 5:
+        if len(recommended_books) == 7:
             break
         if book.genre == most_common_genre:
             # add the book to the recommended books list

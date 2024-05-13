@@ -20,9 +20,13 @@ from django.utils.timezone import now
 from django.conf import settings
 import json
 from recommendations.views import getborrowed
+<<<<<<< Updated upstream
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
+=======
+# from django.views.decorators.cache import cache_page
+>>>>>>> Stashed changes
 
 
 # test_user2 = User.objects.get(username='TestUser2')
@@ -68,7 +72,8 @@ def test(request):
         user_profile = UserProfile.objects.get(user=request.user)
         user_primary = user_profile.primary_location
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery, primary_location=user_primary)  # Filter user profiles based on username
+        user_profiles = UserProfile.objects.filter(user__username=searchquery,
+                                                   primary_location=user_primary)  # Filter user profiles based on username
 
         return render(request, 'test.html', {'searchquery': searchquery,
                                              'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
@@ -94,8 +99,10 @@ def about(request):
     """
     return render(request, 'about.html')
 
+
 def new_about(request):
     return render(request, 'new_about_us.html')
+
 
 def lend(request):
     """
@@ -121,11 +128,78 @@ def new_home(request):
 
     :param request: HttpRequest - The request object
     """
+<<<<<<< Updated upstream
     recs = getborrowed(request) #Recommendation from Rob
+=======
+    form = BookForm(request.POST or None)
+    user = request.user
+    library = Book.objects.all()
+    lib_count = Book.objects.all()
+    user_profile = UserProfile.objects.get(user=user)
+    user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
+    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
+    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
+    owner_bookings = Booking.objects.filter(owner_id=user_profile)
+    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
+    total_bookings = owner_bookings.count() + borrower_bookings.count()
+    recs = getborrowed(request)
+>>>>>>> Stashed changes
 
-    return render(request, 'home.html',{'recs':recs})
+    # Search functionality impleneted
+    user_books_search_query = request.GET.get('user_books_search')
+    if user_books_search_query:
+        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
+
+    library_search_query = request.GET.get('library_search')
+    if library_search_query:
+        library = library.filter(book_title__icontains=library_search_query)
+
+    # Pagination for user_books
+    page_number = request.GET.get('page')
+    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
+    try:
+        user_books = paginator.page(page_number)
+    except PageNotAnInteger:
+        user_books = paginator.page(1)
+    except EmptyPage:
+        user_books = paginator.page(paginator.num_pages)
+
+    # Pagination for library
+    library_page = request.GET.get('library_page')
+    library_paginator = Paginator(library, 10)  # Show 10 books per page
+    try:
+        library = library_paginator.page(library_page)
+    except PageNotAnInteger:
+        library = library_paginator.page(1)
+    except EmptyPage:
+        library = library_paginator.page(library_paginator.num_pages)
+
+    context = {
+        'bookform': form,
+        'user_books': user_books,
+        'user_profile': user_profile,
+        'user': user,
+        'user_books_count': user_books_count,  # Update the count with user_books_count
+        'library': library,
+        'lib_count': lib_count,
+        'pre_booking': pre_booking,
+        'owner_bookings': owner_bookings,
+        'borrower_bookings': borrower_bookings,
+        'total_bookings': total_bookings,
+        'recs': recs,
+    }
+
+    return render(request, 'home.html', context)
+
+
 def new_landing_page(request):
+<<<<<<< Updated upstream
     return render (request, 'new_landing_page.html')
+=======
+    return render(request, 'new_landing_page.html')
+
+
+>>>>>>> Stashed changes
 def new_profile(request):
     """
     Renders the main dashboard page
@@ -191,6 +265,10 @@ def new_profile(request):
     }
     return render(request, 'new_profile.html', context)
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 @login_required_message
 def chat(request):
     """
@@ -204,7 +282,8 @@ def chat(request):
     ).exclude(
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
-    return render(request, 'chat.html', {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True})
+    return render(request, 'chat.html',
+                  {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True})
 
 
 def register(request):
@@ -344,6 +423,7 @@ def addBook(request):
     # This line should ideally never be reached if all cases are handled correctly above
     return HttpResponse('Unexpected error occurred.', status=500)
 
+
 @login_required_message
 def sample_search(request):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -351,10 +431,10 @@ def sample_search(request):
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         users_profiles = UserProfile.objects.filter(
-            user__username=searchquery )  # Filter user profiles based on username and primary location
+            user__username=searchquery)  # Filter user profiles based on username and primary location
 
         return render(request, 'samplesearch.html', {'searchquery': searchquery,
-                                               'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
+                                                     'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
     else:
         # Handle GET request
         # return render(request, 'search.html')
@@ -523,7 +603,7 @@ def search(request):
     if request.method == "POST":
         searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
         users_profiles = UserProfile.objects.filter(
-            user__username=searchquery )  # Filter user profiles based on username and primary location
+            user__username=searchquery)  # Filter user profiles based on username and primary location
 
         return render(request, 'search.html', {'searchquery': searchquery,
                                                'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
@@ -1003,13 +1083,15 @@ def load_full_conversation(request, conversation_id):
             Q(id_1=our_profile) & Q(id_2=our_profile)
         ).select_related('id_1__user', 'id_2__user')
 
-        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile, 'conversation_list': conversations}
+        context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile,
+                   'conversation_list': conversations}
         return render(request, 'chat.html', context)
     except UserProfile.DoesNotExist:
         return HttpResponse("User profile not found", status=404)
     except Conversation.DoesNotExist:
         # If no conversation is selected, return a blank variable in the context
         return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
+
 
 @login_required_message
 def send_message(request, conversation_id):
