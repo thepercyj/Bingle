@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, redirect
-from mainapp.models import User, UserProfile, Message, Book
+from mainapp.models import User, UserProfile, Message, Book, UserBook
 from django.contrib import messages
 from mainapp.models import Conversation
 from django.http import JsonResponse
@@ -50,9 +50,11 @@ def getborrowed(request):
 
     borrowed_books = list(borrow_messages.values_list('user_book_id', flat=True))
     borrowed_books = list(filter(None, borrowed_books))
+    borrowed_books = list(set(borrowed_books))
+    borrowed_books = UserBook.objects.filter(id__in=borrowed_books)
+    borrowed_books = list(borrowed_books.values_list('book_id', flat=True))
 
-
-    
+    print("The borrowed_books are -", borrowed_books)
     genres = []
 
     if len(borrowed_books) > 0:
