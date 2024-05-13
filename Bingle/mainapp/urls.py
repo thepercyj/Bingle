@@ -42,4 +42,5 @@ urlpatterns = [
     #path('test/', views.test, name='test'),
     path('redirect_notification/<int:notification_id>', views.redirect_notification, name='redirect_notification'),
     path('mark_all_as_read/', views.mark_all_as_read, name='mark_all_as_read'),
+    path('new_conv/', views.new_conv, name='new_conv'),
 ]

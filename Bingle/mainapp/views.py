@@ -586,7 +586,7 @@ def view_profile(request, profile_id):
                     )
                     new_message.save()
 
-                    return redirect('chat', conversation_id=existing_conversation.id)
+                    return redirect('chat', conversation_idconversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
                     new_conversation_object.save()
@@ -1086,9 +1086,6 @@ def load_full_conversation(request, conversation_id):
         return render(request, 'chat.html', context)
     except UserProfile.DoesNotExist:
         return HttpResponse("User profile not found", status=404)
-    except Conversation.DoesNotExist:
-        # If no conversation is selected, return a blank variable in the context
-        return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
 
 
 @login_required_message
@@ -1173,5 +1170,90 @@ def mark_all_as_read(request):
         except UserProfile.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User profile does not exist'})
 
+def new_conv(request):
+    """
+    View function to start a new conversation with another user, ensuring the user is logged in.
+
+    Parameters:
+    :param request: The Django HttpRequest object.
+    """
+    # If the form has been submitted
+    if request.method == 'POST':
+        username = request.POST.get('recipient')
+        message = request.POST.get('message')
+
+        # If the username is not empty
+        try:
+            user = User.objects.get(username=username)
+            their_profile = get_object_or_404(UserProfile, user=user)
+            our_profile = get_object_or_404(UserProfile, user=request.user)
+            # Ensure the user is not trying to start a conversation with themselves
+            if their_profile == our_profile:
+                messages.error(
+                    request, 'You cannot start a conversation with yourself.')
+                return redirect('new_conv')
+
+            # Ensure the conversation does not already exist
+            with transaction.atomic():
+                existing_conversation = Conversation.objects.filter(
+                    (Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                    (Q(id_2=our_profile) & Q(id_1=their_profile))
+                ).first()
+
+                # If the conversation already exists, add the message to the existing conversation
+                if existing_conversation:
+                    if message:
+                        new_message = Message(
+                            from_user=our_profile,
+                            to_user=their_profile,
+                            details=message,
+                            request_type=1,
+                            request_value='Simple Message',
+                            created_on=now(),
+                            conversation=existing_conversation
+                        )
+                        new_message.save()
+                        existing_conversation.latest_message = message
+                        existing_conversation.save()
+                    return redirect('chat', conversation_id=existing_conversation.id)
+
+                # If the conversation does not exist, create a new conversation
+                new_conversation_object = Conversation(
+                    id_1=our_profile, id_2=their_profile)
+                new_conversation_object.save()
+                if message:
+                    new_message = Message(
+                        from_user=our_profile,
+                        to_user=their_profile,
+                        details=message,
+                        request_type=1,
+                        request_value='Simple Message',
+                        created_on=now(),
+                        conversation=new_conversation_object
+                    )
+                    new_message.save()
+
+                    # Creates a notification for the recipient
+                    notification = UserNotification(
+                        recipient=their_profile,
+                        message=Notification.objects.get(notify_type=1),
+                        sender=our_profile,
+                    )
+                    notification.save()
+
+                    new_conversation_object.latest_message = message
+                    new_conversation_object.save()
+
+
+                return redirect('chat', conversation_id=new_conversation_object.id)
+        # If the user does not exist, display an error message
+        except User.DoesNotExist:
+            messages.error(request, 'User not found.')
+            return redirect('new_conv')
+
+    # If the form has not been submitted, display the new conversation page
+    else:
+        return render(request, 'mainapp/new_conversation.html',
+                      {'users': UserProfile.objects.exclude(user=request.user)})
 
 
