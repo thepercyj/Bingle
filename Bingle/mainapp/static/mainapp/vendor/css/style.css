@@ -2519,65 +2519,8 @@ progress {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.form-control,
-.datatable-input,
-.custom-select,
-.datatable-selector,
-.datatable-input {
-    display: block;
-    width: 100%;
-    padding: 0.8rem 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #131920;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: #ffffff;
-    background-clip: padding-box;
-    border: 1px solid #bec8d0;
-    border-radius: 8px;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
 @media (prefers-reduced-motion: reduce) {
 
-    .form-control,
-    .datatable-input,
-    .custom-select,
-    .datatable-selector,
-    .datatable-input {
-        transition: none;
-    }
-}
-
-.form-control[type=file],
-[type=file].datatable-input,
-[type=file].custom-select,
-[type=file].datatable-selector,
-[type=file].datatable-input {
-    overflow: hidden;
-}
-
-.form-control[type=file]:not(:disabled):not([readonly]),
-[type=file].datatable-input:not(:disabled):not([readonly]),
-[type=file].custom-select:not(:disabled):not([readonly]),
-[type=file].datatable-selector:not(:disabled):not([readonly]),
-[type=file].datatable-input:not(:disabled):not([readonly]) {
-    cursor: pointer;
-}
-
-.form-control:focus,
-.datatable-input:focus,
-.custom-select:focus,
-.datatable-selector:focus,
-.datatable-input:focus {
-    color: #131920;
-    background-color: #f8f9fa;
-    border-color: var(--bs-primary);
-    outline: 0;
-    box-shadow: 0 0 0 1px rgba(var(--bs-primary-rgb), 0.1);
 }
 
 .form-control::-webkit-date-and-time-value,
