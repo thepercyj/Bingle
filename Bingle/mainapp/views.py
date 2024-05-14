@@ -274,10 +274,7 @@ def profile(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
-    library = cache.get('library')
-    if library is None:
-        library = Book.objects.all()
-        cache.set('library', library, 60 * 5)  # Cache for 5 minutes
+    library = Book.objects.all()
     lib_count = library.count()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
@@ -455,10 +452,10 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('new_home')
+        return redirect('new_profile')
     else:
         # Handle non-POST request
-        return render(request, 'profile_page.html')
+        return render(request, 'new_profile.html')
 
 
 @login_required_message
@@ -511,7 +508,7 @@ def img_upload(request):
                 return JsonResponse({'error': "User not authenticated"}, status=401)
     else:
         form = ProfilePicForm()
-    return render(request, 'profile_page.html', {'uploadpic': form})
+    return render(request, 'new_profile.html', {'uploadpic': form})
 
 
 @login_required_message
@@ -524,7 +521,7 @@ def display_pic(request):
     # Get the user's profile
     display = request.user.profile
 
-    return render(request, 'profile_page.html', {'display': display})
+    return render(request, 'new_profile.html', {'display': display})
 
 
 @login_required_message

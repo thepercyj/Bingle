@@ -10,21 +10,6 @@
             <div class="card-header">
                 <h5>Personal Information</h5>
             </div>
-            <!-- Profile picture image-->
-            <div id="picture-modal" class="modal">
-                <div class="modal-content">
-                    <form id="upload-form" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
-                        <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
-                        <button id="upload-btn" class="btn btn-primary" type="button">Upload
-                        </button>
-                    </form>
-                    <button class="btn btn-primary" onclick="closeModal('picture-modal')">Close
-                    </button>
-                    <p id="error-message" style="color: red;"></p>
-                </div>
-            </div>
             <div class="card-body">
                 <div class="mb-6 mb-xl-0">
                     <div class="card-body">
@@ -42,22 +27,31 @@
                                 <img class=" rounded img-fluid ms-2"
                                      src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                                 {% endif %}
+                                <!-- Profile picture image-->
+                                <div id="picture-modal" class="modal">
+                                    <div class="modal-content">
+                                        <form id="upload-form" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <label class="large mb-1" for="profile_pic">Profile Picture:</label><br>
+                                            <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                                            <button id="upload-btn" class="btn btn-primary" type="button">Upload
+                                            </button>
+                                        </form>
+                                        <button class="btn btn-primary" onclick="closeModal('picture-modal')">Close
+                                        </button>
+                                        <p id="error-message" style="color: red;"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-center text-muted mb-4">JPG or PNG no larger than 5 MB
                         </div>
-                        <!-- Profile picture upload button-->
-                        {#                            <div class="col-12 text-center btn-page">#}
-                        {#                                <a>#}
-                            {#                                    <button class="btn btn-primary" onclick="openUploadModal('picture-modal')">#}
-                                {#                                        Upload#}
-                                {#                                    </button>#}
-                            {#                                </a>#}
-                        {#                            </div>#}
+
                     </div>
                 </div>
                 <form method="post" action="/update-profile/">
+                    {% csrf_token %}
                     <div class="col-sm-6">
                         <div class="mb-6">
                             <label class="form-label">First Name</label>
@@ -119,7 +113,7 @@
                         </div>
                     </div>
                     <div class="col-12 text-end btn-page">
-                        <div class="btn btn-primary" type="submit">Save Changes</div>
+                        <button class="btn btn-primary" type="submit">Save Changes</button>
                     </div>
                 </form>
             </div>
