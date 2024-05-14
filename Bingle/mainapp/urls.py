@@ -26,7 +26,6 @@ urlpatterns = [
     path('img_upload/', views.img_upload, name='img_upload'),
     path('lend/', views.lend, name='lend'),
     path('register/', views.register, name='register'),
-    path('forgetpass/', views.forgetpass, name='forgetpass'),
     path('new_home/', views.new_home, name='new_home'),
     path('new_profile/', views.new_profile, name='new_profile'),
     path('chat/', views.chat, name='chat'),
@@ -43,4 +42,9 @@ urlpatterns = [
     path('redirect_notification/<int:notification_id>', views.redirect_notification, name='redirect_notification'),
     path('mark_all_as_read/', views.mark_all_as_read, name='mark_all_as_read'),
     path('new_conv/', views.new_conv, name='new_conv'),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
