@@ -21,7 +21,6 @@ Follow us for more exciting future projects below:
 - [Rohan Kadam](https://github.com/Rez27)
 - [Tom Naccarato](https://github.com/tnaccarato)
 - [Jawad Nasar Shah](https://github.com/jawadnasar)
-- [Junkai Ou](https://github.com/JUNKAIOU)
 - [Mya Lwin](https://github.com/Mya2328)
 - [Moldir Zhumakhazhi](https://github.com/Moka364mz)
 - [Rob Ryan](https://github.com/RobRyan1122)
