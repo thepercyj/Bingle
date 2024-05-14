@@ -501,7 +501,7 @@ def view_profile(request, profile_id):
 
                     messages.success(request,
                                      pre_message if pre_message else 'Message sent successfully')
-                    return HttpResponseRedirect(reverse('full_conversation') + f'?recipient={viewprofile}')
+                    return HttpResponseRedirect(reverse('chat') + f'?recipient={new_conversation_object.id}', )
         except Exception as e:
             messages.error(request, 'An error occurred.')
             print(e)
