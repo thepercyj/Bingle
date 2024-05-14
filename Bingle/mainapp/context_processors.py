@@ -16,6 +16,9 @@ def get_user_notifications(request):
         unread_notification_count = notifications.count()  # get the count of unread notifications
         read_notification_count = read_notifications.count()
 
+        notifications = reversed(notifications)
+        read_notifications = reversed(read_notifications)
+
         return {'notifications':notifications, 'unread_notifications': unread_notifications, 'unread_notification_count': unread_notification_count,
                 'read_notifications': read_notifications, read_notification_count: 'read_notification_count'}
     return {}

@@ -182,6 +182,15 @@ def new_home(request):
     except EmptyPage:
         library = library_paginator.page(library_paginator.num_pages)
 
+    # Pagination for Recent Activity
+    paginator = Paginator(owner_bookings, 3)
+    page_number = request.GET.get('page')
+    owner_page_obj = paginator.get_page(page_number)
+
+    paginator = Paginator(borrower_bookings, 3)
+    page_number = request.GET.get('page')
+    borrower_page_obj = paginator.get_page(page_number)
+
     context = {
         'bookform': form,
         'user_books': user_books,
@@ -195,6 +204,8 @@ def new_home(request):
         'total_bookings': total_bookings,
         'recs': recs,
         'most_borrowed_books': most_borrowed_books,
+        'owner_page_obj': owner_page_obj,
+        'borrower_page_obj': borrower_page_obj,
         'show_sidebar': True,
     }
 
@@ -641,7 +652,7 @@ def view_profile(request, profile_id):
             print(e)
             return redirect('search')
 
-    return render(request, 'users_profiles.html',
+    return render(request, 'mainapp/users_profiles.html',
                   {'viewprofile': viewprofile, 'pre_message': pre_message, 'show_sidebar': True})
 
 
@@ -1067,7 +1078,7 @@ def redirect_notification(request, notification_id):
             (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
         ).first()
         # Redirect to the conversation page
-        return redirect('full_conversation', conversation_id=message.conversation.id)
+        return redirect('full_conversation', conversation_id=conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
         return redirect('new_home')
