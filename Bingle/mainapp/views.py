@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime
 from io import BytesIO
 from PIL import Image
@@ -135,6 +136,23 @@ def new_home(request):
     total_bookings = owner_bookings.count() + borrower_bookings.count()
     recs = getborrowed(request)
 
+    # Calculate the count of bookings for each book
+    bookings_counter = Counter()
+    for booking in owner_bookings:
+        bookings_counter[booking.user_book_id.book_id.id] += 1
+    for booking in borrower_bookings:
+        bookings_counter[booking.user_book_id.book_id.id] += 1
+
+    # Sort the books based on the count of bookings
+    sorted_books = []
+    for book_id, count in bookings_counter.items():
+        book = Book.objects.get(id=book_id)
+        sorted_books.append((book, count))
+
+    sorted_books.sort(key=lambda x: x[1], reverse=True)
+
+    most_borrowed_books = sorted_books[:10]  # Get the top 10 most borrowed/lent books
+
     # Search functionality implemented
     user_books_search_query = request.GET.get('user_books_search')
     if user_books_search_query:
@@ -177,6 +195,7 @@ def new_home(request):
         'borrower_bookings': borrower_bookings,
         'total_bookings': total_bookings,
         'recs': recs,
+        'most_borrowed_books': most_borrowed_books,
     }
 
     return render(request, 'home.html', context)
