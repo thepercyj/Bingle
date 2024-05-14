@@ -1,7 +1,6 @@
-{% extends 'landing/base.html' %}
+{% extends 'mainapp/base.html' %}
 {% load static %}
 {% block title %} User Profile | Bingle {% endblock %}
-
 {% block content %}
 <section class="client_section">
     <div class="container-xl px-4 mt-4">
@@ -10,7 +9,7 @@
             <div class="col-xl-4">
                 <!-- Profile picture card -->
                 <div class="card mb-4 mb-xl-0">
-                    <div class="heading_container">
+                    <div class="card-header">
                         <h2>Profile Picture</h2>
                     </div>
                     <div class="card-body text-center">
@@ -26,7 +25,7 @@
             <div class="col-xl-8">
                 <!-- Account details card -->
                 <div class="card mb-4">
-                    <div class="heading_container">
+                    <div class="card-header">
                         <h2>Account Details</h2>
                     </div>
                     <div class="card-body">
