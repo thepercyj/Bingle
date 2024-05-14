@@ -611,7 +611,7 @@ def view_profile(request, profile_id):
                     )
                     new_message.save()
 
-                    return redirect('chat', conversation_id=existing_conversation.id)
+                    return redirect('full_conversation', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
                     new_conversation_object.save()
@@ -635,7 +635,7 @@ def view_profile(request, profile_id):
 
                     messages.success(request,
                                      pre_message if pre_message else 'Message sent successfully')
-                    return HttpResponseRedirect(reverse('chat') + f'?recipient={viewprofile}')
+                    return HttpResponseRedirect(reverse('full_conversation') + f'?recipient={viewprofile}')
         except Exception as e:
             messages.error(request, 'An error occurred.')
             print(e)
@@ -784,7 +784,7 @@ def borrow(request, user_book_id):
                 messages.success(request, 'Borrow request saved successfully!')
 
                 # Redirect to appropriate chat page
-                return redirect('chat')
+                return redirect('full_conversation', conversation_id=conversation.id)
 
         except Exception as e:
             print(e)
@@ -861,7 +861,7 @@ def approve_borrow_request(request, book_id):
         messages.success(request, 'Borrow request approved successfully.')
 
         # Redirect to the chats page
-        return redirect('chat')
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -914,7 +914,7 @@ def deny_borrow_request(request, book_id):
         messages.success(request, 'Borrow request denied successfully.')
 
         # Redirect to the chas page
-        return redirect('chat')
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -976,7 +976,7 @@ def return_book(request, book_id):
         messages.success(request, 'Book returned successfully.')
 
         # Redirect to the chas page
-        return redirect('chat')
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1038,7 +1038,7 @@ def request_return_book(request, book_id):
         messages.success(request, 'Book return request sent successfully.')
 
         # Redirect to the chats page
-        return redirect('chat')
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1067,7 +1067,7 @@ def redirect_notification(request, notification_id):
             (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
         ).first()
         # Redirect to the conversation page
-        return redirect('chat')
+        return redirect('full_conversation', conversation_id=message.conversation.id)
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
         return redirect('new_home')
@@ -1167,10 +1167,10 @@ def send_message(request, conversation_id):
             )
             notification.save()
             print(reverse('send_chat_message', args=[conversation_id]))
-            return HttpResponseRedirect(reverse('chat', args=[conversation_id]))
+            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
         except UserProfile.DoesNotExist:
             messages.error(request, 'User profile not found.')
-            return HttpResponseRedirect(reverse('chat', args=[conversation_id]))
+            return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
     else:
         return HttpResponse("Invalid request method", status=405)
 
@@ -1240,7 +1240,7 @@ def new_conv(request):
                         new_message.save()
                         existing_conversation.latest_message = message
                         existing_conversation.save()
-                    return redirect('chat', conversation_id=existing_conversation.id)
+                    return redirect('full_conversation', conversation_id=existing_conversation.id)
 
                 # If the conversation does not exist, create a new conversation
                 new_conversation_object = Conversation(
@@ -1270,7 +1270,7 @@ def new_conv(request):
                     new_conversation_object.save()
 
 
-                return redirect('chat', conversation_id=new_conversation_object.id)
+                return redirect('full_conversation', conversation_id=new_conversation_object.id)
         # If the user does not exist, display an error message
         except User.DoesNotExist:
             messages.error(request, 'User not found.')
