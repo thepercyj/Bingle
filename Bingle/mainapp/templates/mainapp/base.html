@@ -16,10 +16,11 @@
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/material.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/vendor/css/style-preset.css' %}">
-    <link rel="stylesheet" href="{% static 'mainapp/vendor/css/bootstrap-slider.min.css' %}">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14K1GBX9FG"></script>
     <script src="{% static 'mainapp/vendor/js/pcoded.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 </head>
 
@@ -30,11 +31,18 @@
 </div>
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme_contrast=""
       data-pc-theme="light">
+{% if show_sidebar %}
 {% include 'mainapp/sidebar.html' %}
+{% endif %}
 <header class="pc-header">
+    <div class="m-header">
+        <a class="m-header" href="{% url 'new_landing_page' %}">
+            <img src="{% static 'mainapp/images/Bingle-logos.jpeg'%}" style=" border-radius: 50%; height:60px; width:60px;" class="img-fluid logo-lg"></a>
+    </div>
     <div class="header-wrapper">
         <div class="me-auto pc-mob-drp">
             <ul class="list-unstyled">
+
 
                 <li class="pc-h-item pc-sidebar-popup">
                     <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
@@ -82,8 +90,8 @@
                         <svg class="pc-icon">
                             <use xlink:href="#custom-notification"></use>
                         </svg>
-                        {% if unread_notifications %}
-                            <span class="badge bg-success pc-h-badge">{{ unread_notification_count }}</span>
+                        {% if notification_count %}
+                        <span class="badge bg-success pc-h-badge">{{ unread_notification_count }}</span>
                         {% endif %}
                     </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
@@ -98,39 +106,39 @@
                         <div class="dropdown-body text-wrap header-notification-scroll"
                              style="max-height: calc(100vh - 215px)">
                             {% if notifications %}
-                                {% if unread_notifications %}
-                                    <p class="text-span">Unread</p>
-                                    {% for notification in notifications %}
-                                        <div class="card mb-2">
-                                            <div class="card-body">
-                                                <div class="d-flex">
-                                                    <a href="{% url 'redirect_notification' notification.id %}">
-                                                        <div class="flex-shrink-0">
-                                                            <svg class="pc-icon text-primary">
-                                                                <use xlink:href="#custom-sms"></use>
-                                                                <!-- You can change this icon per notification type -->
-                                                            </svg>
-                                                        </div>
-                                                        <div class="flex-grow-1 ms-3">
-                                                    <span class="float-end text-sm text-muted">{{ notification.created_on|timesince }}</span>
-                                                    <h5 class="text-body mb-2">{{ notification.message.notify_value|capfirst }}</h5>
-                                                    <p class="mb-0">{{ notification }}</p>
-                                                </div>
-
-                                                    </a>
-                                                </div>
+                            {% if unread_notifications %}
+                            <p class="text-span">Unread</p>
+                            {% for notification in notifications %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <a href="{% url 'redirect_notification' notification.id %}">
+                                            <div class="flex-shrink-0">
+                                                <svg class="pc-icon text-primary">
+                                                    <use xlink:href="#custom-sms"></use>
+                                                    <!-- You can change this icon per notification type -->
+                                                </svg>
                                             </div>
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <div class="card mb-2">
-                                    <div class="card-body">
-                                        <p class="mb-0">No unread notifications.</p>
+                                            <div class="flex-grow-1 ms-3">
+                                                <span class="float-end text-sm text-muted">{{ notification.created_on|timesince }}</span>
+                                                <h5 class="text-body mb-2">{{ notification.message.notify_value|capfirst }}</h5>
+                                                <p class="mb-0">{{ notification }}</p>
+                                            </div>
+
+                                        </a>
                                     </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <p class="mb-0">No unread notifications.</p>
+                                </div>
                                 {% endif %}
 
-                            <p class="text-span">Archived</p>
-                            {% for notification in read_notifications %}
+                                <p class="text-span">Archived</p>
+                                {% for notification in read_notifications %}
                                 <div class="card mb-2">
                                     <a href="{% url 'redirect_notification' notification.id %}">
                                         <div class="card-body">
@@ -147,17 +155,17 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                    </a>
                                 </div>
-                                </a>
-                            {% endfor %}
+
+                                {% endfor %}
                             </div>
                             {% else %}
-                                <div class="card mb-2">
-                                    <div class="card-body">
-                                        <p class="mb-0">No notifications found.</p>
-                                    </div>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <p class="mb-0">No notifications found.</p>
                                 </div>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -167,11 +175,11 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                        role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
                         {% if profile_pic %}
-                            <img class="user-avtar" src="{{ profile_pic.url }}" alt="Profile Picture"
-                                 style="max-width: 100px;">
+                        <img class="user-avtar wid-45 hei-45 rounded-circle" src="{{ profile_pic.url }}" alt="Profile Picture"
+                             style="max-width: 100px;">
                         {% else %}
-                            <img class="user-avtar" src="http://bootdey.com/img/Content/avatar/avatar1.png"
-                                 alt="Default Profile Picture" style="max-width: 100px;">
+                        <img class="user-avtar wid-45 hei-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                             alt="Default Profile Picture" style="max-width: 100px;">
                         {% endif %}
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
@@ -181,12 +189,12 @@
                                 <div class="d-flex mb-1">
                                     <div class="flex-shrink-0">
                                         {% if profile_pic %}
-                                            <img class="user-avtar wid-35" src="{{ profile_pic.url }}"
-                                                 alt="Profile Picture" style="max-width: 100px;">
+                                        <img class="user-avtar wid-45 hei-45 rounded-circle" src="{{ profile_pic.url }}"
+                                             alt="Profile Picture" style="max-width: 100px;">
                                         {% else %}
-                                            <img class="user-avtar wid-35"
-                                                 src="http://bootdey.com/img/Content/avatar/avatar1.png"
-                                                 alt="Default Profile Picture" style="max-width: 100px;">
+                                        <img class="user-avtar wid-45 hei-45 rounded-circle"
+                                             src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                                             alt="Default Profile Picture" style="max-width: 100px;">
                                         {% endif %}
                                     </div>
                                     <div class="flex-grow-1 ms-3">
@@ -215,19 +223,19 @@
                                 <div class="d-grid mb-3">
                                     {% if user.is_authenticated %}
 
-                                        <a href="/logout/" class="btn btn-primary">
-                                            <svg class="pc-icon me-2">
-                                                <use xlink:href="#custom-logout-1-outline"></use>
-                                            </svg>
-                                            Logout
-                                        </a>
+                                    <a href="/logout/" class="btn btn-primary">
+                                        <svg class="pc-icon me-2">
+                                            <use xlink:href="#custom-logout-1-outline"></use>
+                                        </svg>
+                                        Logout
+                                    </a>
                                     {% else %}
-                                        <a href="/login/" class="btn btn-primary">
-                                            <svg class="pc-icon me-2">
-                                                <use xlink:href="#custom-logout-1-outline"></use>
-                                            </svg>
-                                            Login
-                                        </a>
+                                    <a href="/login/" class="btn btn-primary">
+                                        <svg class="pc-icon me-2">
+                                            <use xlink:href="#custom-logout-1-outline"></use>
+                                        </svg>
+                                        Login
+                                    </a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -272,9 +280,7 @@
 <script src="{% static 'mainapp/vendor/js/feather.min.js' %}"></script>
 <script src="{% static 'messagesApp/js/chat.js' %}"></script>
 <script src="{% static 'mainapp/js/modal.js' %}"></script>
-<script src="{% static 'mainapp/vendor/js/ac-rangeslider.js' %}"></script>
-<script src="{% static 'mainapp/vendor/js/bootstrap-slider.min.js' %}"></script>
-<script src="{% static 'mainapp/vendor/js/clipboard.min.js' %}"></script>
+<script src="{% static 'mainapp/js/custom.js' %}"></script>
 
 <script>
     layout_change('light');

@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime
 from io import BytesIO
 from PIL import Image
@@ -18,14 +19,7 @@ from django.db.models import Q, F
 from django.db import transaction
 from django.utils.timezone import now
 from django.conf import settings
-import json
 from recommendations.views import getborrowed
-from django.core.cache import cache
-
-
-
-# test_user2 = User.objects.get(username='TestUser2')
-# test_user_2_profile = UserProfile.objects.get(user=test_user2)
 
 
 def login_required_message(function):
@@ -61,60 +55,15 @@ def login_required_message(function):
     return wrap
 
 
-# test page
-def test(request):
-    if request.method == "POST":
-        user_profile = UserProfile.objects.get(user=request.user)
-        user_primary = user_profile.primary_location
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        user_profiles = UserProfile.objects.filter(user__username=searchquery,
-                                                   primary_location=user_primary)  # Filter user profiles based on username
-
-        return render(request, 'test.html', {'searchquery': searchquery,
-                                             'user_profiles': user_profiles})  # Pass the filtered user profiles to the template
-    else:
-        return render(request, 'about.html')
-
-
-# Index Page
-def index(request):
-    """
-    Renders the index page
-
-    :param request: HttpRequest - The request object
-    """
-    return render(request, 'index.html')
-
-
-def about(request):
+@login_required_message
+def new_about(request):
     """
     Renders the about page
 
     :param request: HttpRequest - The request object
     """
-    return render(request, 'about.html')
+    return render(request, 'new_about_us.html', {'show_sidebar': True})
 
-
-def new_about(request):
-    return render(request, 'new_about_us.html')
-
-
-def lend(request):
-    """
-    Renders the lend page
-
-    :param request: HttpRequest - The request object
-    """
-    return render(request, 'lend.html')
-
-
-def forgetpass(request):
-    """
-    Renders the forgetpass page
-
-    :param request: HttpRequest - The request object
-    """
-    return render(request, 'forgetpass.html')
 
 @login_required_message
 def new_home(request):
@@ -125,18 +74,34 @@ def new_home(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
+    # Attempt to retrieve library from cache
     library = Book.objects.all()
-    lib_count = Book.objects.all()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
-    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
     pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
     owner_bookings = Booking.objects.filter(owner_id=user_profile)
     borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
     total_bookings = owner_bookings.count() + borrower_bookings.count()
     recs = getborrowed(request)
 
-    # Search functionality impleneted
+    # Calculate the count of bookings for each book
+    bookings_counter = Counter()
+    for booking in owner_bookings:
+        bookings_counter[booking.user_book_id.book_id.id] += 1
+    for booking in borrower_bookings:
+        bookings_counter[booking.user_book_id.book_id.id] += 1
+
+    # Sort the books based on the count of bookings
+    sorted_books = []
+    for book_id, count in bookings_counter.items():
+        book = Book.objects.get(id=book_id)
+        sorted_books.append((book, count))
+
+    sorted_books.sort(key=lambda x: x[1], reverse=True)
+
+    most_borrowed_books = sorted_books[:10]  # Get the top 10 most borrowed/lent books
+
+    # Search functionality implemented
     user_books_search_query = request.GET.get('user_books_search')
     if user_books_search_query:
         user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
@@ -165,28 +130,43 @@ def new_home(request):
     except EmptyPage:
         library = library_paginator.page(library_paginator.num_pages)
 
+    # Pagination for Recent Activity
+    paginator = Paginator(owner_bookings, 3)
+    page_number = request.GET.get('page')
+    owner_page_obj = paginator.get_page(page_number)
+
+    paginator = Paginator(borrower_bookings, 3)
+    page_number = request.GET.get('page')
+    borrower_page_obj = paginator.get_page(page_number)
+
     context = {
         'bookform': form,
         'user_books': user_books,
         'user_profile': user_profile,
         'user': user,
-        'user_books_count': user_books_count,  # Update the count with user_books_count
+        # 'user_books_count': user_books_count,  # Update the count with user_books_count
         'library': library,
-        'lib_count': lib_count,
         'pre_booking': pre_booking,
         'owner_bookings': owner_bookings,
         'borrower_bookings': borrower_bookings,
         'total_bookings': total_bookings,
         'recs': recs,
+        'most_borrowed_books': most_borrowed_books,
+        'owner_page_obj': owner_page_obj,
+        'borrower_page_obj': borrower_page_obj,
+        'show_sidebar': True,
     }
 
     return render(request, 'home.html', context)
 
 
+@login_required_message
 def new_landing_page(request):
-    return render (request, 'new_landing_page.html')
+    return render(request, 'new_landing_page.html', {'show_sidebar': False})
 
 
+@login_required_message
+# Need to remove all modal related code as it is shifted to dashboard
 def new_profile(request):
     """
     Renders the main dashboard page
@@ -195,60 +175,15 @@ def new_profile(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
-    library = cache.get('library')
-    if library is None:
-        library = Book.objects.all()
-        cache.set('library', library, 60 * 5)  # Cache for 5 minutes
-    lib_count = library.count()
     user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
-    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
-    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
-    owner_bookings = Booking.objects.filter(owner_id=user_profile)
-    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
-    total_bookings = owner_bookings.count() + borrower_bookings.count()
-
-    # Search functionality impleneted
-    user_books_search_query = request.GET.get('user_books_search')
-    if user_books_search_query:
-        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
-
-    library_search_query = request.GET.get('library_search')
-    if library_search_query:
-        library = library.filter(book_title__icontains=library_search_query)
-
-    # Pagination for user_books
-    page_number = request.GET.get('page')
-    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
-    try:
-        user_books = paginator.page(page_number)
-    except PageNotAnInteger:
-        user_books = paginator.page(1)
-    except EmptyPage:
-        user_books = paginator.page(paginator.num_pages)
-
-    # Pagination for library
-    library_page = request.GET.get('library_page')
-    library_paginator = Paginator(library, 10)  # Show 10 books per page
-    try:
-        library = library_paginator.page(library_page)
-    except PageNotAnInteger:
-        library = library_paginator.page(1)
-    except EmptyPage:
-        library = library_paginator.page(library_paginator.num_pages)
+    library = Book.objects.all()
 
     context = {
         'bookform': form,
-        'user_books': user_books,
         'user_profile': user_profile,
         'user': user,
-        'user_books_count': user_books_count,  # Update the count with user_books_count
         'library': library,
-        'lib_count': lib_count,
-        'pre_booking': pre_booking,
-        'owner_bookings': owner_bookings,
-        'borrower_bookings': borrower_bookings,
-        'total_bookings': total_bookings,
+        'show_sidebar': True
     }
     return render(request, 'new_profile.html', context)
 
@@ -267,7 +202,8 @@ def chat(request):
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
     return render(request, 'chat.html',
-                  {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True})
+                  {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True,
+                   'show_sidebar': True})
 
 
 def register(request):
@@ -301,7 +237,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('new_landing_page')
+                return redirect('new_home')
             else:
                 # Handle the case where authentication fails
                 form.add_error(None, "Invalid username or password.")
@@ -311,73 +247,6 @@ def login_view(request):
     token = {'form_log': form}
     # No need to manually add the CSRF token in Django templates, {% csrf_token %} does this
     return render(request, 'login.html', token)
-
-
-@login_required_message
-def profile(request):
-    """
-    Renders the profile page
-
-    :param request: HttpRequest - The request object
-    """
-    form = BookForm(request.POST or None)
-    user = request.user
-    library = cache.get('library')
-    if library is None:
-        library = Book.objects.all()
-        cache.set('library', library, 60 * 5)  # Cache for 5 minutes
-    lib_count = library.count()
-    user_profile = UserProfile.objects.get(user=user)
-    user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
-    user_books_count = UserBook.objects.filter(owner_book_id=user_profile).count()
-    pre_booking = Transactions.objects.filter(user_book_id__owner_book_id=user_profile.id)
-    owner_bookings = Booking.objects.filter(owner_id=user_profile)
-    borrower_bookings = Booking.objects.filter(borrower_id=user_profile)
-    total_bookings = owner_bookings.count() + borrower_bookings.count()
-
-    # Search functionality
-    user_books_search_query = request.GET.get('user_books_search')
-    if user_books_search_query:
-        user_books = user_books.filter(book_id__book_title__icontains=user_books_search_query)
-
-    library_search_query = request.GET.get('library_search')
-    if library_search_query:
-        library = library.filter(book_title__icontains=library_search_query)
-
-    # Pagination for user_books
-    page_number = request.GET.get('page')
-    paginator = Paginator(user_books, 10)  # Show 10 user_books per page
-    try:
-        user_books = paginator.page(page_number)
-    except PageNotAnInteger:
-        user_books = paginator.page(1)
-    except EmptyPage:
-        user_books = paginator.page(paginator.num_pages)
-
-    # Pagination for library
-    library_page = request.GET.get('library_page')
-    library_paginator = Paginator(library, 10)  # Show 10 books per page
-    try:
-        library = library_paginator.page(library_page)
-    except PageNotAnInteger:
-        library = library_paginator.page(1)
-    except EmptyPage:
-        library = library_paginator.page(library_paginator.num_pages)
-
-    context = {
-        'bookform': form,
-        'user_books': user_books,
-        'user_profile': user_profile,
-        'user': user,
-        'user_books_count': user_books_count,  # Update the count with user_books_count
-        'library': library,
-        'lib_count': lib_count,
-        'pre_booking': pre_booking,
-        'owner_bookings': owner_bookings,
-        'borrower_bookings': borrower_bookings,
-        'total_bookings': total_bookings,
-    }
-    return render(request, 'profile_page.html', context)
 
 
 @login_required_message
@@ -393,7 +262,7 @@ def addBook(request):
             new_book = form.save()
             # Adds the book to the userBooks table
             addUserBook(request, new_book)
-            return redirect('new_profile')
+            return redirect('new_home')
         else:
             # Form validation failed, return error details
             return JsonResponse({'status': 'error', 'message': 'Form validation failed', 'errors': form.errors},
@@ -409,22 +278,34 @@ def addBook(request):
 
 
 @login_required_message
-def sample_search(request):
+def search(request):
+    """
+    Renders the search page and handles search functionality
+
+    :param request: HttpRequest - The request object
+    """
     user_profile = UserProfile.objects.get(user=request.user)
     current_location = user_profile.current_location
-    if request.method == "POST":
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        users_profiles = UserProfile.objects.filter(
-            user__username=searchquery)  # Filter user profiles based on username and primary location
 
-        return render(request, 'samplesearch.html', {'searchquery': searchquery,
-                                                     'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
+    if request.method == "POST":
+        searchquery = request.POST.get('searchquery')
+        users_profiles = UserProfile.objects.filter(user__username=searchquery)
     else:
-        # Handle GET request
-        # return render(request, 'search.html')
-        users_profiles = UserProfile.objects.all()
-        users_profiles = users_profiles.filter(current_location=current_location)
-        return render(request, 'samplesearch.html', {'users_profiles': users_profiles})
+        users_profiles = UserProfile.objects.filter(current_location=current_location)
+
+    # Paginate the user profiles
+    paginator = Paginator(users_profiles, 10)  # Show 10 profiles per page
+    page = request.GET.get('page')
+    try:
+        users_profiles = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        users_profiles = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        users_profiles = paginator.page(paginator.num_pages)
+
+    return render(request, 'samplesearch.html', {'users_profiles': users_profiles, 'show_sidebar': True})
 
 
 @login_required_message
@@ -450,20 +331,6 @@ def addUserBook(request, book):
 
 
 @login_required_message
-def library(request):
-    """
-    Renders the library page
-
-    :param request: HttpRequest - The request object
-    """
-    # Fetch all Book records without prefetch_related
-    library = Book.objects.all()
-
-    # Pass the result to the template
-    return render(request, 'library.html', {'library': library})
-
-
-@login_required_message
 def removeBook(request):
     """
     Removes a book from the user's library
@@ -478,7 +345,7 @@ def removeBook(request):
         messages.success(request, "Book removed successfully.")
     except UserBook.DoesNotExist:
         messages.error(request, "Book not found.")
-    return HttpResponseRedirect(reverse('new_profile') + '?remove=true')
+    return HttpResponseRedirect(reverse('new_home') + '?remove=true')
 
 
 @login_required_message
@@ -503,10 +370,10 @@ def updateProfile(request):
         user_profile.save()
 
         messages.success(request, "Profile updated successfully.")
-        return redirect('new_home')
+        return redirect('new_profile')
     else:
         # Handle non-POST request
-        return render(request, 'profile_page.html')
+        return render(request, 'new_profile.html')
 
 
 @login_required_message
@@ -559,7 +426,7 @@ def img_upload(request):
                 return JsonResponse({'error': "User not authenticated"}, status=401)
     else:
         form = ProfilePicForm()
-    return render(request, 'profile_page.html', {'uploadpic': form})
+    return render(request, 'new_profile.html', {'uploadpic': form})
 
 
 @login_required_message
@@ -572,31 +439,7 @@ def display_pic(request):
     # Get the user's profile
     display = request.user.profile
 
-    return render(request, 'profile_page.html', {'display': display})
-
-
-@login_required_message
-def search(request):
-    """
-    Renders the search page and handles search functionality
-
-    :param request: HttpRequest - The request object
-    """
-    user_profile = UserProfile.objects.get(user=request.user)
-    current_location = user_profile.current_location
-    if request.method == "POST":
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        users_profiles = UserProfile.objects.filter(
-            user__username=searchquery)  # Filter user profiles based on username and primary location
-
-        return render(request, 'search.html', {'searchquery': searchquery,
-                                               'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
-    else:
-        # Handle GET request
-        # return render(request, 'search.html')
-        users_profiles = UserProfile.objects.all()
-        users_profiles = users_profiles.filter(current_location=current_location)
-        return render(request, 'search.html', {'users_profiles': users_profiles})
+    return render(request, 'new_profile.html', {'display': display})
 
 
 @login_required_message
@@ -634,7 +477,7 @@ def view_profile(request, profile_id):
                     )
                     new_message.save()
 
-                    return redirect('conversation', conversation_id=existing_conversation.id)
+                    return redirect('full_conversation', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
                     new_conversation_object.save()
@@ -658,14 +501,14 @@ def view_profile(request, profile_id):
 
                     messages.success(request,
                                      pre_message if pre_message else 'Message sent successfully')
-                    return HttpResponseRedirect(reverse('new_conversation') + f'?recipient={viewprofile}')
+                    return HttpResponseRedirect(reverse('full_conversation') + f'?recipient={viewprofile}')
         except Exception as e:
             messages.error(request, 'An error occurred.')
             print(e)
             return redirect('search')
 
-    return render(request, 'users_profiles.html',
-                  {'viewprofile': viewprofile, 'pre_message': pre_message})
+    return render(request, 'mainapp/users_profiles.html',
+                  {'viewprofile': viewprofile, 'pre_message': pre_message, 'show_sidebar': True})
 
 
 def get_pre_message_content(request, user):
@@ -719,7 +562,9 @@ def decrement_counter(request):
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 
+
 @login_required_message
+@transaction.atomic
 def borrow(request, user_book_id):
     """
     Combined function to handle both initiating a borrow request and saving booking details.
@@ -806,18 +651,21 @@ def borrow(request, user_book_id):
 
                 messages.success(request, 'Borrow request saved successfully!')
 
-                # Redirect to appropriate conversation page
-                return redirect('conversation', conversation_id=conversation.id)
+                # Redirect to appropriate chat page
+                return redirect('full_conversation', conversation_id=conversation.id)
 
         except Exception as e:
             print(e)
             messages.error(request, 'An error occurred.')
             return redirect('library')
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book})
+    return render(request, 'borrow.html',
+                  {'book': book, 'user_books': user_books, 'user_book': user_book, 'show_sidebar': True})
+
 
 
 @login_required_message
+@transaction.atomic
 def approve_borrow_request(request, book_id):
     """
     View function to approve a borrow request for a book.
@@ -883,8 +731,8 @@ def approve_borrow_request(request, book_id):
         # Display a success message
         messages.success(request, 'Borrow request approved successfully.')
 
-        # Redirect to the conversations page
-        return redirect('conversation', conversation_id=message.conversation.id)
+        # Redirect to the chats page
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -936,8 +784,8 @@ def deny_borrow_request(request, book_id):
         # Display a success message
         messages.success(request, 'Borrow request denied successfully.')
 
-        # Redirect to the conversations page
-        return redirect('conversation', conversation_id=message.conversation.id)
+        # Redirect to the chas page
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -946,6 +794,7 @@ def deny_borrow_request(request, book_id):
 
 
 @login_required_message
+@transaction.atomic
 def return_book(request, book_id):
     """
     View function to return a book.
@@ -998,8 +847,8 @@ def return_book(request, book_id):
         # Display a success message
         messages.success(request, 'Book returned successfully.')
 
-        # Redirect to the conversations page
-        return redirect('conversation', conversation_id=message.conversation.id)
+        # Redirect to the chas page
+        return redirect('full_conversation', conversation_id=message.conversation.id)
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1007,6 +856,70 @@ def return_book(request, book_id):
         return redirect('library')
 
 
+@login_required_message
+@transaction.atomic
+def request_return_book(request, book_id):
+    """
+    View function to request return a book.
+
+    :param request: HttpRequest - The request object
+    :param book_id: int - The ID of the book to return
+    """
+    if request.method == 'POST':
+        print("Book ID: ", book_id)
+        # Get the message object based on the book ID and request type
+        message = get_object_or_404(Message, user_book_id__id=book_id, request_type=3)
+
+        # Create a pre-message to notify the recipient
+        pre_message_content = f" {message.from_user} has requested you to return {message.user_book_id.book_id.book_title}."
+        new_message = Message(
+            from_user=message.to_user,
+            to_user=message.from_user,
+            details=pre_message_content,
+            request_type=8,
+            request_value='Request Return',
+            user_book_id=message.user_book_id,
+            conversation=message.conversation,
+        )
+        new_message.save()
+
+        # Update UserBook values
+        with transaction.atomic():
+            user_book = message.user_book_id
+            user_book.currently_with = message.from_user
+            user_book.availability = False
+            user_book.booked = "Yes"
+            user_book.save()
+            print('user_book updated successfully')
+
+            # Update Booking values
+            booking = Booking.objects.get(user_book_id=user_book)
+            booking.returned = False
+            booking.save()
+            print('booking updated successfully')
+
+            # Adds a notification for the owner
+            notification = UserNotification(
+                sender=message.to_user,
+                message=Notification.objects.get(notify_type=8),
+                recipient=message.from_user,
+                book=message.user_book_id
+            )
+            notification.save()
+
+        # Display a success message
+        messages.success(request, 'Book return request sent successfully.')
+
+        # Redirect to the chats page
+        return redirect('full_conversation', conversation_id=message.conversation.id)
+
+    else:
+        # If the request method is not POST, display an error message and redirect
+        messages.error(request, 'Invalid request method.')
+        return redirect('library')
+
+
+@login_required_message
 def redirect_notification(request, notification_id):
     """
     Marks notification as read and redirects the user to the appropriate page for the notification type.
@@ -1068,13 +981,10 @@ def load_full_conversation(request, conversation_id):
         ).select_related('id_1__user', 'id_2__user')
 
         context = {'messages': messages_list, 'conversation': conversation, 'our_profile': our_profile,
-                   'conversation_list': conversations}
+                   'conversation_list': conversations, 'show_sidebar': True}
         return render(request, 'chat.html', context)
     except UserProfile.DoesNotExist:
         return HttpResponse("User profile not found", status=404)
-    except Conversation.DoesNotExist:
-        # If no conversation is selected, return a blank variable in the context
-        return render(request, 'chat.html', {'messages': [], 'conversation': None, 'our_profile': None})
 
 
 @login_required_message
@@ -1137,6 +1047,7 @@ def send_message(request, conversation_id):
             return HttpResponseRedirect(reverse('full_conversation', args=[conversation_id]))
     else:
         return HttpResponse("Invalid request method", status=405)
+
 
 @login_required_message
 def mark_all_as_read(request):
@@ -1218,4 +1129,88 @@ def rate_user(request, conversation_id):
         return redirect('full_conversation', conversation_id=conversation_id)
 
 
+@login_required_message
+def new_conv(request):
+    """
+    View function to start a new conversation with another user, ensuring the user is logged in.
 
+    Parameters:
+    :param request: The Django HttpRequest object.
+    """
+    # If the form has been submitted
+    if request.method == 'POST':
+        username = request.POST.get('recipient')
+        message = request.POST.get('message')
+
+        # If the username is not empty
+        try:
+            user = User.objects.get(username=username)
+            their_profile = get_object_or_404(UserProfile, user=user)
+            our_profile = get_object_or_404(UserProfile, user=request.user)
+            # Ensure the user is not trying to start a conversation with themselves
+            if their_profile == our_profile:
+                messages.error(
+                    request, 'You cannot start a conversation with yourself.')
+                return redirect('new_conv')
+
+            # Ensure the conversation does not already exist
+            with transaction.atomic():
+                existing_conversation = Conversation.objects.filter(
+                    (Q(id_1=our_profile) & Q(id_2=their_profile)) |
+                    (Q(id_2=our_profile) & Q(id_1=their_profile))
+                ).first()
+
+                # If the conversation already exists, add the message to the existing conversation
+                if existing_conversation:
+                    if message:
+                        new_message = Message(
+                            from_user=our_profile,
+                            to_user=their_profile,
+                            details=message,
+                            request_type=1,
+                            request_value='Simple Message',
+                            created_on=now(),
+                            conversation=existing_conversation
+                        )
+                        new_message.save()
+                        existing_conversation.latest_message = message
+                        existing_conversation.save()
+                    return redirect('full_conversation', conversation_id=existing_conversation.id)
+
+                # If the conversation does not exist, create a new conversation
+                new_conversation_object = Conversation(
+                    id_1=our_profile, id_2=their_profile)
+                new_conversation_object.save()
+                if message:
+                    new_message = Message(
+                        from_user=our_profile,
+                        to_user=their_profile,
+                        details=message,
+                        request_type=1,
+                        request_value='Simple Message',
+                        created_on=now(),
+                        conversation=new_conversation_object
+                    )
+                    new_message.save()
+
+                    # Creates a notification for the recipient
+                    notification = UserNotification(
+                        recipient=their_profile,
+                        message=Notification.objects.get(notify_type=1),
+                        sender=our_profile,
+                    )
+                    notification.save()
+
+                    new_conversation_object.latest_message = message
+                    new_conversation_object.save()
+
+                return redirect('full_conversation', conversation_id=new_conversation_object.id)
+        # If the user does not exist, display an error message
+        except User.DoesNotExist:
+            messages.error(request, 'User not found.')
+            return redirect('new_conv')
+
+    # If the form has not been submitted, display the new conversation page
+    else:
+        return render(request, 'new_conversation.html',
+                      {'users': UserProfile.objects.exclude(user=request.user), 'show_sidebar': True})

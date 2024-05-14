@@ -23,9 +23,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'messagesApp/static'),
     os.path.join(BASE_DIR, 'mainapp/static'),
 
-    # Add more paths for other apps if needed
-    # os.path.join(BASE_DIR, 'app1/static'),
-    # os.path.join(BASE_DIR, 'app2/static'),
 ]
 
 # Quick-start development settings - unsuitable for production
@@ -51,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cryptography',
     'mainapp',
-    'messagesApp',
     'crispy_forms',
     'crispy_bootstrap5',
     'recommendations',
@@ -176,3 +172,12 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
+
+#Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'bingleteam24@gmail.com'
+EMAIL_HOST_PASSWORD = 'B!ngl3@2024##!'
+DEFAULT_FROM_EMAIL = 'bingleteam24@gmail.com'

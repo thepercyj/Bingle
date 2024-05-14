@@ -1,0 +1,60 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %} Borrow | Bingle {% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Borrow</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h2 class="mb-0">Select Owner to Borrow From</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <form method="post" id="borrow-form">
+        {% csrf_token %}
+        <label for="owner">Book Owner(s):</label>
+        <select name="owner" id="owner">
+            {% for user_book in user_books %}
+            {% if user_book.owner_book_id.user != request.user %}
+            <option  value="{{ user_book.owner_book_id.user.username }}">{{ user_book.owner_book_id.user.username }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+            <button class="btn btn-sm btn-primary " type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Select</button>
+    </form>
+    <br>
+    <br>
+    <br>
+    <div class="collapse" id="collapseExample">
+        <div class="card-body">
+            <form method="post" action="{% url 'borrow' user_book.id  %}">
+                {% csrf_token %}
+                {% if user_book.owner_book_id.user != request.user %}
+                <input type="hidden" name="user_book_id" value="{{ user_book.id }}">
+                <input type="hidden" name="owner_id" value="{{ user_book.owner_book_id.id }}">
+                <input type="hidden" name="borrower_id" value="{{ request.user.id }}">
+
+                <label for="from_date">From Date:</label>
+                <input type="date" id="from_date" name="from_date" required>
+
+                <label for="to_date">To Date:</label>
+                <input type="date" id="to_date" name="to_date" required>
+                {% endif %}
+                <button class="btn btn-sm btn-primary" type="submit">Submit Borrow Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

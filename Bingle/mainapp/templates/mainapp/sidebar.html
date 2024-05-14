@@ -3,8 +3,7 @@
     <div class="navbar-wrapper">
         <div class="m-header">
             <a class="m-header" href="{% url 'new_landing_page' %}">
-            <img src="{% static 'mainapp/images/Bingle-logos.jpeg'%}" style=" border-radius: 50%; height:150%; width:30%;" class="img-fluid logo-lg">
-            &nbsp; &nbsp; <h2>Bingle</h2>
+            <h2>Bingle</h2>
             </a>
         </div>
         <div class="navbar-content">
@@ -13,9 +12,9 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             {% if profile_pic %}
-                            <img class="user-avtar wid-35 rounded-circle" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                            <img class="user-avtar wid-45 hei-45 rounded-circle" src="{{ profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                             {% else %}
-                            <img class="user-avtar wid-35 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                            <img class="user-avtar wid-45 hei-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
                             {% endif %}
                         </div>
                         <div class="flex-grow-1 ms-3 me-2">
@@ -48,10 +47,10 @@
                         <span class="pc-mtext">Chat</span></a>
                 </li>
                 <li class="pc-item">
-                    <a href="{% url 'sample_search' %}" class="pc-link">
+                    <a href="{% url 'search' %}" class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
-                                    <use xlink:href="#custom-message-2"></use>
+                                    <use xlink:href="#custom-story"></use>
                                 </svg>
                             </span>
                         <span class="pc-mtext">Search</span></a>

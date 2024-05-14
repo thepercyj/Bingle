@@ -7,7 +7,7 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
                     <li class="breadcrumb-item" aria-current="page">Search</li>
                 </ul>
             </div>
@@ -57,9 +57,9 @@
             <tr>
                 <td>
                     {% if profile.profile_pic %}
-                    <img class="rounded-circle custom-img-small" src="{{ profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
+                    <img class="rounded-circle user-avtar wid-50" src="{{ profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                     {% else %}
-                    <img class="rounded-circle custom-img-small" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
+                    <img class="rounded-circle user-avtar wid-50" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
                     {% endif %}
                 </td>
                 <td>{{ profile.user.username }}</td>
@@ -67,9 +67,9 @@
                 <td>{{ profile.review }}</td>
                 <td>
                     {% if profile.user == request.user %}
-                    <a href="{% url 'profile' %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'new_profile' %}" ><i class="fa-info"></i></a>
                     {% else %}
-                    <a href="{% url 'viewprofile' profile.id %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'viewprofile' profile.id %}"><i class="fa-info"></i></a>
                     {% endif %}
                 </td>
             </tr>
@@ -78,15 +78,29 @@
         </table>
         {% endif %}
         <div class="clearfix">
-            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <div class="hint-text">Showing <b>{{ users_profiles.start_index }}</b> to <b>{{ users_profiles.end_index }}</b> of <b>{{ users_profiles.paginator.count }}</b> entries</div>
             <ul class="pagination">
+                {% if users_profiles.has_previous %}
+                <li class="page-item"><a href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                <li class="page-item"><a href="?page={{ users_profiles.previous_page_number }}" class="page-link"><i class="fa fa-angle-left"></i></a></li>
+                {% else %}
                 <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                <li class="page-item"><a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+                <li class="page-item disabled"><a href="#" class="page-link"><i class="fa fa-angle-left"></i></a></li>
+                {% endif %}
+
+                {% for page_num in users_profiles.paginator.page_range %}
+                <li class="page-item{% if page_num == users_profiles.number %} active{% endif %}">
+                    <a href="?page={{ page_num }}" class="page-link">{{ page_num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if users_profiles.has_next %}
+                <li class="page-item"><a href="?page={{ users_profiles.next_page_number }}" class="page-link"><i class="fa fa-angle-right"></i></a></li>
+                <li class="page-item"><a href="?page={{ users_profiles.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+                {% else %}
+                <li class="page-item disabled"><a href="#" class="page-link"><i class="fa fa-angle-right"></i></a></li>
+                <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

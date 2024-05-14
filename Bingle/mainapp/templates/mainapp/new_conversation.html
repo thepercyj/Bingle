@@ -1,0 +1,43 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %} Chat | Bingle {% endblock %}
+{% block content %}
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page">New Conversation</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <div class="page-header-title">
+                        <h2 class="mb-0">New Conversation</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form action="{% url 'new_conv' %}" method="post">
+                {% csrf_token %}
+                <label for="recipient" class="form-label">Recipient:</label>
+                <input class="form-control" type="text" name="recipient" id="recipient" value="{{ request.GET.recipient }}" readonly>
+                <br>
+                <label for="message">Message:</label>
+                <textarea class="form-control" name="message" id="message" cols="30" rows="10"></textarea>
+                <br>
+                <input type="submit" class="btn btn-primary" value="Send">
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %} User Profile | Bingle {% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Profile Details</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h2 class="mb-0">Profile Details</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="client_section">
+    <div class="container-xl px-4 mt-4">
+        <!-- User profile details -->
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Profile picture card -->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">
+                        <h2>Profile Picture</h2>
+                    </div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image -->
+                        {% if viewprofile.profile_pic %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img" src="{{ viewprofile.profile_pic.url }}" alt="Profile Picture">
+                        {% else %}
+                            <img class="img-account-profile rounded-circle mb-2 custom-img" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <!-- Account details card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2>Account Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- Display user details -->
+                        <p><strong>Username:</strong> {{ viewprofile.user.username }}</p>
+                        <p><strong>First Name:</strong> {{ viewprofile.user.first_name }}</p>
+                        <p><strong>Last Name:</strong> {{ viewprofile.user.last_name }}</p>
+                        <p><strong>Email:</strong> {{ viewprofile.user.email }}</p>
+                        <!-- Display user profile details -->
+                        <p><strong>Primary Location:</strong> {{ viewprofile.primary_location }}</p>
+                        <p><strong>Current Location:</strong> {{ viewprofile.current_location }}</p>
+                        <p><strong>Phone Number:</strong> {{ viewprofile.phone_number }}</p>
+                        <p><strong>Birth Date:</strong> {{ viewprofile.birth_date }}</p>
+                        <p><strong>Review Score:</strong> {{ viewprofile.review }}</p>
+                        <form action="{% url 'viewprofile' profile_id=viewprofile.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-primary" value="Send Message" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

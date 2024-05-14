@@ -7,7 +7,7 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
                     <li class="breadcrumb-item" aria-current="page">Dashboard</li>
                 </ul>
             </div>
@@ -20,798 +20,608 @@
     </div>
 </div>
 <div class="row">
-    <div id="add-book-modal" class="modal">
+    <div id="book-modal" class="modal">
         <div class="modal-content-lib">
-            <form method="POST" action="/add-book/">
-                {% csrf_token %}
-                {{ bookform |crispy }}
-                <input class="btn btn-primary" type="submit" value="Submit">
-            </form>
+            <h3 class="modal-black">My Library</h3>
+            <div class="search-box">
+                <i class="material-icons">&#xE8B6;</i>
+                <input type="text" id="searchUserBooks" placeholder="Search My Library" onkeypress="libraryPress(event)">
+
+            </div>
             <br>
-            <button
-                    class="btn btn-primary"
-                    onclick="closeModal('add-book-modal')">Close
+
+            <div class="user_books">
+                {% csrf_token %}
+                {% if user_books %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Publish Date</th>
+                            <th>Currently With</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for user_book in user_books %}
+                        <tr>
+                            <td>{{ user_book.book_id.book_title }}</td>
+                            <td>{{ user_book.book_id.book_author }}</td>
+                            <td>{{ user_book.book_id.genre }}</td>
+                            <td>{{ user_book.book_id.published_date }}</td>
+                            <td>{{ user_book.currently_with }}</td>
+                            <td>
+                                <form action="/remove-book/" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id"
+                                           value="{{ user_book.id }}"/>
+                                    <input type="submit"
+                                           class="btn btn-primary"
+                                           value="X"/>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <br>
+                    <!-- Pagination links for user_books -->
+                    <div class="pagination">
+                            <span class="step-links">
+                                {% if user_books.has_previous %}
+                                    <a href="?page=1">&laquo; first</a>
+                                    <a href="?page={{ user_books.previous_page_number }}">previous</a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ user_books.number }} of {{ user_books.paginator.num_pages }}.
+                                </span>
+
+                                {% if user_books.has_next %}
+                                    <a href="?page={{ user_books.next_page_number }}">next</a>
+                                    <a href="?page={{ user_books.paginator.num_pages }}">last &raquo;</a>
+                                {% endif %}
+                            </span>
+                    </div>
+                    {% else %}
+                    <div class="table-responsive">You don't have any books, getting adding!</div>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary" onclick="openBookModal('add-book-modal')">
+                    Add
+                </button>
+                <br>
+                <br>
+                <button class="btn btn-primary"
+                        onclick="closeModal('book-modal')">Close
+                </button>
+
+                <div id="add-book-modal" class="modal">
+                    <div class="modal-content-lib">
+                        <h3 class="modal-black">Add Books</h3>
+                        <form method="POST" action="/add-book/">
+                            {% csrf_token %}
+                            {{ bookform |crispy }}
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </form>
+                        <br>
+                        <button
+                                class="btn btn-primary"
+                                onclick="closeModal('add-book-modal')">Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="library-modal" class="modal">
+        <div class="modal-content-lib">
+            <h3 class="modal-black">Bingle Store</h3>
+            <div class="search-box">
+                <i class="material-icons">&#xE8B6;</i>
+                <input type="text" id="searchLibrary" placeholder="Search Store" onkeypress="storePress(event)">
+            </div>
+            <div class="library">
+                {% csrf_token %}
+                {% if library %}
+                <br>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Book Author</th>
+                            <th>Current Owner(s)</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for book in library %}
+                        <tr>
+                            <td>{{ book.book_title }}</td>
+                            <td>{{ book.book_author }}</td>
+                            <td style="max-width: 200px; overflow-x: auto;">
+                                {% for user_book in book.user_books_book.all %}
+                                {% if user_book.currently_with %}
+                                {{ user_book.currently_with.user }}
+                                {% if not forloop.last %}, {% endif %}
+                                {% else %}
+                                Not currently owned
+                                {% endif %}
+                                {% empty %}
+                                Not currently owned
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <!-- Only display the form if there are user_books -->
+                                {% if book.user_books_book.first %}
+                                <form action="{% url 'borrow' book.user_books_book.first.id %}" method="get">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-primary" value="Borrow" />
+                                </form>
+                                {% else %}
+                                <button class="btn btn-secondary" disabled>No Borrow Option</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No books available.</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <br>
+                    <!-- Pagination links for library -->
+                    <div class="pagination">
+                            <span class="step-links">
+                                {% if library.has_previous %}
+                                    <a href="?library_page=1">&laquo; first</a>
+                                    <a href="?library_page={{ library.previous_page_number }}">previous</a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ library.number }} of {{ library.paginator.num_pages }}.
+                                </span>
+
+                                {% if library.has_next %}
+                                    <a href="?library_page={{ library.next_page_number }}">next</a>
+                                    <a href="?library_page={{ library.paginator.num_pages }}">last &raquo;</a>
+                                {% endif %}
+                            </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <button class="btn btn-primary"
+                    onclick="closeModal('library-modal')">Close
+            </button>
+        </div>
+
+    </div>
+
+    <div id="borrow-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-black">Borrow Requests</h3>
+            <div class="borrow">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <tr>
+                            <th>Title</th>
+                            <th>Borrower</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Status</th>
+                        </tr>
+                        {% if pre_booking %}
+                        {% for prebook in pre_booking %}
+                        <tr>
+                            <td>{{ prebook.user_book_id.book_id.book_title }}</td>
+                            <td>{{ prebook.borrower_id }}</td>
+                            <td>{{ prebook.from_date }}</td>
+                            <td>{{ prebook.to_date }}</td>
+                            {% if prebook.status == "pending" %}
+                            <td>
+                                <form action="{% url 'approve_borrow_request' prebook.user_book_id.id %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id"
+                                           value="{{ prebook.user_book_id.id }}"/>
+                                    <input type="submit" class="btn btn-success"
+                                           value="Approve"/>
+                                </form>
+                                <br>
+                                <form action="{% url 'deny_borrow_request' prebook.user_book_id.id %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id"
+                                           value="{{ prebook.user_book_id.id }}"/>
+                                    <input type="submit" class="btn btn-danger " value="Deny"/>
+                                </form>
+                            </td>
+                            {% elif prebook.status == "approved" %}
+                            <td>Approved</td>
+                            {% elif prebook.status == "denied" %}
+                            <td>Denied</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+            <button class="btn btn-primary"
+                    onclick="closeModal('borrow-modal')">Close
+            </button>
+        </div>
+
+    </div>
+
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-black">Booking History</h3>
+            <div class="booking">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <tr>
+                            <th>Title</th>
+                            <th>Owner</th>
+                            <th>Borrower</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Returned</th>
+                            <th>Action</th>
+                        </tr>
+                        {% if owner_bookings %}
+                        {% for booked in owner_bookings %}
+                        <tr>
+                            <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                            <td>{{ booked.owner_id }}</td>
+                            <td>{{ booked.borrower_id }}</td>
+                            <td>{{ booked.from_date }}</td>
+                            <td>{{ booked.to_date }}</td>
+                            <td>{{ booked.returned }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% if borrower_bookings %}
+                        {% for booked in borrower_bookings %}
+                        <tr>
+                            <td>{{ booked.user_book_id.book_id.book_title }}</td>
+                            <td>{{ booked.owner_id }}</td>
+                            <td>{{ booked.borrower_id }}</td>
+                            <td>{{ booked.from_date }}</td>
+                            <td>{{ booked.to_date }}</td>
+                            <td>{{ booked.returned }}</td>
+                            <td>
+                                {% if not booked.returned %}
+                                <form action="{% url 'return_book' booked.user_book_id.id %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id"
+                                           value="{{ booked.user_book_id.id }}"/>
+                                    <input type="submit" class="btn btn-success"
+                                           value="Return Book"/>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+            <button class="btn btn-primary"
+                    onclick="closeModal('booking-modal')">Close
             </button>
         </div>
     </div>
-</div>
-<div id="book-modal" class="modal">
-    <div class="modal-content-lib">
-        <h3 class="modal-black">My Library</h3>
-        <div class="user_books">
-            <div class="search-box">
-                <i class="material-icons">&#xE8B6;</i>
-                <input type="text" id="searchLibrary" placeholder="Search Library">
-                <button class="btn btn-primary" onclick="searchLibrary()">
-                    Search
-                </button>
-            </div>
-            <br>
-            {% csrf_token %}
-            {% if user_books %}
-            <div class="table-responsive">
-                <table class="table table-hover table-borderless mb-0">
-                    <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Genre</th>
-                        <th>Publish Date</th>
-                        <th>Currently With</th>
-                        <th>Action</th>
-                    </tr>
-                    {% for user_book in user_books %}
-                    <tr>
-                        <td>{{ user_book.book_id.book_title }}</td>
-                        <td>{{ user_book.book_id.book_author }}</td>
-                        <td>{{ user_book.book_id.genre }}</td>
-                        <td>{{ user_book.book_id.published_date }}</td>
-                        <td>{{ user_book.currently_with }}</td>
-                        <td>
-                            <form action="/remove-book/" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="book_id"
-                                       value="{{ user_book.id }}"/>
-                                <input type="submit"
-                                       class="btn btn-primary"
-                                       value="X"/>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <div class="pagination">
-                                <span class="step-links">
-                                    {% if user_books.has_previous %}
-                                        <a href="?page=1">&laquo; first</a>
-                                        <a href="?page={{ user_books.previous_page_number }}">previous</a>
-                                    {% endif %}
+    <div class="row">
 
-                                    <span class="current">
-                                        Page {{ user_books.number }} of {{ user_books.paginator.num_pages }}.
-                                    </span>
-
-                                    {% if user_books.has_next %}
-                                        <a href="?page={{ user_books.next_page_number }}">next</a>
-                                        <a href="?page={{ user_books.paginator.num_pages }}">last &raquo;</a>
-                                    {% endif %}
-                                </span>
-                </div>
-                {% else %}
-                <div>You don't have any books, getting adding!</div>
-                {% endif %}
-            </div>
-        </div>
-        <button class="btn btn-primary"
-                onclick="closeModal('book-modal')">Close
-        </button>
-    </div>
-</div>
-
-<div id="library-modal" class="modal">
-    <div class="modal-content-lib">
-        <h3 class="modal-black">Bingle Store</h3>
-        <div class="library">
-            {% csrf_token %}
-            {% if library %}
-            <div class="search-box">
-                <i class="material-icons">&#xE8B6;</i>
-                <input type="text" id="searchStore" placeholder="Search Store">
-            </div>
-            <br>
-            <div class="table-responsive">
-                <table class="table table-hover table-borderless mb-0">
-                    <tr>
-                        <th>Book Title</th>
-                        <th>Book Author</th>
-                        <th>Current Owner(s)</th>
-                        <th>Action</th>
-                    </tr>
-                    {% for book in library %}
-                    {% if book.user_books_book.first.owner_book_id.user != request.user %}
-                    <tr>
-                        <td>{{ book.book_title }}</td>
-                        <td>{{ book.book_author }}</td>
-                        <td style="max-width: 200px; overflow-x: auto;">
-                            {% for user_book in book.user_books_book.all %}
-                            {% if user_book.currently_with %}
-                            {{ user_book.currently_with.user }}
-                            {% if not forloop.last %}, {% endif %}
-                            {% else %}
-                            Not currently owned
-                            {% endif %}
-                            {% empty %}
-                            Not currently owned
-                            {% endfor %}
-                        </td>
-                        <td>
-                            <form action="{% url 'borrow' book.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="submit" class="btn btn-primary"
-                                       value="Borrow"/>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </table>
-                {% endif %}
-            </div>
-        </div>
-        <button class="btn btn-primary"
-                onclick="closeModal('library-modal')">Close
-        </button>
-    </div>
-
-</div>
-
-<div id="borrow-modal" class="modal">
-    <div class="modal-content">
-        <h3 class="modal-black">Borrow Requests</h3>
-        <div class="borrow">
-            <div class="table-responsive">
-                <table class="table table-hover table-borderless mb-0">
-                    <tr>
-                        <th>Title</th>
-                        <th>Borrower</th>
-                        <th>From Date</th>
-                        <th>To Date</th>
-                        <th>Status</th>
-                    </tr>
-                    {% if pre_booking %}
-                    {% for prebook in pre_booking %}
-                    <tr>
-                        <td>{{ prebook.user_book_id.book_id.book_title }}</td>
-                        <td>{{ prebook.borrower_id }}</td>
-                        <td>{{ prebook.from_date }}</td>
-                        <td>{{ prebook.to_date }}</td>
-                        {% if prebook.status == "pending" %}
-                        <td>
-                            <form action="{% url 'approve_borrow_request' prebook.user_book_id.id %}"
-                                  method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="book_id"
-                                       value="{{ prebook.user_book_id.id }}"/>
-                                <input type="submit" class="btn btn-success"
-                                       value="Approve"/>
-                            </form>
-                            <br>
-                            <form action="{% url 'deny_borrow_request' prebook.user_book_id.id %}"
-                                  method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="book_id"
-                                       value="{{ prebook.user_book_id.id }}"/>
-                                <input type="submit" class="btn btn-danger " value="Deny"/>
-                            </form>
-                        </td>
-                        {% elif prebook.status == "approved" %}
-                        <td>Approved</td>
-                        {% elif prebook.status == "denied" %}
-                        <td>Denied</td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                    {% endif %}
-                </table>
-            </div>
-        </div>
-        <button class="btn btn-primary"
-                onclick="closeModal('borrow-modal')">Close
-        </button>
-    </div>
-
-</div>
-
-<div id="booking-modal" class="modal">
-    <div class="modal-content">
-        <h3 class="modal-black">Booking History</h3>
-        <div class="booking">
-            <div class="table-responsive">
-                <table class="table table-hover table-borderless mb-0">
-                    <tr>
-                        <th>Title</th>
-                        <th>Owner</th>
-                        <th>Borrower</th>
-                        <th>From Date</th>
-                        <th>To Date</th>
-                        <th>Returned</th>
-                        <th>Action</th>
-                    </tr>
-                    {% if owner_bookings %}
-                    {% for booked in owner_bookings %}
-                    <tr>
-                        <td>{{ booked.user_book_id.book_id.book_title }}</td>
-                        <td>{{ booked.owner_id }}</td>
-                        <td>{{ booked.borrower_id }}</td>
-                        <td>{{ booked.from_date }}</td>
-                        <td>{{ booked.to_date }}</td>
-                        <td>{{ booked.returned }}</td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                    {% endif %}
-                    {% if borrower_bookings %}
-                    {% for booked in borrower_bookings %}
-                    <tr>
-                        <td>{{ booked.user_book_id.book_id.book_title }}</td>
-                        <td>{{ booked.owner_id }}</td>
-                        <td>{{ booked.borrower_id }}</td>
-                        <td>{{ booked.from_date }}</td>
-                        <td>{{ booked.to_date }}</td>
-                        <td>{{ booked.returned }}</td>
-                        <td>
-                            {% if not booked.returned %}
-                            <form action="{% url 'return_book' booked.user_book_id.id %}"
-                                  method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="book_id"
-                                       value="{{ booked.user_book_id.id }}"/>
-                                <input type="submit" class="btn btn-success"
-                                       value="Return Book"/>
-                            </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    {% endif %}
-                </table>
-            </div>
-        </div>
-        <button class="btn btn-primary"
-                onclick="closeModal('booking-modal')">Close
-        </button>
-    </div>
-</div>
-<div class="row">
-
-    <div class="col-xxl-3 col-md-6">
-        <a class="nav-link" href="#" onclick="openViewModal('book-modal')">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 me-3">
-                            <h2 class="mb-1">My Library</h2>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="avtar avtar-l bg-light-primary rounded-circle">
-                                <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/book.png' %}">
+        <div class="col-xxl-3 col-md-6">
+            <a class="nav-link" href="#" onclick="openViewModal('book-modal')">
+                <div class="card bg-yellow-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <h2 class="mb-1">My Library</h2>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/book.png' %}">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xxl-3 col-md-6">
-        <a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 me-3">
-                            <h2 class="mb-1">Bingle Store</h2>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="avtar avtar-l bg-light-primary rounded-circle">
-                                <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/book store.png' %}">
+            </a>
+        </div>
+        <div class="col-xxl-3 col-md-6">
+            <a class="nav-link" href="#" onclick="openLibraryModal('library-modal')">
+                <div class="card bg-yellow-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <h2 class="mb-1">Bingle Store</h2>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/book store.png' %}">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
+            </a>
+        </div>
 
 
-    {#            Adding Borrow requests here#}
-    <div class="col-xxl-3 col-md-6">
-        <a class=" nav-link" href="#"
-           onclick="openViewModal('borrow-modal')">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 me-3">
-                            <h2 class="mb-1">Borrow Requests</h2>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="avtar avtar-l bg-light-primary rounded-circle">
-                                <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/pending.png' %}">
+        {#            Adding Borrow requests here#}
+        <div class="col-xxl-3 col-md-6">
+            <a class=" nav-link" href="#"
+               onclick="openViewModal('borrow-modal')">
+                <div class="card bg-yellow-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <h2 class="mb-1">Borrow Requests</h2>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/pending.png' %}">
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
+            </a>
+        </div>
 
-    <div class="col-xxl-3 col-md-6">
-        <a class="nav-link" href="#" onclick="openBookingModal('booking-modal')">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 me-3">
-                            <h2 class="mb-1">Booking History</h2>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="avtar avtar-l bg-light-primary rounded-circle">
-                                <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/history.png' %}">
+        <div class="col-xxl-3 col-md-6">
+            <a class="nav-link" href="#" onclick="openBookingModal('booking-modal')">
+                <div class="card bg-yellow-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <h2 class="mb-1">Booking History</h2>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="avtar avtar-l bg-light-primary rounded-circle">
+                                    <img class="user-avtar wid-50 rounded-circle" src="{% static 'mainapp/images/dashboard/history.png' %}">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
-                <h4> My Recommendations </h4>
-                <p>Based on your previous booking, here are some recommendations.</p>
-            </div>
-            <div>
-                <table class="table">
-                    <tr>
-                        <td><h5>Book Title</h5></td>
-                        <td><h5>Book Author</h5></td>
-                        <td><h5>Genre</h5></td>
-                    </tr>
-                    {% for rec in recs %}
-                    <tr>
-                        <td>{{ rec.book_title }}</td>
-                        <td>{{ rec.book_author }}</td>
-                        <td>{{ rec.genre }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4> My Recommendations </h4>
+                    <p>Based on your previous booking, here are some recommendations.</p>
+                </div>
+                <div>
+                    <table class="table">
+                        <tr>
+                            <td><h5>Book Title</h5></td>
+                            <td><h5>Book Author</h5></td>
+                            <td><h5>Genre</h5></td>
+                        </tr>
+                        {% for rec in recs %}
+                        <tr>
+                            <td>{{ rec.book_title }}</td>
+                            <td>{{ rec.book_author }}</td>
+                            <td>{{ rec.genre }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-body border-bottom pb-0">
-                <div class="d-flex align-items-center justify-content-between">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
                     <h4>Recent Activity</h4>
-                    <div class="dropdown">
-                        <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Today</a> <a class="dropdown-item" href="#">Weekly</a> <a class="dropdown-item" href="#">Monthly</a></div>
+                    <p>Based on your recent activity, here are your latest borrows and lends.</p>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade active show">
+                        <ul class="list-group list-group-flush">
+                            {% if owner_bookings %}
+                            {% for booked in owner_bookings %}
+                            {% if forloop.counter <= 3 %} {# Display only the first 3 items #}
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 ms-3">
+                                        <div class="row g-1">
+                                            <div class="col-6">
+                                                <h6 class="mb-0">{{ booked.user_book_id.book_id.book_title }} has been lended to {{ booked.borrower_id.first_name }} </h6>
+                                                <p class="text-muted mb-0"><small>from {{ booked.from_date }} - {{ booked.to_date }}</small></p>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <form action="{% url 'request_return_book' booked.user_book_id.id %}"
+                                                      method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="book_id"
+                                                           value="{{ booked.user_book_id.id }}"/>
+                                                    <input type="submit" class="btn btn-success"
+                                                           value="Request Book"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            {% if borrower_bookings %}
+                            {% for booked in borrower_bookings %}
+                            {% if forloop.counter <= 3 %} {# Display only the first 3 items #}
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 ms-3">
+                                        <div class="row g-1">
+                                            <div class="col-6">
+                                                <h6 class="mb-0">{{ booked.user_book_id.book_id.book_title }} has been borrowed from {{ booked.owner_id.user.first_name }} {{ booked.owner_id.user.last_name }}</h6>
+                                                <p class="text-muted mb-0"><small>from {{ booked.from_date }} - {{ booked.to_date }}</small></p>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                {% if not booked.returned %}
+                                                <form action="{% url 'return_book' booked.user_book_id.id %}"
+                                                      method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="book_id"
+                                                           value="{{ booked.user_book_id.id }}"/>
+                                                    <input type="submit" class="btn btn-danger"
+                                                           value="Return Book"/>
+                                                </form>
+                                                <p class="text-danger mb-0">Please, return the book on time.</p>
+
+                                                {% else %}
+                                                <p class="text-success mb-0"> Book has been returned.</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
-            </div>
-
-            <table class="table table-hover table-borderless mb-0">
-                <tr>
-                    <th>Title</th>
-                    <th>Owner</th>
-                    <th>Borrower</th>
-                    <th>From Date</th>
-                    <th>To Date</th>
-                    <th>Returned</th>
-                    <th>Action</th>
-                </tr>
-                {% if owner_bookings %}
-                {% for booked in owner_bookings %}
-                <tr>
-                    <td>{{ booked.user_book_id.book_id.book_title }}</td>
-                    <td>{{ booked.owner_id }}</td>
-                    <td>{{ booked.borrower_id }}</td>
-                    <td>{{ booked.from_date }}</td>
-                    <td>{{ booked.to_date }}</td>
-                    <td>{{ booked.returned }}</td>
-                    <td></td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-                {% if borrower_bookings %}
-                {% for booked in borrower_bookings %}
-                <tr>
-                    <td>{{ booked.user_book_id.book_id.book_title }}</td>
-                    <td>{{ booked.owner_id }}</td>
-                    <td>{{ booked.borrower_id }}</td>
-                    <td>{{ booked.from_date }}</td>
-                    <td>{{ booked.to_date }}</td>
-                    <td>{{ booked.returned }}</td>
-                    <td>
-                        {% if not booked.returned %}
-                        <form action="{% url 'return_book' booked.user_book_id.id %}"
-                              method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="book_id"
-                                   value="{{ booked.user_book_id.id }}"/>
-                            <input type="submit" class="btn btn-success"
-                                   value="Return Book"/>
-                        </form>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </table>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade active show" id="analytics-tab-1-pane" role="tabpanel" aria-labelledby="analytics-tab-1" tabindex="0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border">AI</div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Apple Inc.</h6>
-                                            <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">$210,000</h6>
-                                            <p class="text-danger mb-0"><i class="ti ti-arrow-down-left"></i> 10.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border" data-bs-toggle="tooltip" data-bs-title="10,000 Tracks"><span>SM</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Spotify Music</h6>
-                                            <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">- 10,000</h6>
-                                            <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i> 30.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border bg-light-primary" data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Medium</h6>
-                                            <p class="text-muted mb-0"><small>06:30 pm</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">-26</h6>
-                                            <p class="text-warning mb-0"><i class="ti ti-arrows-left-right"></i> 5%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border" data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>U</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Uber</h6>
-                                            <p class="text-muted mb-0"><small>08:40 pm</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">+210,000</h6>
-                                            <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i> 10.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane fade" id="analytics-tab-2-pane" role="tabpanel" aria-labelledby="analytics-tab-2" tabindex="0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border" data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>U</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Uber</h6>
-                                            <p class="text-muted mb-0"><small>08:40 pm</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">+210,000</h6>
-                                            <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i> 10.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border">AI</div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Apple Inc.</h6>
-                                            <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">$210,000</h6>
-                                            <p class="text-danger mb-0"><i class="ti ti-arrow-down-left"></i> 10.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border" data-bs-toggle="tooltip" data-bs-title="10,000 Tracks"><span>SM</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Spotify Music</h6>
-                                            <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">- 10,000</h6>
-                                            <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i> 30.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border bg-light-primary" data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Medium</h6>
-                                            <p class="text-muted mb-0"><small>06:30 pm</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">-26</h6>
-                                            <p class="text-warning mb-0"><i class="ti ti-arrows-left-right"></i> 5%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane fade" id="analytics-tab-3-pane" role="tabpanel" aria-labelledby="analytics-tab-3" tabindex="0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border" data-bs-toggle="tooltip" data-bs-title="10,000 Tracks"><span>SM</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Spotify Music</h6>
-                                            <p class="text-muted mb-0"><small>#ABLE-PRO-T10232</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">- 10,000</h6>
-                                            <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i> 30.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border bg-light-primary" data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>MD</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Medium</h6>
-                                            <p class="text-muted mb-0"><small>06:30 pm</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">-26</h6>
-                                            <p class="text-warning mb-0"><i class="ti ti-arrows-left-right"></i> 5%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border" data-bs-toggle="tooltip" data-bs-title="143 Posts"><span>U</span></div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Uber</h6>
-                                            <p class="text-muted mb-0"><small>08:40 pm</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">+210,000</h6>
-                                            <p class="text-success mb-0"><i class="ti ti-arrow-up-right"></i> 10.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="avtar avtar-s border">AI</div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="row g-1">
-                                        <div class="col-6">
-                                            <h6 class="mb-0">Apple Inc.</h6>
-                                            <p class="text-muted mb-0"><small>#ABLE-PRO-T00232</small></p>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h6 class="mb-1">$210,000</h6>
-                                            <p class="text-danger mb-0"><i class="ti ti-arrow-down-left"></i> 10.6%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <div class="d-grid"><button class="btn btn-outline-secondary d-grid"><span class="text-truncate w-100">View all Transaction History</span></button></div>
+                <div class="card-footer">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <div class="d-grid"><button class="btn btn-outline-secondary d-grid bg-blue-600" onclick="openBookingModal('booking-modal')"><span class="text-truncate w-100 text-white">View All</span></button></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <h4>Top Borrow/Lended Books</h4>
-                    <div class="dropdown">
-                        <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="ti ti-dots-vertical f-18"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Today</a>
-                            <a class="dropdown-item" href="#">Weekly</a>
-                            <a class="dropdown-item" href="#">Monthly</a>
-                        </div>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h4>Top Borrow/Lended Books</h4>
                     </div>
-                </div>
-                <div id="total-income-graph"></div>
-                <div class="row g-3 mt-3">
-                    <div class="col-sm-6">
-                        <div class="bg-body p-3 rounded">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="flex-shrink-0">
-                                                    <span class="p-1 d-block bg-primary rounded-circle">
-                                                        <span class="visually-hidden">New alerts</span>
-                                                    </span>
+                    <div id="borrow-lend-graph"></div>
+                    <div class="row g-3 mt-3">
+                        {% for book, count in most_borrowed_books %}
+                        <div class="col-sm-6">
+                            <div class="bg-body p-3 rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="flex-shrink-0">
+                                        {% if forloop.counter0|divisibleby:4 %}
+                                        <span class="p-1 d-block bg-warning rounded-circle">
+                                        {% elif forloop.counter0|divisibleby:3 %}
+                                            <span class="p-1 d-block bg-info rounded-circle">
+                                        {% elif forloop.counter0|divisibleby:2 %}
+                                            <span class="p-1 d-block bg-success rounded-circle">
+                                        {% else %}
+                                            <span class="p-1 d-block bg-danger rounded-circle">
+                                        {% endif %}
+                                            <span class="visually-hidden">New alerts</span>
+                                        </span>
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <p class="mb-0">{{ book.book_title }}</p>
+                                    </div>
                                 </div>
-                                <div class="flex-grow-1 ms-2">
-                                    <p class="mb-0">Book01</p>
-                                </div>
+                                <h6 class="mb-0">
+                                    Borrowed/Lent
+                                    <small class="text-muted">
+                                        <i class="ti ti-chevrons-up"></i>
+                                        {{ count }} times
+                                    </small>
+                                </h6>
                             </div>
-                            <h6 class="mb-0">
-                                $23,876
-                                <small class="text-muted">
-                                    <i class="ti ti-chevrons-up"></i>
-                                    +$763,43
-                                </small>
-                            </h6>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="bg-body p-3 rounded">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="flex-shrink-0">
-                                                    <span class="p-1 d-block bg-warning rounded-circle">
-                                                        <span class="visually-hidden">New alerts</span>
-                                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-2">
-                                    <p class="mb-0">Book02</p>
-                                </div>
-                            </div>
-                            <h6 class="mb-0">
-                                $23,876
-                                <small class="text-muted">
-                                    <i class="ti ti-chevrons-up"></i>
-                                    +$763,43
-                                </small>
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="bg-body p-3 rounded">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="flex-shrink-0">
-                                                    <span class="p-1 d-block bg-success rounded-circle">
-                                                        <span class="visually-hidden">New alerts</span>
-                                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-2">
-                                    <p class="mb-0">Book03</p>
-                                </div>
-                            </div>
-                            <h6 class="mb-0">
-                                $23,876
-                                <small class="text-muted">
-                                    <i class="ti ti-chevrons-up"></i>
-                                    +$763,43
-                                </small>
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="bg-body p-3 rounded">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="flex-shrink-0">
-                                                    <span class="p-1 d-block bg-light-primary rounded-circle">
-                                                        <span class="visually-hidden">New alerts</span>
-                                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-2">
-                                    <p class="mb-0">Book01</p>
-                                </div>
-                            </div>
-                            <h6 class="mb-0">
-                                $23,876
-                                <small class="text-muted">
-                                    <i class="ti ti-chevrons-up"></i>
-                                    +$763,43
-                                </small>
-                            </h6>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+           // Initialize an empty array to store series data
+           var seriesData = [];
+           // Initialize an array to store labels
+           var labels = [];
 
-<!--    <div class="row">-->
-<!--        <div class="col-md-5">-->
-<!--            <div class="img-box">-->
-<!--                <img src="{% static 'mainapp/images/experience-img.jpg' %}" alt="" />-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-</div>
+           // Iterate over the most_borrowed_books data passed from Django template
+           {% for book, count in most_borrowed_books %}
+               // Append the count of each book to the seriesData array
+               seriesData.push({{ count }});
+               // Append the title of each book to the labels array
+               labels.push("{{ book.book_title }}");
+           {% endfor %}
+
+           // Configure and render the ApexCharts using the generated seriesData and labels
+           var options = {
+               chart: {
+                   height: 320,
+                   type: "donut",
+                   id: "borrow-lend-graph"
+               },
+               series: seriesData,
+               labels: labels,
+               colors: ["#4680FF", "#E58A00", "#2CA87F", "#4680FF"],
+               fill: {
+                   opacity: [1, 1, 1, .3]
+               },
+               legend: {
+                   show: false
+               },
+               plotOptions: {
+                   pie: {
+                       donut: {
+                           size: "65%",
+                           labels: {
+                               show: true,
+                               name: {
+                                   show: true
+                               },
+                               value: {
+                                   show: true
+                               }
+                           }
+                       }
+                   }
+               },
+               dataLabels: {
+                   enabled: false
+               },
+               responsive: [{
+                   breakpoint: 575,
+                   options: {
+                       chart: {
+                           height: 250
+                       },
+                       plotOptions: {
+                           pie: {
+                               donut: {
+                                   size: "65%",
+                                   labels: {
+                                       show: false
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }]
+           };
+
+           // Render the chart
+           var chart = new ApexCharts(document.querySelector("#borrow-lend-graph"), options);
+           chart.render();
+       });
+</script>
 {% endblock %}
