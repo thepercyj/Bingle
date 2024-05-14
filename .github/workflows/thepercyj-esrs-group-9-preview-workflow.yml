@@ -1,0 +1,55 @@
+name: Architect Preview Deployment
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+
+env:
+  ARCHITECT_GENERATED: true
+  ARCHITECT_PREVIEW: true
+  PREVIEW_PREFIX: preview-
+  PREVIEW_TAG: preview-${{ github.event.number }}
+  PREVIEW_MAINLINE_BRANCH: main
+  COMPONENT_FILE_PATH: architect.yml
+  ARCHITECT_ACCOUNT: thepercyj
+  CLUSTER_NAME: esrs
+  ENVIRONMENT_TTL: 
+
+jobs:
+  architect_remove_preview:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install Architect CLI
+        run: npm install -g @architect-io/cli
+      - name: Login to Architect Cloud
+        run: architect login -e ${{ secrets.ARCHITECT_EMAIL }} -p ${{ secrets.ARCHITECT_PASSWORD }}
+      - name: Remove components from preview environment
+        run: architect destroy -e ${{ env.PREVIEW_TAG }} --auto-approve
+      - name: Remove preview environment
+        run: architect environment:destroy ${{ env.PREVIEW_TAG }} --auto-approve
+  architect_create_preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: crazy-max/ghaction-github-runtime@v2 # Exports internal envs for Github Actions. Required for register caching to work.
+      - name: Install Architect CLI
+        run: npm install -g @architect-io/cli
+      - name: Login to Architect Cloud
+        run: architect login -e ${{ secrets.ARCHITECT_EMAIL }} -p ${{ secrets.ARCHITECT_PASSWORD }} # These secrets were created on your behalf
+      - name: Create env if not exists
+        run: architect environment:create ${{ env.PREVIEW_TAG }} --cluster ${{ env.CLUSTER_NAME }} ${{ env.ENVIRONMENT_TTL }}
+      - name: Register and deploy component
+        run: architect deploy --auto-approve -e ${{ env.PREVIEW_TAG }} ${{ env.COMPONENT_FILE_PATH }}
