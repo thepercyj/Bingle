@@ -182,6 +182,15 @@ def new_home(request):
     except EmptyPage:
         library = library_paginator.page(library_paginator.num_pages)
 
+    # Pagination for Recent Activity
+    paginator = Paginator(owner_bookings, 3)
+    page_number = request.GET.get('page')
+    owner_page_obj = paginator.get_page(page_number)
+
+    paginator = Paginator(borrower_bookings, 3)
+    page_number = request.GET.get('page')
+    borrower_page_obj = paginator.get_page(page_number)
+
     context = {
         'bookform': form,
         'user_books': user_books,
@@ -195,6 +204,8 @@ def new_home(request):
         'total_bookings': total_bookings,
         'recs': recs,
         'most_borrowed_books': most_borrowed_books,
+        'owner_page_obj': owner_page_obj,
+        'borrower_page_obj': borrower_page_obj,
         'show_sidebar': True,
     }
 

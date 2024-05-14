@@ -432,6 +432,7 @@
                         <ul class="list-group list-group-flush">
                             {% if owner_bookings %}
                             {% for booked in owner_bookings %}
+                            {% if forloop.counter <= 3 %} {# Display only the first 3 items #}
                             <li class="list-group-item">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 ms-3">
@@ -454,10 +455,12 @@
                                     </div>
                                 </div>
                             </li>
+                            {% endif %}
                             {% endfor %}
                             {% endif %}
                             {% if borrower_bookings %}
                             {% for booked in borrower_bookings %}
+                            {% if forloop.counter <= 3 %} {# Display only the first 3 items #}
                             <li class="list-group-item">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 ms-3">
@@ -486,6 +489,7 @@
                                     </div>
                                 </div>
                             </li>
+                            {% endif %}
                             {% endfor %}
                             {% endif %}
                         </ul>
