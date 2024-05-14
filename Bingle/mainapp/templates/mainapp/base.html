@@ -90,7 +90,7 @@
                         <svg class="pc-icon">
                             <use xlink:href="#custom-notification"></use>
                         </svg>
-                        {% if notification_count %}
+                        {% if unread_notification_count %}
                         <span class="badge bg-success pc-h-badge">{{ unread_notification_count }}</span>
                         {% endif %}
                     </a>
@@ -108,7 +108,7 @@
                             {% if notifications %}
                             {% if unread_notifications %}
                             <p class="text-span">Unread</p>
-                            {% for notification in notifications %}
+                            {% for notification in unread_notifications %}
                             <div class="card mb-2">
                                 <div class="card-body">
                                     <div class="d-flex">

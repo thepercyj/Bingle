@@ -13,7 +13,7 @@ def get_user_notifications(request):
         notifications = UserNotification.objects.filter(recipient__user=request.user)
         read_notifications = notifications.filter(read=True)  # get the read notifications
         unread_notifications = notifications.filter(read=False)  # get the unread notifications
-        unread_notification_count = notifications.count()  # get the count of unread notifications
+        unread_notification_count = unread_notifications.count()  # get the count of unread notifications
         read_notification_count = read_notifications.count()
 
         notifications = reversed(notifications)
