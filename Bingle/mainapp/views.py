@@ -652,7 +652,7 @@ def view_profile(request, profile_id):
             print(e)
             return redirect('search')
 
-    return render(request, 'users_profiles.html',
+    return render(request, 'mainapp/users_profiles.html',
                   {'viewprofile': viewprofile, 'pre_message': pre_message, 'show_sidebar': True})
 
 
