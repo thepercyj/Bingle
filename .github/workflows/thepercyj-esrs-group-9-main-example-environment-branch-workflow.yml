@@ -11,7 +11,7 @@ env:
   COMPONENT_FILE_PATH: architect.yml
   ARCHITECT_ACCOUNT: thepercyj
   COMPONENT_NAME: esrs-group-9
-  ENVIRONMENT_NAME: example-environment
+  ENVIRONMENT_NAME: production
   BRANCH_NAME: main
   CLUSTER_NAME: architect
 
