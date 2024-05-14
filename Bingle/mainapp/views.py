@@ -586,7 +586,7 @@ def view_profile(request, profile_id):
                     )
                     new_message.save()
 
-                    return redirect('chat', conversation_idconversation_id=existing_conversation.id)
+                    return redirect('chat', conversation_id=existing_conversation.id)
                 else:
                     new_conversation_object = Conversation(id_1=our_profile, id_2=viewprofile)
                     new_conversation_object.save()
@@ -1253,7 +1253,7 @@ def new_conv(request):
 
     # If the form has not been submitted, display the new conversation page
     else:
-        return render(request, 'mainapp/new_conversation.html',
+        return render(request, 'new_conversation.html',
                       {'users': UserProfile.objects.exclude(user=request.user)})
 
 
