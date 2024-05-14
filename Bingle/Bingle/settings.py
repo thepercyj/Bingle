@@ -23,9 +23,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'messagesApp/static'),
     os.path.join(BASE_DIR, 'mainapp/static'),
 
-    # Add more paths for other apps if needed
-    # os.path.join(BASE_DIR, 'app1/static'),
-    # os.path.join(BASE_DIR, 'app2/static'),
 ]
 
 # Quick-start development settings - unsuitable for production
@@ -51,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cryptography',
     'mainapp',
-    'messagesApp',
     'crispy_forms',
     'crispy_bootstrap5',
     'recommendations',
