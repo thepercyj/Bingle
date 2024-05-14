@@ -759,7 +759,7 @@ def borrow(request, user_book_id):
                 messages.success(request, 'Borrow request saved successfully!')
 
                 # Redirect to appropriate chat page
-                return redirect('chat', conversation_id=conversation.id)
+                return redirect('chat')
 
         except Exception as e:
             print(e)
