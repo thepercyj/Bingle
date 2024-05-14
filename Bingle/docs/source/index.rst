@@ -12,7 +12,6 @@ Welcome to Bingle App's documentation!
 
    mainapp
    recommendations
-   messagesApp
 
 Indices and tables
 ==================
