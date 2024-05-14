@@ -15,6 +15,7 @@ Portal can be accessed from [Bingle](http://bingle.amanthapa.com.np)
 ### Code Docstrings
 - Code docstrings have been generated using Sphinx that describes all our function and can be found [here](Bingle/docs).
 
+### Issues
 All the tickets opened for bugs and issues can be found [Here](https://github.com/thepercyj/esrs-group-9/issues?q=is%3Aissue+is%3Aclosed).
 
 Follow us for more exciting future projects below:
