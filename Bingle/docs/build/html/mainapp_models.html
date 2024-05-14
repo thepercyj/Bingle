@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MainApp Models &mdash; Bingle App 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MainApp Views" href="mainapp_views.html" />
+    <link rel="prev" title="MainApp Forms" href="mainapp_forms.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Bingle App
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="mainapp.html">MainApp Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mainapp_context_processors.html">MainApp Context Processors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mainapp_forms.html">MainApp Forms</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MainApp Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.Book"><code class="docutils literal notranslate"><span class="pre">Book</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Book.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Book.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.book_author"><code class="docutils literal notranslate"><span class="pre">Book.book_author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.book_title"><code class="docutils literal notranslate"><span class="pre">Book.book_title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.genre"><code class="docutils literal notranslate"><span class="pre">Book.genre</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.get_next_by_published_date"><code class="docutils literal notranslate"><span class="pre">Book.get_next_by_published_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.get_previous_by_published_date"><code class="docutils literal notranslate"><span class="pre">Book.get_previous_by_published_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.id"><code class="docutils literal notranslate"><span class="pre">Book.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.objects"><code class="docutils literal notranslate"><span class="pre">Book.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.published_date"><code class="docutils literal notranslate"><span class="pre">Book.published_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Book.user_books_book"><code class="docutils literal notranslate"><span class="pre">Book.user_books_book</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.Booking"><code class="docutils literal notranslate"><span class="pre">Booking</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Booking.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Booking.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.borrower_id"><code class="docutils literal notranslate"><span class="pre">Booking.borrower_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.borrower_id_id"><code class="docutils literal notranslate"><span class="pre">Booking.borrower_id_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.from_date"><code class="docutils literal notranslate"><span class="pre">Booking.from_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.get_next_by_from_date"><code class="docutils literal notranslate"><span class="pre">Booking.get_next_by_from_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.get_next_by_to_date"><code class="docutils literal notranslate"><span class="pre">Booking.get_next_by_to_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.get_previous_by_from_date"><code class="docutils literal notranslate"><span class="pre">Booking.get_previous_by_from_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.get_previous_by_to_date"><code class="docutils literal notranslate"><span class="pre">Booking.get_previous_by_to_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.id"><code class="docutils literal notranslate"><span class="pre">Booking.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.objects"><code class="docutils literal notranslate"><span class="pre">Booking.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.owner_id"><code class="docutils literal notranslate"><span class="pre">Booking.owner_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.owner_id_id"><code class="docutils literal notranslate"><span class="pre">Booking.owner_id_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.returned"><code class="docutils literal notranslate"><span class="pre">Booking.returned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.to_date"><code class="docutils literal notranslate"><span class="pre">Booking.to_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.user_book_id"><code class="docutils literal notranslate"><span class="pre">Booking.user_book_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Booking.user_book_id_id"><code class="docutils literal notranslate"><span class="pre">Booking.user_book_id_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.Conversation"><code class="docutils literal notranslate"><span class="pre">Conversation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Conversation.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Conversation.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.id"><code class="docutils literal notranslate"><span class="pre">Conversation.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.id_1"><code class="docutils literal notranslate"><span class="pre">Conversation.id_1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.id_1_id"><code class="docutils literal notranslate"><span class="pre">Conversation.id_1_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.id_2"><code class="docutils literal notranslate"><span class="pre">Conversation.id_2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.id_2_id"><code class="docutils literal notranslate"><span class="pre">Conversation.id_2_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.latest_message"><code class="docutils literal notranslate"><span class="pre">Conversation.latest_message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.messages_conversation"><code class="docutils literal notranslate"><span class="pre">Conversation.messages_conversation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Conversation.objects"><code class="docutils literal notranslate"><span class="pre">Conversation.objects</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.CustomUser"><code class="docutils literal notranslate"><span class="pre">CustomUser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Message.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Message.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.conversation"><code class="docutils literal notranslate"><span class="pre">Message.conversation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.conversation_id"><code class="docutils literal notranslate"><span class="pre">Message.conversation_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.created_on"><code class="docutils literal notranslate"><span class="pre">Message.created_on</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.details"><code class="docutils literal notranslate"><span class="pre">Message.details</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.from_user"><code class="docutils literal notranslate"><span class="pre">Message.from_user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.from_user_id"><code class="docutils literal notranslate"><span class="pre">Message.from_user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.get_next_by_created_on"><code class="docutils literal notranslate"><span class="pre">Message.get_next_by_created_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.get_previous_by_created_on"><code class="docutils literal notranslate"><span class="pre">Message.get_previous_by_created_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.id"><code class="docutils literal notranslate"><span class="pre">Message.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.objects"><code class="docutils literal notranslate"><span class="pre">Message.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.request_type"><code class="docutils literal notranslate"><span class="pre">Message.request_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.request_value"><code class="docutils literal notranslate"><span class="pre">Message.request_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.to_user"><code class="docutils literal notranslate"><span class="pre">Message.to_user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.to_user_id"><code class="docutils literal notranslate"><span class="pre">Message.to_user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.user_book_id"><code class="docutils literal notranslate"><span class="pre">Message.user_book_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Message.user_book_id_id"><code class="docutils literal notranslate"><span class="pre">Message.user_book_id_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Notification.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Notification.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.details"><code class="docutils literal notranslate"><span class="pre">Notification.details</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.id"><code class="docutils literal notranslate"><span class="pre">Notification.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.notifications"><code class="docutils literal notranslate"><span class="pre">Notification.notifications</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.notify_type"><code class="docutils literal notranslate"><span class="pre">Notification.notify_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.notify_value"><code class="docutils literal notranslate"><span class="pre">Notification.notify_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Notification.objects"><code class="docutils literal notranslate"><span class="pre">Notification.objects</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.Transactions"><code class="docutils literal notranslate"><span class="pre">Transactions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Transactions.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Transactions.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.STATUS_CHOICES"><code class="docutils literal notranslate"><span class="pre">Transactions.STATUS_CHOICES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.borrower_id"><code class="docutils literal notranslate"><span class="pre">Transactions.borrower_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.borrower_id_id"><code class="docutils literal notranslate"><span class="pre">Transactions.borrower_id_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.from_date"><code class="docutils literal notranslate"><span class="pre">Transactions.from_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.get_next_by_from_date"><code class="docutils literal notranslate"><span class="pre">Transactions.get_next_by_from_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.get_next_by_to_date"><code class="docutils literal notranslate"><span class="pre">Transactions.get_next_by_to_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.get_previous_by_from_date"><code class="docutils literal notranslate"><span class="pre">Transactions.get_previous_by_from_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.get_previous_by_to_date"><code class="docutils literal notranslate"><span class="pre">Transactions.get_previous_by_to_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.get_status_display"><code class="docutils literal notranslate"><span class="pre">Transactions.get_status_display()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.id"><code class="docutils literal notranslate"><span class="pre">Transactions.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.objects"><code class="docutils literal notranslate"><span class="pre">Transactions.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.status"><code class="docutils literal notranslate"><span class="pre">Transactions.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.to_date"><code class="docutils literal notranslate"><span class="pre">Transactions.to_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.user_book_id"><code class="docutils literal notranslate"><span class="pre">Transactions.user_book_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.Transactions.user_book_id_id"><code class="docutils literal notranslate"><span class="pre">Transactions.user_book_id_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.UserBook"><code class="docutils literal notranslate"><span class="pre">UserBook</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">UserBook.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">UserBook.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.availability"><code class="docutils literal notranslate"><span class="pre">UserBook.availability</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.book_id"><code class="docutils literal notranslate"><span class="pre">UserBook.book_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.book_id_id"><code class="docutils literal notranslate"><span class="pre">UserBook.book_id_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.booked"><code class="docutils literal notranslate"><span class="pre">UserBook.booked</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.booking_user_book"><code class="docutils literal notranslate"><span class="pre">UserBook.booking_user_book</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.currently_with"><code class="docutils literal notranslate"><span class="pre">UserBook.currently_with</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.currently_with_id"><code class="docutils literal notranslate"><span class="pre">UserBook.currently_with_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.id"><code class="docutils literal notranslate"><span class="pre">UserBook.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.messages_user_book"><code class="docutils literal notranslate"><span class="pre">UserBook.messages_user_book</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.notifications"><code class="docutils literal notranslate"><span class="pre">UserBook.notifications</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.objects"><code class="docutils literal notranslate"><span class="pre">UserBook.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.owner_book_id"><code class="docutils literal notranslate"><span class="pre">UserBook.owner_book_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.owner_book_id_id"><code class="docutils literal notranslate"><span class="pre">UserBook.owner_book_id_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserBook.transaction_user_book"><code class="docutils literal notranslate"><span class="pre">UserBook.transaction_user_book</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.UserNotification"><code class="docutils literal notranslate"><span class="pre">UserNotification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">UserNotification.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">UserNotification.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.book"><code class="docutils literal notranslate"><span class="pre">UserNotification.book</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.book_id"><code class="docutils literal notranslate"><span class="pre">UserNotification.book_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.created_on"><code class="docutils literal notranslate"><span class="pre">UserNotification.created_on</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.get_next_by_created_on"><code class="docutils literal notranslate"><span class="pre">UserNotification.get_next_by_created_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.get_previous_by_created_on"><code class="docutils literal notranslate"><span class="pre">UserNotification.get_previous_by_created_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.id"><code class="docutils literal notranslate"><span class="pre">UserNotification.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.message"><code class="docutils literal notranslate"><span class="pre">UserNotification.message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.message_id"><code class="docutils literal notranslate"><span class="pre">UserNotification.message_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.objects"><code class="docutils literal notranslate"><span class="pre">UserNotification.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.read"><code class="docutils literal notranslate"><span class="pre">UserNotification.read</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.recipient"><code class="docutils literal notranslate"><span class="pre">UserNotification.recipient</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.recipient_id"><code class="docutils literal notranslate"><span class="pre">UserNotification.recipient_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.sender"><code class="docutils literal notranslate"><span class="pre">UserNotification.sender</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserNotification.sender_id"><code class="docutils literal notranslate"><span class="pre">UserNotification.sender_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mainapp.models.UserProfile"><code class="docutils literal notranslate"><span class="pre">UserProfile</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">UserProfile.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">UserProfile.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.birth_date"><code class="docutils literal notranslate"><span class="pre">UserProfile.birth_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.booking_borrower"><code class="docutils literal notranslate"><span class="pre">UserProfile.booking_borrower</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.booking_owner"><code class="docutils literal notranslate"><span class="pre">UserProfile.booking_owner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.conversations_as_user_1"><code class="docutils literal notranslate"><span class="pre">UserProfile.conversations_as_user_1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.conversations_as_user_2"><code class="docutils literal notranslate"><span class="pre">UserProfile.conversations_as_user_2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.current_location"><code class="docutils literal notranslate"><span class="pre">UserProfile.current_location</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.currently_with"><code class="docutils literal notranslate"><span class="pre">UserProfile.currently_with</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.get_next_by_birth_date"><code class="docutils literal notranslate"><span class="pre">UserProfile.get_next_by_birth_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.get_previous_by_birth_date"><code class="docutils literal notranslate"><span class="pre">UserProfile.get_previous_by_birth_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.id"><code class="docutils literal notranslate"><span class="pre">UserProfile.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.increment_notification_counter"><code class="docutils literal notranslate"><span class="pre">UserProfile.increment_notification_counter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.notification_counter"><code class="docutils literal notranslate"><span class="pre">UserProfile.notification_counter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.notifications"><code class="docutils literal notranslate"><span class="pre">UserProfile.notifications</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.notifications_sent"><code class="docutils literal notranslate"><span class="pre">UserProfile.notifications_sent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.objects"><code class="docutils literal notranslate"><span class="pre">UserProfile.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.owner"><code class="docutils literal notranslate"><span class="pre">UserProfile.owner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.phone_number"><code class="docutils literal notranslate"><span class="pre">UserProfile.phone_number</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.primary_location"><code class="docutils literal notranslate"><span class="pre">UserProfile.primary_location</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.profile_pic"><code class="docutils literal notranslate"><span class="pre">UserProfile.profile_pic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.received_messages"><code class="docutils literal notranslate"><span class="pre">UserProfile.received_messages</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.review"><code class="docutils literal notranslate"><span class="pre">UserProfile.review</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.sent_messages"><code class="docutils literal notranslate"><span class="pre">UserProfile.sent_messages</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.transaction_borrower"><code class="docutils literal notranslate"><span class="pre">UserProfile.transaction_borrower</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.user"><code class="docutils literal notranslate"><span class="pre">UserProfile.user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mainapp.models.UserProfile.user_id"><code class="docutils literal notranslate"><span class="pre">UserProfile.user_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mainapp_views.html">MainApp Views</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="recommendations.html">Recommendations Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Bingle App</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="mainapp.html">MainApp Documentation</a></li>
+      <li class="breadcrumb-item active">MainApp Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mainapp_models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mainapp.models">
+<span id="mainapp-models"></span><h1>MainApp Models<a class="headerlink" href="#module-mainapp.models" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.Book">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">Book</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Book" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Book Model</p>
+<p>This model is used to store information about books.</p>
+<p>Attributes:
+book_title: A string representing the title of the book.
+book_author: A string representing the author of the book.
+genre: A string representing the genre of the book.
+published_date: A date representing the publish date of the book.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Book.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.Book.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Book.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.Book.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.book_author">
+<span class="sig-name descname"><span class="pre">book_author</span></span><a class="headerlink" href="#mainapp.models.Book.book_author" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.book_title">
+<span class="sig-name descname"><span class="pre">book_title</span></span><a class="headerlink" href="#mainapp.models.Book.book_title" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.genre">
+<span class="sig-name descname"><span class="pre">genre</span></span><a class="headerlink" href="#mainapp.models.Book.genre" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Book.get_next_by_published_date">
+<span class="sig-name descname"><span class="pre">get_next_by_published_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">published_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Book.get_next_by_published_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Book.get_previous_by_published_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_published_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">published_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Book.get_previous_by_published_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.Book.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.Book.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.published_date">
+<span class="sig-name descname"><span class="pre">published_date</span></span><a class="headerlink" href="#mainapp.models.Book.published_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Book.user_books_book">
+<span class="sig-name descname"><span class="pre">user_books_book</span></span><a class="headerlink" href="#mainapp.models.Book.user_books_book" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.Booking">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">Booking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Booking" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Booking Model</p>
+<p>This model is used to store information about bookings between users.</p>
+<p>Attributes:
+owner_id: A foreign key to the UserProfile model representing the owner of the book.
+borrower_id: A foreign key to the UserProfile model representing the borrower of the book.
+user_book_id: A foreign key to the UserBook model.
+from_date: A date representing the start date of the booking.
+to_date: A date representing the end date of the booking.
+returned: A boolean representing the return status of the booking.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Booking.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.Booking.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Booking.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.Booking.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.borrower_id">
+<span class="sig-name descname"><span class="pre">borrower_id</span></span><a class="headerlink" href="#mainapp.models.Booking.borrower_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.borrower_id_id">
+<span class="sig-name descname"><span class="pre">borrower_id_id</span></span><a class="headerlink" href="#mainapp.models.Booking.borrower_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.from_date">
+<span class="sig-name descname"><span class="pre">from_date</span></span><a class="headerlink" href="#mainapp.models.Booking.from_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Booking.get_next_by_from_date">
+<span class="sig-name descname"><span class="pre">get_next_by_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">from_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Booking.get_next_by_from_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Booking.get_next_by_to_date">
+<span class="sig-name descname"><span class="pre">get_next_by_to_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">to_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Booking.get_next_by_to_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Booking.get_previous_by_from_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">from_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Booking.get_previous_by_from_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Booking.get_previous_by_to_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_to_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">to_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Booking.get_previous_by_to_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.Booking.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.Booking.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.owner_id">
+<span class="sig-name descname"><span class="pre">owner_id</span></span><a class="headerlink" href="#mainapp.models.Booking.owner_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.owner_id_id">
+<span class="sig-name descname"><span class="pre">owner_id_id</span></span><a class="headerlink" href="#mainapp.models.Booking.owner_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.returned">
+<span class="sig-name descname"><span class="pre">returned</span></span><a class="headerlink" href="#mainapp.models.Booking.returned" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.to_date">
+<span class="sig-name descname"><span class="pre">to_date</span></span><a class="headerlink" href="#mainapp.models.Booking.to_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.user_book_id">
+<span class="sig-name descname"><span class="pre">user_book_id</span></span><a class="headerlink" href="#mainapp.models.Booking.user_book_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Booking.user_book_id_id">
+<span class="sig-name descname"><span class="pre">user_book_id_id</span></span><a class="headerlink" href="#mainapp.models.Booking.user_book_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.Conversation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">Conversation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Conversation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Conversation Model</p>
+<p>This model is used to store information about conversations between users.</p>
+<p>Attributes:
+id_1: A foreign key to the UserProfile model representing the first user.
+id_2: A foreign key to the UserProfile model representing the second user.
+latest_message: A string representing the latest message in the conversation.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.Conversation.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.Conversation.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.Conversation.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.id_1">
+<span class="sig-name descname"><span class="pre">id_1</span></span><a class="headerlink" href="#mainapp.models.Conversation.id_1" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.id_1_id">
+<span class="sig-name descname"><span class="pre">id_1_id</span></span><a class="headerlink" href="#mainapp.models.Conversation.id_1_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.id_2">
+<span class="sig-name descname"><span class="pre">id_2</span></span><a class="headerlink" href="#mainapp.models.Conversation.id_2" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.id_2_id">
+<span class="sig-name descname"><span class="pre">id_2_id</span></span><a class="headerlink" href="#mainapp.models.Conversation.id_2_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.latest_message">
+<span class="sig-name descname"><span class="pre">latest_message</span></span><a class="headerlink" href="#mainapp.models.Conversation.latest_message" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.messages_conversation">
+<span class="sig-name descname"><span class="pre">messages_conversation</span></span><a class="headerlink" href="#mainapp.models.Conversation.messages_conversation" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Conversation.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.Conversation.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.CustomUser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">CustomUser</span></span><a class="headerlink" href="#mainapp.models.CustomUser" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.Message">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Message" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Message Model</p>
+<p>This model is used to store information about messages between users.</p>
+<p>Attributes:
+user_book_id: A foreign key to the UserBook model.
+to_user: A foreign key to the UserProfile model representing the recipient of the message.
+from_user: A foreign key to the UserProfile model representing the sender of the message.
+details: A string representing the details of the message.
+request_type: An integer representing the type of request.
+request_value: A string representing the value of the request.
+created_on: A date representing the creation date of the message.
+conversation: A foreign key to the Conversation model.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Message.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.Message.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Message.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.Message.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.conversation">
+<span class="sig-name descname"><span class="pre">conversation</span></span><a class="headerlink" href="#mainapp.models.Message.conversation" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.conversation_id">
+<span class="sig-name descname"><span class="pre">conversation_id</span></span><a class="headerlink" href="#mainapp.models.Message.conversation_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.created_on">
+<span class="sig-name descname"><span class="pre">created_on</span></span><a class="headerlink" href="#mainapp.models.Message.created_on" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.details">
+<span class="sig-name descname"><span class="pre">details</span></span><a class="headerlink" href="#mainapp.models.Message.details" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.from_user">
+<span class="sig-name descname"><span class="pre">from_user</span></span><a class="headerlink" href="#mainapp.models.Message.from_user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.from_user_id">
+<span class="sig-name descname"><span class="pre">from_user_id</span></span><a class="headerlink" href="#mainapp.models.Message.from_user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Message.get_next_by_created_on">
+<span class="sig-name descname"><span class="pre">get_next_by_created_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_on&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Message.get_next_by_created_on" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Message.get_previous_by_created_on">
+<span class="sig-name descname"><span class="pre">get_previous_by_created_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_on&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Message.get_previous_by_created_on" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.Message.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.Message.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.request_type">
+<span class="sig-name descname"><span class="pre">request_type</span></span><a class="headerlink" href="#mainapp.models.Message.request_type" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.request_value">
+<span class="sig-name descname"><span class="pre">request_value</span></span><a class="headerlink" href="#mainapp.models.Message.request_value" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.to_user">
+<span class="sig-name descname"><span class="pre">to_user</span></span><a class="headerlink" href="#mainapp.models.Message.to_user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.to_user_id">
+<span class="sig-name descname"><span class="pre">to_user_id</span></span><a class="headerlink" href="#mainapp.models.Message.to_user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.user_book_id">
+<span class="sig-name descname"><span class="pre">user_book_id</span></span><a class="headerlink" href="#mainapp.models.Message.user_book_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Message.user_book_id_id">
+<span class="sig-name descname"><span class="pre">user_book_id_id</span></span><a class="headerlink" href="#mainapp.models.Message.user_book_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.Notification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">Notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Notification" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Notification Model</p>
+<p>Template messages for notification types.</p>
+<p>Attributes:
+notify_type: An integer representing the type of notification.
+notify_value: A string representing the value of the notification.
+details: A string representing the details of the notification.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Notification.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.Notification.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Notification.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.Notification.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Notification.details">
+<span class="sig-name descname"><span class="pre">details</span></span><a class="headerlink" href="#mainapp.models.Notification.details" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Notification.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.Notification.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Notification.notifications">
+<span class="sig-name descname"><span class="pre">notifications</span></span><a class="headerlink" href="#mainapp.models.Notification.notifications" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Notification.notify_type">
+<span class="sig-name descname"><span class="pre">notify_type</span></span><a class="headerlink" href="#mainapp.models.Notification.notify_type" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Notification.notify_value">
+<span class="sig-name descname"><span class="pre">notify_value</span></span><a class="headerlink" href="#mainapp.models.Notification.notify_value" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Notification.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.Notification.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.Transactions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">Transactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Transactions" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Transactions Model</p>
+<p>This model is used to store information about transactions between users.</p>
+<p>Attributes:
+user_book_id: A foreign key to the UserBook model.
+borrower_id: A foreign key to the UserProfile model representing the borrower of the book.
+from_date: A date representing the start date of the transaction.
+to_date: A date representing the end date of the transaction.
+status: A string representing the status of the transaction.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.Transactions.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.Transactions.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.STATUS_CHOICES">
+<span class="sig-name descname"><span class="pre">STATUS_CHOICES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('pending',</span> <span class="pre">'Pending'),</span> <span class="pre">('approved',</span> <span class="pre">'Approved'),</span> <span class="pre">('denied',</span> <span class="pre">'Denied')]</span></em><a class="headerlink" href="#mainapp.models.Transactions.STATUS_CHOICES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.borrower_id">
+<span class="sig-name descname"><span class="pre">borrower_id</span></span><a class="headerlink" href="#mainapp.models.Transactions.borrower_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.borrower_id_id">
+<span class="sig-name descname"><span class="pre">borrower_id_id</span></span><a class="headerlink" href="#mainapp.models.Transactions.borrower_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.from_date">
+<span class="sig-name descname"><span class="pre">from_date</span></span><a class="headerlink" href="#mainapp.models.Transactions.from_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.get_next_by_from_date">
+<span class="sig-name descname"><span class="pre">get_next_by_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">from_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Transactions.get_next_by_from_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.get_next_by_to_date">
+<span class="sig-name descname"><span class="pre">get_next_by_to_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">to_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Transactions.get_next_by_to_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.get_previous_by_from_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">from_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Transactions.get_previous_by_from_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.get_previous_by_to_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_to_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">to_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Transactions.get_previous_by_to_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.get_status_display">
+<span class="sig-name descname"><span class="pre">get_status_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.CharField:</span> <span class="pre">status&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.Transactions.get_status_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.Transactions.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.Transactions.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#mainapp.models.Transactions.status" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.to_date">
+<span class="sig-name descname"><span class="pre">to_date</span></span><a class="headerlink" href="#mainapp.models.Transactions.to_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.user_book_id">
+<span class="sig-name descname"><span class="pre">user_book_id</span></span><a class="headerlink" href="#mainapp.models.Transactions.user_book_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.Transactions.user_book_id_id">
+<span class="sig-name descname"><span class="pre">user_book_id_id</span></span><a class="headerlink" href="#mainapp.models.Transactions.user_book_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.UserBook">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">UserBook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserBook" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>User Book Model</p>
+<p>This model is used to store information about books owned by users.</p>
+<p>Attributes:
+owner_book_id: A foreign key to the UserProfile model representing the owner of the book.
+currently_with: A foreign key to the UserProfile model representing the current user with the book.
+book_id: A foreign key to the Book model representing the book.
+availability: A boolean representing the availability of the book.
+booked: A string representing the booking status of the book.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.UserBook.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.UserBook.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.availability">
+<span class="sig-name descname"><span class="pre">availability</span></span><a class="headerlink" href="#mainapp.models.UserBook.availability" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.book_id">
+<span class="sig-name descname"><span class="pre">book_id</span></span><a class="headerlink" href="#mainapp.models.UserBook.book_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.book_id_id">
+<span class="sig-name descname"><span class="pre">book_id_id</span></span><a class="headerlink" href="#mainapp.models.UserBook.book_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.booked">
+<span class="sig-name descname"><span class="pre">booked</span></span><a class="headerlink" href="#mainapp.models.UserBook.booked" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.booking_user_book">
+<span class="sig-name descname"><span class="pre">booking_user_book</span></span><a class="headerlink" href="#mainapp.models.UserBook.booking_user_book" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.currently_with">
+<span class="sig-name descname"><span class="pre">currently_with</span></span><a class="headerlink" href="#mainapp.models.UserBook.currently_with" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.currently_with_id">
+<span class="sig-name descname"><span class="pre">currently_with_id</span></span><a class="headerlink" href="#mainapp.models.UserBook.currently_with_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.UserBook.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.messages_user_book">
+<span class="sig-name descname"><span class="pre">messages_user_book</span></span><a class="headerlink" href="#mainapp.models.UserBook.messages_user_book" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.notifications">
+<span class="sig-name descname"><span class="pre">notifications</span></span><a class="headerlink" href="#mainapp.models.UserBook.notifications" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.UserBook.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.owner_book_id">
+<span class="sig-name descname"><span class="pre">owner_book_id</span></span><a class="headerlink" href="#mainapp.models.UserBook.owner_book_id" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.owner_book_id_id">
+<span class="sig-name descname"><span class="pre">owner_book_id_id</span></span><a class="headerlink" href="#mainapp.models.UserBook.owner_book_id_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserBook.transaction_user_book">
+<span class="sig-name descname"><span class="pre">transaction_user_book</span></span><a class="headerlink" href="#mainapp.models.UserBook.transaction_user_book" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">UserNotification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserNotification" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>User Notification Model</p>
+<p>Notifications for users.</p>
+<p>Attributes:
+sender: A foreign key to the UserProfile model representing the sender of the notification.
+message: A foreign key to the Notification model representing the message of the notification.
+recipient: A foreign key to the UserProfile model representing the recipient of the notification.
+read: A boolean representing the read status of the notification.
+created_on: A date representing the creation date of the notification.
+book: A foreign key to the UserBook model.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.UserNotification.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.UserNotification.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.book">
+<span class="sig-name descname"><span class="pre">book</span></span><a class="headerlink" href="#mainapp.models.UserNotification.book" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.book_id">
+<span class="sig-name descname"><span class="pre">book_id</span></span><a class="headerlink" href="#mainapp.models.UserNotification.book_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.created_on">
+<span class="sig-name descname"><span class="pre">created_on</span></span><a class="headerlink" href="#mainapp.models.UserNotification.created_on" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.get_next_by_created_on">
+<span class="sig-name descname"><span class="pre">get_next_by_created_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_on&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserNotification.get_next_by_created_on" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.get_previous_by_created_on">
+<span class="sig-name descname"><span class="pre">get_previous_by_created_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_on&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserNotification.get_previous_by_created_on" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.UserNotification.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#mainapp.models.UserNotification.message" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.message_id">
+<span class="sig-name descname"><span class="pre">message_id</span></span><a class="headerlink" href="#mainapp.models.UserNotification.message_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.UserNotification.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.read">
+<span class="sig-name descname"><span class="pre">read</span></span><a class="headerlink" href="#mainapp.models.UserNotification.read" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.recipient">
+<span class="sig-name descname"><span class="pre">recipient</span></span><a class="headerlink" href="#mainapp.models.UserNotification.recipient" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.recipient_id">
+<span class="sig-name descname"><span class="pre">recipient_id</span></span><a class="headerlink" href="#mainapp.models.UserNotification.recipient_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.sender">
+<span class="sig-name descname"><span class="pre">sender</span></span><a class="headerlink" href="#mainapp.models.UserNotification.sender" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserNotification.sender_id">
+<span class="sig-name descname"><span class="pre">sender_id</span></span><a class="headerlink" href="#mainapp.models.UserNotification.sender_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mainapp.models.</span></span><span class="sig-name descname"><span class="pre">UserProfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserProfile" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>User Profile Model</p>
+<p>This model is used to store additional information about the user.</p>
+<p>Attributes:
+user: A foreign key to the User model.
+primary_location: A string representing the user’s primary location.
+current_location: A string representing the user’s current location.
+phone_number: A string representing the user’s phone number.
+birth_date: A date representing the user’s birth date.
+review: An integer representing the user’s review score.
+notification_counter: An integer representing the user’s notification counter.
+profile_pic: An image representing the user’s profile picture.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#mainapp.models.UserProfile.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#mainapp.models.UserProfile.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.birth_date">
+<span class="sig-name descname"><span class="pre">birth_date</span></span><a class="headerlink" href="#mainapp.models.UserProfile.birth_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.booking_borrower">
+<span class="sig-name descname"><span class="pre">booking_borrower</span></span><a class="headerlink" href="#mainapp.models.UserProfile.booking_borrower" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.booking_owner">
+<span class="sig-name descname"><span class="pre">booking_owner</span></span><a class="headerlink" href="#mainapp.models.UserProfile.booking_owner" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.conversations_as_user_1">
+<span class="sig-name descname"><span class="pre">conversations_as_user_1</span></span><a class="headerlink" href="#mainapp.models.UserProfile.conversations_as_user_1" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.conversations_as_user_2">
+<span class="sig-name descname"><span class="pre">conversations_as_user_2</span></span><a class="headerlink" href="#mainapp.models.UserProfile.conversations_as_user_2" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.current_location">
+<span class="sig-name descname"><span class="pre">current_location</span></span><a class="headerlink" href="#mainapp.models.UserProfile.current_location" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.currently_with">
+<span class="sig-name descname"><span class="pre">currently_with</span></span><a class="headerlink" href="#mainapp.models.UserProfile.currently_with" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.get_next_by_birth_date">
+<span class="sig-name descname"><span class="pre">get_next_by_birth_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">birth_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserProfile.get_next_by_birth_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.get_previous_by_birth_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_birth_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">birth_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserProfile.get_previous_by_birth_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#mainapp.models.UserProfile.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.increment_notification_counter">
+<span class="sig-name descname"><span class="pre">increment_notification_counter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mainapp.models.UserProfile.increment_notification_counter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.notification_counter">
+<span class="sig-name descname"><span class="pre">notification_counter</span></span><a class="headerlink" href="#mainapp.models.UserProfile.notification_counter" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.notifications">
+<span class="sig-name descname"><span class="pre">notifications</span></span><a class="headerlink" href="#mainapp.models.UserProfile.notifications" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.notifications_sent">
+<span class="sig-name descname"><span class="pre">notifications_sent</span></span><a class="headerlink" href="#mainapp.models.UserProfile.notifications_sent" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#mainapp.models.UserProfile.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.owner">
+<span class="sig-name descname"><span class="pre">owner</span></span><a class="headerlink" href="#mainapp.models.UserProfile.owner" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.phone_number">
+<span class="sig-name descname"><span class="pre">phone_number</span></span><a class="headerlink" href="#mainapp.models.UserProfile.phone_number" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.primary_location">
+<span class="sig-name descname"><span class="pre">primary_location</span></span><a class="headerlink" href="#mainapp.models.UserProfile.primary_location" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.profile_pic">
+<span class="sig-name descname"><span class="pre">profile_pic</span></span><a class="headerlink" href="#mainapp.models.UserProfile.profile_pic" title="Link to this definition"></a></dt>
+<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
+assigning the width/height to the width_field/height_field, if appropriate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.received_messages">
+<span class="sig-name descname"><span class="pre">received_messages</span></span><a class="headerlink" href="#mainapp.models.UserProfile.received_messages" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.review">
+<span class="sig-name descname"><span class="pre">review</span></span><a class="headerlink" href="#mainapp.models.UserProfile.review" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.sent_messages">
+<span class="sig-name descname"><span class="pre">sent_messages</span></span><a class="headerlink" href="#mainapp.models.UserProfile.sent_messages" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.transaction_borrower">
+<span class="sig-name descname"><span class="pre">transaction_borrower</span></span><a class="headerlink" href="#mainapp.models.UserProfile.transaction_borrower" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#mainapp.models.UserProfile.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mainapp.models.UserProfile.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#mainapp.models.UserProfile.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mainapp_forms.html" class="btn btn-neutral float-left" title="MainApp Forms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mainapp_views.html" class="btn btn-neutral float-right" title="MainApp Views" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, ESRS Group 9.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
