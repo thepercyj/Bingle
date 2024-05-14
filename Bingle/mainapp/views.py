@@ -274,7 +274,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('new_landing_page')
+                return redirect('new_home')
             else:
                 # Handle the case where authentication fails
                 form.add_error(None, "Invalid username or password.")

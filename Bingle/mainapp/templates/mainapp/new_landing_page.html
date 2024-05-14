@@ -1,7 +1,7 @@
 {% extends 'mainapp/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block title %} Profile | Bingle {% endblock %}
+{% block title %} Home | Bingle {% endblock %}
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
@@ -9,11 +9,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-7">
-                        <h1>
-                            Borrow <br>
-                            Lend <br>
-                            Connect
-                        </h1>
+                        <h1>Borrow</h1>
+                        <h1>Lend</h1>
+                        <h1>Connect</h1>
                         <br>
                         <br>
                         <br>
@@ -29,9 +27,26 @@
                         </h3>
                         <br>
                         <h5>Don't miss out, start your journey here.</h5>
-                        <button class="btn btn-primary d-grid">
-                            <span class="text-truncate w-100">Login</span>
-                        </button>
+                        <br>
+                        {% if user.is_authenticated %}
+                        <div class="btn-box">
+                            <a href="{% url 'new_home' %}" class="btn btn-primary">
+                                Dashboard
+                            </a>
+                            <a href="{% url 'new_profile' %}" class="btn btn-danger">
+                                My Profile
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="btn-box">
+                            <a href="{% url 'login_view' %}" class="btn btn-info">
+                                Login
+                            </a>
+                            <a href=" {% url 'register' %}" class="btn btn-danger">
+                                Register
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="col-lg-5">
                         <img class="custom-img" src="{% static 'mainapp/images/p9.png' %}" alt="">
@@ -48,6 +63,7 @@
                         <img class="custom-img" src="{% static 'mainapp/images/experience-img.jpg' %}" alt="">
                     </div>
                     <div class="col-lg-7">
+                        <h1> How it Started ?</h1>
                         <br>
                         <br>
                         <br>
@@ -60,9 +76,11 @@
                             fostering connections and saving budgets.
                         </h3>
                         <br>
-                        <button class="btn btn-primary d-grid">
-                            <span class="text-truncate w-100">Read More</span>
-                        </button>
+                        <a href="{% url 'new_about' %}">
+                            <button class="btn btn-primary d-grid">
+                                <span class="text-truncate w-100">Read More</span>
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -73,7 +91,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <div class="row">
-                    <h1 class="card-title">Meet the team</h1>
+                    <h2 class="text-center">Meet the Team</h2>
 
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
@@ -104,7 +122,7 @@
                                     <div class="flex-shrink-0">
                                         <div class="avtar bg-light-primary">
                                             <img class="user-avtar wid-45 rounded-circle"
-                                                 src="/static/mainapp/images/Tom.jpg"
+                                                 src="/static/mainapp/images/tom.webp"
                                                  alt="Full Stack">
                                         </div>
                                     </div>
@@ -126,7 +144,7 @@
                                     <div class="flex-shrink-0">
                                         <div class="avtar bg-light-primary">
                                             <img class="user-avtar wid-45 rounded-circle"
-                                                 src="/static/mainapp/images/Moka.jpg"
+                                                 src="/static/mainapp/images/moldy.webp"
                                                  alt="Back End & Documentation">
                                         </div>
                                     </div>
@@ -170,7 +188,7 @@
                                     <div class="flex-shrink-0">
                                         <div class="avtar bg-light-primary">
                                             <img class="user-avtar wid-45 rounded-circle"
-                                                 src="/static/mainapp/images/Rohan.jpg"
+                                                 src="/static/mainapp/images/rohan.webp"
                                                  alt="Team Lead">
                                         </div>
                                     </div>
@@ -246,9 +264,6 @@
                         </h1>
                         <br>
                         <br>
-                        <br>
-                        <br>
-                        <br>
                         <h4>
                             Welcome to Bingle, the friendly book lending app designed to make reading a joy
                             for
@@ -257,17 +272,7 @@
                             them, Bingle steps in to bridge the gap. Our mission is simple: to share books
                             among
                             readers, reducing waste and promoting environmental sustainability. <br><br>
-                        </h4>
-                        <br>
 
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-
-                    <div class="col-lg-12 text-center">
-
-                        <h4>
                             But Bingle is more than just a green initiative. It's a cozy corner for those
                             who
                             cherish the tangible experience of holding a book in their hands. Despite the

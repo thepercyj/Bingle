@@ -8,11 +8,11 @@ class CustomLogoutView(auth_views.LogoutView):
     next_page = reverse_lazy('new_landing_page')
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('home/', views.index, name='index'),
+    # path('', views.index, name='index'),
+    # path('home/', views.index, name='index'),
     path('about/', views.about, name='about'),
     path('new_about/', views.new_about, name='new_about'),
-        path('new_landing_page/', views.new_landing_page, name='new_landing_page'),
+    path('', views.new_landing_page, name='new_landing_page'),
     path('login/', views.login_view, name='login_view'),
     path('logout/',  CustomLogoutView.as_view(), name='logout_view'),
     path('profile_page/', views.profile, name='profile'),
