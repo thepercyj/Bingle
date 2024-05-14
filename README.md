@@ -1,5 +1,5 @@
 # ESRS Group 9
-Bingle - A book lending app built using Django, Python, HTML, and JavaScript. Deployed on Kubernetes and Docker.
+### Bingle - A book lending app built using Django, Python, HTML, and JavaScript. Deployed on Kubernetes and Docker.
 
 ### Objectives
 Bingle originated from the minds of University of Sussex students, initially as a modest academic project. Yet, it quickly evolved into a beacon of sustainability and community for book lovers. Beyond assessment criteria, it now promotes healthy book exchange, fostering connections and saving budgets.
