@@ -861,7 +861,7 @@ def approve_borrow_request(request, book_id):
         messages.success(request, 'Borrow request approved successfully.')
 
         # Redirect to the chats page
-        return redirect('chat', conversation_id=message.conversation.id)
+        return redirect('chat')
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -914,7 +914,7 @@ def deny_borrow_request(request, book_id):
         messages.success(request, 'Borrow request denied successfully.')
 
         # Redirect to the chas page
-        return redirect('chat', conversation_id=message.conversation.id)
+        return redirect('chat')
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -976,7 +976,7 @@ def return_book(request, book_id):
         messages.success(request, 'Book returned successfully.')
 
         # Redirect to the chas page
-        return redirect('chat', conversation_id=message.conversation.id)
+        return redirect('chat')
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1038,7 +1038,7 @@ def request_return_book(request, book_id):
         messages.success(request, 'Book return request sent successfully.')
 
         # Redirect to the chats page
-        return redirect('chat', conversation_id=message.conversation.id)
+        return redirect('chat')
 
     else:
         # If the request method is not POST, display an error message and redirect
@@ -1067,7 +1067,7 @@ def redirect_notification(request, notification_id):
             (Q(id_2=notification.sender) & Q(id_1=notification.recipient))
         ).first()
         # Redirect to the conversation page
-        return redirect('chat', conversation_id=conversation.id)
+        return redirect('chat')
     # If borrow request, accept, deny or return book, redirect to profile page
     elif notify_type in [2, 3, 4, 5]:
         return redirect('new_home')
