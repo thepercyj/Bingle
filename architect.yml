@@ -1,15 +1,79 @@
 name: esrs-group-9
+secrets:
+  django_secret_key:
+    default: 'django-insecure-52x#*-q+0#lrs^*#^*g4yagkd@y-nbs*^62_g++2+k=jf!mu%v'
+  db_user:
+    description: Root user to assign to the component's DB
+    default: esrs
+  db_pass:
+    description: Root password to assign to the component's DB
+    default: 'esrsdb@2024##'
+  db_name:
+    description: Name of the DB the component will store content in
+    default: esrs
+  db_port:
+    description: Port for the db
+    default: 6969
+  db_host:
+    description: Public IP address or domain name of the MySQL server
+    default: 144.21.56.167  
 services:
-  web:
+  app-db:
+    image: 'mysql:8'
+    interfaces:
+      database:
+        port: '${{ secrets.db_port }}'
+        protocol: tcp
+    environment:
+      MYSQL_ROOT_PASSWORD: '${{ secrets.db_pass }}'
+      MYSQL_USER: '${{ secrets.db_user }}'
+      MYSQL_PASSWORD: '${{ secrets.db_pass }}'
+      MYSQL_DATABASE: '${{ secrets.db_name }}'
+    liveness_probe:
+      command: 'mysqladmin ping -h localhost -u${{ secrets.db_user }} -p${{ secrets.db_pass }}'
+      interval: 10s
+      failure_threshold: 3
+  app:
+    depends_on:
+      - app-db
     build:
       context: .
-      dockerfile: Dockerfile
+    command: |
+      sh -c '
+        python manage.py migrate --noinput
+        python manage.py createsuperuser --noinput
+        uwsgi --http "0.0.0.0:8000" --module Bingle.wsgi:application --master --processes 4 --threads 2
+      '
     interfaces:
       main:
         port: 8000
+        ingress:
+          subdomain: app
+    liveness_probe:
+      command: 'curl --fail 0.0.0.0:8000'
+      interval: 10s
+      failure_threshold: 3
+    environment:
+      ALLOWED_HOST: '*'
+      SECRET_KEY: '${{ secrets.django_secret_key }}'
+      DATABASE_ENGINE: 'django.db.backends.mysql'
+      DATABASE_NAME: '${{ secrets.db_name }}'
+      DATABASE_USER: '${{ secrets.db_user }}'
+      DATABASE_PASSWORD: '${{ secrets.db_pass }}'
+      DATABASE_HOST: '${{ secrets.db_host }}'
+      DATABASE_PORT: '${{ secrets.db_port }}'
     debug:
+      liveness_probe:
+        initial_delay: 15s
+      command: |
+        sh -c '
+          python manage.py migrate --noinput
+          python manage.py runserver 0.0.0.0:8000
+        '
+      environment:
+        ALLOWED_HOST: '*'
+        DEBUG: 'True'
       volumes:
-        volume:
+        app:
           host_path: .
           mount_path: /usr/src/app
-    reserved_name: web
