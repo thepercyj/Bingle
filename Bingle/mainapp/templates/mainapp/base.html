@@ -19,6 +19,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14K1GBX9FG"></script>
     <script src="{% static 'mainapp/vendor/js/pcoded.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 </head>
 
@@ -166,10 +168,10 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                        role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
                         {% if profile_pic %}
-                        <img class="user-avtar" src="{{ profile_pic.url }}" alt="Profile Picture"
+                        <img class="user-avtar wid-45 hei-45 rounded-circle" src="{{ profile_pic.url }}" alt="Profile Picture"
                              style="max-width: 100px;">
                         {% else %}
-                        <img class="user-avtar" src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                        <img class="user-avtar wid-45 hei-45 rounded-circle" src="http://bootdey.com/img/Content/avatar/avatar1.png"
                              alt="Default Profile Picture" style="max-width: 100px;">
                         {% endif %}
                     </a>
@@ -180,10 +182,10 @@
                                 <div class="d-flex mb-1">
                                     <div class="flex-shrink-0">
                                         {% if profile_pic %}
-                                        <img class="user-avtar wid-35" src="{{ profile_pic.url }}"
+                                        <img class="user-avtar wid-45 hei-45 rounded-circle" src="{{ profile_pic.url }}"
                                              alt="Profile Picture" style="max-width: 100px;">
                                         {% else %}
-                                        <img class="user-avtar wid-35"
+                                        <img class="user-avtar wid-45 hei-45 rounded-circle"
                                              src="http://bootdey.com/img/Content/avatar/avatar1.png"
                                              alt="Default Profile Picture" style="max-width: 100px;">
                                         {% endif %}

@@ -204,6 +204,7 @@ def new_home(request):
 def new_landing_page(request):
     return render (request, 'new_landing_page.html')
 
+@login_required_message
 #Need to remove all modal related code as it is shifted to dashboard
 def new_profile(request):
     """
