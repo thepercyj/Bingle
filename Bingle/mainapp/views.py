@@ -114,7 +114,7 @@ def forgetpass(request):
 
     :param request: HttpRequest - The request object
     """
-    return render(request, 'forgetpass.html')
+    return render(request, 'password_reset_form.html')
 
 @login_required_message
 def new_home(request):
