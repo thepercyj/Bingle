@@ -31,11 +31,18 @@
 </div>
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme_contrast=""
       data-pc-theme="light">
+{% if show_sidebar %}
 {% include 'mainapp/sidebar.html' %}
+{% endif %}
 <header class="pc-header">
+    <div class="m-header">
+        <a class="m-header" href="{% url 'new_landing_page' %}">
+            <img src="{% static 'mainapp/images/Bingle-logos.jpeg'%}" style=" border-radius: 50%; height:60px; width:60px;" class="img-fluid logo-lg"></a>
+    </div>
     <div class="header-wrapper">
         <div class="me-auto pc-mob-drp">
             <ul class="list-unstyled">
+
 
                 <li class="pc-h-item pc-sidebar-popup">
                     <a href="#" class="pc-head-link ms-0" id="mobile-collapse">

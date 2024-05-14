@@ -21,7 +21,6 @@ from django.utils.timezone import now
 from django.conf import settings
 import json
 from recommendations.views import getborrowed
-from django.core.cache import cache
 
 
 
@@ -97,7 +96,7 @@ def about(request):
 
 
 def new_about(request):
-    return render(request, 'new_about_us.html')
+    return render(request, 'new_about_us.html', {'show_sidebar': True})
 
 
 def lend(request):
@@ -196,13 +195,14 @@ def new_home(request):
         'total_bookings': total_bookings,
         'recs': recs,
         'most_borrowed_books': most_borrowed_books,
+        'show_sidebar': True,
     }
 
     return render(request, 'home.html', context)
 
 
 def new_landing_page(request):
-    return render (request, 'new_landing_page.html')
+    return render (request, 'new_landing_page.html', {'show_sidebar': False})
 
 @login_required_message
 #Need to remove all modal related code as it is shifted to dashboard
@@ -221,6 +221,7 @@ def new_profile(request):
         'user_profile': user_profile,
         'user': user,
         'library': library,
+        'show_sidebar': True
     }
     return render(request, 'new_profile.html', context)
 
@@ -239,7 +240,7 @@ def chat(request):
         Q(id_1=our_profile) & Q(id_2=our_profile)
     ).select_related('id_1__user', 'id_2__user')
     return render(request, 'chat.html',
-                  {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True})
+                  {'conversation_list': conversation_list, 'our_profile': our_profile, 'initial': True, 'show_sidebar': True})
 
 
 def register(request):
@@ -381,19 +382,26 @@ def addBook(request):
 def sample_search(request):
     user_profile = UserProfile.objects.get(user=request.user)
     current_location = user_profile.current_location
-    if request.method == "POST":
-        searchquery = request.POST.get('searchquery')  # Retrieve the value of searchquery from POST data
-        users_profiles = UserProfile.objects.filter(
-            user__username=searchquery)  # Filter user profiles based on username and primary location
 
-        return render(request, 'samplesearch.html', {'searchquery': searchquery,
-                                                     'users_profiles': users_profiles})  # Pass the filtered user profiles to the template
+    if request.method == "POST":
+        searchquery = request.POST.get('searchquery')
+        users_profiles = UserProfile.objects.filter(user__username=searchquery)
     else:
-        # Handle GET request
-        # return render(request, 'search.html')
-        users_profiles = UserProfile.objects.all()
-        users_profiles = users_profiles.filter(current_location=current_location)
-        return render(request, 'samplesearch.html', {'users_profiles': users_profiles})
+        users_profiles = UserProfile.objects.filter(current_location=current_location)
+
+    # Paginate the user profiles
+    paginator = Paginator(users_profiles, 10)  # Show 10 profiles per page
+    page = request.GET.get('page')
+    try:
+        users_profiles = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        users_profiles = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        users_profiles = paginator.page(paginator.num_pages)
+
+    return render(request, 'samplesearch.html', {'users_profiles': users_profiles, 'show_sidebar': True})
 
 
 @login_required_message
@@ -634,7 +642,7 @@ def view_profile(request, profile_id):
             return redirect('search')
 
     return render(request, 'users_profiles.html',
-                  {'viewprofile': viewprofile, 'pre_message': pre_message})
+                  {'viewprofile': viewprofile, 'pre_message': pre_message, 'show_sidebar': True})
 
 
 def get_pre_message_content(request, user):
@@ -783,7 +791,7 @@ def borrow(request, user_book_id):
             messages.error(request, 'An error occurred.')
             return redirect('library')
 
-    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book})
+    return render(request, 'borrow.html', {'book': book, 'user_books': user_books, 'user_book': user_book, 'show_sidebar': True})
 
 
 @login_required_message
@@ -1271,6 +1279,6 @@ def new_conv(request):
     # If the form has not been submitted, display the new conversation page
     else:
         return render(request, 'new_conversation.html',
-                      {'users': UserProfile.objects.exclude(user=request.user)})
+                      {'users': UserProfile.objects.exclude(user=request.user), 'show_sidebar': True})
 
 

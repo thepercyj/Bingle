@@ -3,7 +3,23 @@
 {% load static %}
 {% block title %} Profile | Bingle {% endblock %}
 {% block content %}
-
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
+                    <li class="breadcrumb-item" aria-current="page">My Profile</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h2 class="mb-0">My Profile</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-6">
         <div class="card">

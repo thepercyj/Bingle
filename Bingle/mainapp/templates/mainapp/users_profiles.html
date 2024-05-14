@@ -2,6 +2,23 @@
 {% load static %}
 {% block title %} User Profile | Bingle {% endblock %}
 {% block content %}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'new_home' %}">Home</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Profile Details</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h2 class="mb-0">Profile Details</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <section class="client_section">
     <div class="container-xl px-4 mt-4">
         <!-- User profile details -->
