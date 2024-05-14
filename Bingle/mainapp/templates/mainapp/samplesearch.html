@@ -56,7 +56,7 @@
             {% for profile in users_profiles %}
             <tr>
                 <td>
-                    {% if profile.profile_pic %}
+                    {% if profile.profile_pic.url != "/media/b''" %}
                     <img class="rounded-circle user-avtar wid-50" src="{{ profile.profile_pic.url }}" alt="Profile Picture" style="max-width: 100px;">
                     {% else %}
                     <img class="rounded-circle user-avtar wid-50" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Default Profile Picture" style="max-width: 100px;">
