@@ -20,7 +20,6 @@ from django.utils.timezone import now
 from django.conf import settings
 import json
 from recommendations.views import getborrowed
-from django.core.cache import cache
 
 
 
@@ -274,10 +273,8 @@ def profile(request):
     """
     form = BookForm(request.POST or None)
     user = request.user
-    library = cache.get('library')
-    if library is None:
-        library = Book.objects.all()
-        cache.set('library', library, 60 * 5)  # Cache for 5 minutes
+    library = Book.objects.all()
+
     lib_count = library.count()
     user_profile = UserProfile.objects.get(user=user)
     user_books = UserBook.objects.filter(owner_book_id=user_profile.id)
