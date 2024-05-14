@@ -67,7 +67,7 @@
                 <td>{{ profile.review }}</td>
                 <td>
                     {% if profile.user == request.user %}
-                    <a href="{% url 'profile' %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'new_profile' %}" class="btn btn-primary">View</a>
                     {% else %}
                     <a href="{% url 'viewprofile' profile.id %}" class="btn btn-primary">View</a>
                     {% endif %}
