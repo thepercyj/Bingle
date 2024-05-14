@@ -18,6 +18,7 @@ Portal can be accessed from [Bingle](http://bingle.amanthapa.com.np)
 ### Issues
 All the tickets opened for bugs and issues can be found [Here](https://github.com/thepercyj/esrs-group-9/issues?q=is%3Aissue+is%3Aclosed).
 
+### Connect with Us
 Follow us for more exciting future projects below:
 - [Rohan Kadam](https://github.com/Rez27)
 - [Tom Naccarato](https://github.com/tnaccarato)
