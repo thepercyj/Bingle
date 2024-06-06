@@ -1,4 +1,4 @@
-# ESRS Group 9
+# Bingle
 ### Bingle - A book lending app built using Django, Python, HTML, and JavaScript. Deployed on Kubernetes and Docker.
 
 ### Objectives
